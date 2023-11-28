@@ -1,0 +1,17 @@
+.svelte-kit
+.vscode
+
+build
+node_modules
+
+.eslint*
+.prettier*
+.npmrc
+
+.git*
+README.md
+
+Dockerfile
+docker-compose.yml
+
+.env.example
