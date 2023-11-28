@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  admin-web-service:
+    container_name: admin-web-container
+    image: admin-web-image
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # Explicitly tell SvelteKit where the app is being served
+      # to avoid the "Cross-site POST form submissions are forbidden" error
+      # when using form actions with the node adapter
+      - ORIGIN=http://localhost:3000
+    restart: always
+    ports:
+      - 3000:3000
