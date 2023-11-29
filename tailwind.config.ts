@@ -17,7 +17,9 @@ const config: Config = {
 	},
 	plugins: [
 		// 4. Append the Skeleton plugin (after other plugins)
-		skeleton
+		skeleton({
+			themes: { preset: ['hamlindigo'] }
+		})
 	]
 };
 
