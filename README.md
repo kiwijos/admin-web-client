@@ -1,3 +1,17 @@
+# MapTiler API KEY
+
+The application uses MapLibre GL JS with tiles from MapTiler.
+
+## Adding a free key
+
+Create a `.env` file or simply copy and/or rename the `.env.example` file.
+
+Open the `.env` file, you will need to add/replace **MAPTILER_API_KEY** with your own MapTiler API key.
+
+Your MapTiler account access key is on your MapTiler [Cloud](https://cloud.maptiler.com/account/keys/) account page.
+
+:information_source: If you don't have an API KEY, you can create it for free at https://www.maptiler.com/cloud/
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
