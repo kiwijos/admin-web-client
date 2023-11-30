@@ -6,7 +6,7 @@
 	let mapContainer: HTMLDivElement;
 
 	$: if (mapContainer) {
-		const initialState = { lat: 62.0, lng: 15.0, zoom: 10 };
+		const initialState = { lat: 62.0, lng: 15.0, zoom: 4 };
 
 		const map: Map = new Map({
 			container: mapContainer,
