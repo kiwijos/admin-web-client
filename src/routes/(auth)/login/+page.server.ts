@@ -4,7 +4,7 @@ import type { Action, Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user) {
 		// redirect logged in users to the dashboard
-		throw redirect(302, '/dashboard');
+		throw redirect(302, '/admin/dashboard');
 	}
 };
 
@@ -25,7 +25,7 @@ const login: Action = async ({ cookies, request }) => {
 	});
 
 	// redirect the user
-	throw redirect(302, '/dashboard');
+	throw redirect(302, '/admin/dashboard');
 };
 
 export const actions: Actions = { login };
