@@ -1,6 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-test('index page has expected h1', async ({ page }) => {
-	await page.goto('/');
-	await expect(page.getByRole('heading', { name: 'Welcome to SvelteKit' })).toBeVisible();
+test.describe('map page test', () => {
+	test('map page has one expected map container', async ({ page }) => {
+		await page.goto('/admin/map');
+		const mapContainer = page.locator('.map');
+		await expect(mapContainer).toBeTruthy();
+		await expect(mapContainer).toHaveCount(1);
+	});
 });
