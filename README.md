@@ -6,7 +6,7 @@ The application uses MapLibre GL JS with tiles from MapTiler.
 
 Create a `.env` file or simply copy and/or rename the `.env.example` file.
 
-Open the `.env` file, you will need to add/replace **MAPTILER_API_KEY** with your own MapTiler API key.
+Open the `.env` file, you will need to add/replace **PUBLIC_MAPTILER_API_KEY** with your own MapTiler API key.
 
 Your MapTiler account access key is on your MapTiler [Cloud](https://cloud.maptiler.com/account/keys/) account page.
 
