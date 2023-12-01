@@ -12,12 +12,12 @@ export const load: PageLoad = async () => {
 		},
 
 		{
-			heading: 'Analysis',
-			title: 'Transactions this Month',
+			heading: 'User Management',
+			title: 'Manage Users',
 			description:
 				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel urna eget massa aliquet ultrices. Donec euismod, nisl eget aliquam ultricies, nisl nisl aliquet nisl, eget aliquam nisl nisl eget nisl. ',
 			image: '',
-			link: '/admin/stats/transactions'
+			link: '/admin/users'
 		}
 	];
 
