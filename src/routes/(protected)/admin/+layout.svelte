@@ -2,7 +2,7 @@
 	import { AppShell } from '@skeletonlabs/skeleton';
 	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
 	import { page } from '$app/stores';
-    import Navigation from '$lib/components/Navigation.svelte';
+	import Navigation from '$lib/components/Navigation.svelte';
 
 	const drawerStore = getDrawerStore();
 
@@ -12,8 +12,8 @@
 </script>
 
 <!-- The drawer overlays the page when active -->
-<Drawer class="z-2" >
-    <Navigation />
+<Drawer>
+	<Navigation />
 </Drawer>
 
 <AppShell
@@ -25,10 +25,10 @@
 		><div class="flex items-center justify-between">
 			<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
 				<span>
-					<svg viewBox="0 0 100 80" class="fill-token w-4 h-4">
-						<rect width="100" height="20" />
-						<rect y="30" width="100" height="20" />
-						<rect y="60" width="100" height="20" />
+					<svg viewBox="0 0 100 80" class="fill-token w-8 h-4">
+						<rect width="100" height="12" />
+						<rect y="30" width="75" height="12" />
+						<rect y="60" width="100" height="12" />
 					</svg>
 				</span>
 			</button>
