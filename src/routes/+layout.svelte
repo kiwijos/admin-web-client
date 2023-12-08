@@ -1,11 +1,12 @@
 <script lang="ts">
-    import "../app.pcss";
-    import { autoModeWatcher } from '@skeletonlabs/skeleton';
+	import '../app.pcss';
+	import { autoModeWatcher } from '@skeletonlabs/skeleton';
 	import { initializeStores } from '@skeletonlabs/skeleton';
 
-    initializeStores();
+	initializeStores();
 </script>
+
 <svelte:head>
-    {@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
+	{@html `<script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
 </svelte:head>
-<slot></slot>
+<slot />
