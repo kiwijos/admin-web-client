@@ -20,7 +20,7 @@ const config: Config = {
 		forms,
 		// 4. Append the Skeleton plugin (after other plugins)
 		skeleton({
-			themes: { preset: ['hamlindigo', 'rocket', 'crimson'] }
+			themes: { preset: ['crimson'] }
 		})
 	]
 };
