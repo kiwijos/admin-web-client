@@ -59,7 +59,7 @@
 		<img
 			src={heroImg}
 			alt="Grupp med männsiskor som skrattar vid datorn"
-			class="absolute inset-0 object-cover h-full"
+			class="absolute inset-0 object-cover h-full w-full"
 		/>
 		<p
 			class="absolute mr-2 mb-2 right-0 bottom-0 text-sm variant-glass-tertiary rounded-3xl px-2 py-1 text-surface-700 dark:text-surface-400"
