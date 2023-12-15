@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { AppShell } from '@skeletonlabs/skeleton';
 	import { Drawer, getDrawerStore } from '@skeletonlabs/skeleton';
-	import { page } from '$app/stores';
 	import Navigation from '$lib/components/Navigation.svelte';
 
 	const drawerStore = getDrawerStore();
@@ -12,33 +11,27 @@
 </script>
 
 <!-- The drawer overlays the page when active -->
-<Drawer>
+<Drawer width="w-52" bgDrawer="bg-white dark:bg-surface-800">
 	<Navigation />
 </Drawer>
 
 <AppShell
-	regionPage="relative"
-	slotSidebarLeft="bg-surface-500/5 w-0 lg:w-48 border border-transparent  border-r-surface-800"
-	slotPageHeader="lg:hidden sticky top-0 z-10 bg-surface-500/5 drop-shadow-md p-2"
+	slotSidebarLeft="bg-white dark:bg-transparent w-0 lg:w-52 border-r border-r-gray-100 dark:border-r-surface-600"
 >
-	<svelte:fragment slot="pageHeader"
-		><div class="flex items-center justify-between">
-			<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
-				<span>
-					<svg viewBox="0 0 100 80" class="fill-token w-8 h-4">
-						<rect width="100" height="12" />
-						<rect y="30" width="75" height="12" />
-						<rect y="60" width="100" height="12" />
-					</svg>
-				</span>
-			</button>
-			{#if !$page.data.user}
-				<div>
-					<a class="btn variant-filled-primary" href="/login">Sign in</a>
-				</div>
-			{/if}
-		</div></svelte:fragment
-	>
+	<svelte:fragment slot="header">
+		<button
+			class="absolute lg:hidden btn-icon btn-sm bg-primary-500 mt-4 ml-4 z-10"
+			on:click={drawerOpen}
+		>
+			<span>
+				<svg viewBox="0 0 100 80" class="fill-white w-8 h-4">
+					<rect width="100" height="12" />
+					<rect y="30" width="75" height="12" />
+					<rect y="60" width="100" height="12" />
+				</svg>
+			</span>
+		</button>
+	</svelte:fragment>
 	<slot />
 	<svelte:fragment slot="sidebarLeft">
 		<Navigation />
