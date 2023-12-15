@@ -41,22 +41,22 @@
 		drawerStore.close();
 	}
 
-	const activeClass = 'bg-surface-100 dark:bg-surface-700 dark:!text-white';
+	const activeClass = 'bg-gray-100 dark:bg-surface-700 dark:!text-white';
 </script>
 
 <div
 	role="navigation"
-	class="flex flex-col h-full divide-y divide-surface-200 dark:divide-surface-700"
+	class="flex flex-col h-full divide-y divide-gray-100 dark:divide-surface-700"
 >
 	{#if $page.data.user}
 		<a
 			href="/admin/account"
-			class="flex px-4 py-3 hover:bg-surface-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
+			class="flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
 		>
 			<div>
 				<Avatar
 					width="w-10"
-					background="bg-surface-50 dark:bg-surface-500"
+					background="bg-gray-100 dark:bg-surface-500"
 					initials={$page.data.user.email[0]}
 				/>
 			</div>
@@ -73,7 +73,7 @@
 				<li>
 					<ul>
 						<a
-							class="flex items-center px-4 py-2 text-sm text-surface-700 hover:bg-surface-100 dark:hover:bg-surface-700 dark:text-surface-100 dark:hover:text-white {$page
+							class="flex items-center px-4 py-2 text-sm text-surface-700 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-100 dark:hover:text-white {$page
 								.url.pathname === path
 								? activeClass
 								: ''}"
@@ -88,7 +88,7 @@
 							{@const active = $page.url.pathname === path ? 'page' : null}
 							<li>
 								<a
-									class="flex px-4 py-2 text-sm text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700 dark:text-surface-300 dark:hover:text-white {$page
+									class="flex px-4 py-2 text-sm text-surface-400 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-300 dark:hover:text-white {$page
 										.url.pathname === path
 										? activeClass
 										: ''}"
@@ -107,7 +107,7 @@
 		<form action="/logout" method="POST" use:enhance>
 			<button
 				type="submit"
-				class="flex items-center w-full px-4 py-2 text-sm text-left text-surface-700 hover:bg-surface-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
+				class="flex items-center w-full px-4 py-2 text-sm text-left text-surface-700 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
 				><Fa icon={faSignOutAlt} /><span class="ms-3">Logga ut</span></button
 			>
 		</form>
