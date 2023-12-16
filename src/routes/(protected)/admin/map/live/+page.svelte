@@ -3,7 +3,7 @@
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
 	import { onMount, onDestroy } from 'svelte';
-	import { animateToPoint } from '$lib/services/animator';
+	// import { animateToPoint } from '$lib/services/animator';
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 
 	let map: MaplibreMap;
@@ -11,10 +11,10 @@
 
 	let evtSource: EventSource;
 
-	let bikeLines: {
-		id: string;
-		coords: [number, number][];
-	}[] = [];
+	// let bikeLines: {
+	// 	id: string;
+	// 	coords: [number, number][];
+	// }[] = [];
 
 	let bikePointFeatures: BikePointFeature[] = [];
 
@@ -87,33 +87,38 @@
 				// 	return;
 				// }
 
+				updateBike({
+					id: data.id,
+					coords: data.coords
+				});
+
 				// check if the bike is already in the array
-				const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
+				// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
 
-				if (existingIndex === -1) {
-					// Add new bike
-					bikeLines.push({
-						id: data.id,
-						coords: [data.coords]
-					});
+				// if (existingIndex === -1) {
+				// 	// Add new bike
+				// 	bikeLines.push({
+				// 		id: data.id,
+				// 		coords: [data.coords]
+				// 	});
 
-					updateBike({
-						id: data.id,
-						coords: data.coords
-					});
-				} else {
-					const prevPoint =
-						bikeLines[existingIndex].coords[bikeLines[existingIndex].coords.length - 1];
-					// Update existing bike
-					bikeLines[existingIndex].coords.push(data.coords);
+				// 	updateBike({
+				// 		id: data.id,
+				// 		coords: data.coords
+				// 	});
+				// } else {
+				// 	const prevPoint =
+				// 		bikeLines[existingIndex].coords[bikeLines[existingIndex].coords.length - 1];
+				// 	// Update existing bike
+				// 	bikeLines[existingIndex].coords.push(data.coords);
 
-					animateToPoint(prevPoint, data.coords, 10000, (coords) => {
-						updateBike({
-							id: data.id,
-							coords: coords
-						});
-					});
-				}
+				// 	animateToPoint(prevPoint, data.coords, 10000, (coords) => {
+				// 		updateBike({
+				// 			id: data.id,
+				// 			coords: coords
+				// 		});
+				// 	});
+				// }
 			};
 
 			evtSource.onerror = function (event) {
