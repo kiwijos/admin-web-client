@@ -50,21 +50,102 @@
 
 	$: if (map)
 		map.on('load', () => {
-			// Add bike source
+			// remove existing symbol layers from the tile provider (they really bog down the map)
+			const layers = map.getStyle().layers;
+			console.log(layers);
+			for (let i = 0; i < layers.length; i++) {
+				const layer = layers[i];
+				if (layer.type === 'symbol') {
+					map.removeLayer(layer.id);
+				}
+			}
+
 			map.addSource('bikes', {
 				type: 'geojson',
-				data: bikePointFeatures
+				data: {
+					type: 'FeatureCollection',
+					features: bikePointFeatures
+				},
+				cluster: true,
+				clusterMaxZoom: 11, // Don't cluster when zoomed in past 11
+				clusterRadius: 50 // Cluster points within 50 pixels of each other
 			});
 
-			// Add bike layer
 			map.addLayer({
-				id: 'bikes',
+				id: 'clusters',
 				type: 'circle',
 				source: 'bikes',
+				filter: ['has', 'point_count'],
 				paint: {
-					'circle-radius': 6,
-					'circle-color': '#000000'
+					// Use step expressions (https://maplibre.org/maplibre-style-spec/#expressions-step)
+					// with three steps to implement three types of circles:
+					//   * Blue, 20px circles when point count is less than 100
+					//   * Yellow, 30px circles when point count is between 100 and 750
+					//   * Pink, 40px circles when point count is greater than or equal to 750
+					'circle-color': [
+						'step',
+						['get', 'point_count'],
+						'#51bbd6',
+						100,
+						'#f1f075',
+						750,
+						'#f28cb1'
+					],
+					'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
 				}
+			});
+
+			map.addLayer({
+				id: 'cluster-count',
+				type: 'symbol',
+				source: 'bikes',
+				filter: ['has', 'point_count'],
+				layout: {
+					'icon-allow-overlap': true,
+					'text-field': '{point_count_abbreviated}',
+					'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+					'text-size': 12
+				}
+			});
+
+			map.addLayer({
+				id: 'unclustered-point',
+				type: 'circle',
+				source: 'bikes',
+				filter: ['!', ['has', 'point_count']],
+				paint: {
+					'circle-color': '#11b4da',
+					'circle-radius': 4,
+					'circle-stroke-width': 1,
+					'circle-stroke-color': '#fff'
+				}
+			});
+
+			// Inspect cluster on click
+			map.on('click', 'clusters', (e) => {
+				const features = map.queryRenderedFeatures(e.point, {
+					layers: ['clusters']
+				});
+				const clusterId = features[0].properties.cluster_id;
+
+				// @ts-expect-error - getClusterExpansionZoom does exist in the types
+				map.getSource('bikes').getClusterExpansionZoom(clusterId, (err, zoom) => {
+					if (err) return;
+
+					map.easeTo({
+						// @ts-expect-error - The features have a geometry, I've just not typed it out here
+						center: features[0].geometry.coordinates,
+						zoom
+					});
+				});
+			});
+
+			map.on('mouseenter', 'clusters', () => {
+				map.getCanvas().style.cursor = 'pointer';
+			});
+
+			map.on('mouseleave', 'clusters', () => {
+				map.getCanvas().style.cursor = '';
 			});
 		});
 
@@ -77,6 +158,8 @@
 
 			evtSource.onmessage = function (event) {
 				const data = JSON.parse(event.data);
+
+				if (!map || !map.getBounds().contains(data.coords)) return;
 
 				updateBike(data.id, data.coords);
 
