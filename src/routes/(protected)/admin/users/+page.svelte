@@ -7,6 +7,25 @@
 
 	export let data: PageData;
 
+	// Filter the data
+	let filter: string = '';
+	$: filteredBody = data?.props.users.filter((user) => {
+		return user.email.toLowerCase().startsWith(filter.toLowerCase());
+	});
+
+	// Filter function
+	function filterUsers(event: Event) {
+		filter = (event.target as HTMLInputElement).value;
+		console.log(filter);
+		console.log(filteredBody);
+	}
+
+	// Slice the data to fit the pagination
+	$: sourceBodySliced = filteredBody.slice(
+		paginationSettings.page * paginationSettings.limit,
+		paginationSettings.page * paginationSettings.limit + paginationSettings.limit
+	);
+
 	$: size = data?.props.users.length;
 
 	// Same goes for the pagination settings
@@ -17,12 +36,6 @@
 		size: size,
 		amounts: [5, 10, 50]
 	};
-
-	// Slice the data to fit the pagination
-	$: sourceBodySliced = data?.props.users.slice(
-		paginationSettings.page * paginationSettings.limit,
-		paginationSettings.page * paginationSettings.limit + paginationSettings.limit
-	);
 </script>
 
 <div class="bg-surface-50 dark:bg-transparent flex gap-4 p-8">
@@ -34,6 +47,7 @@
 			type="search"
 			class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
 			placeholder="Sök efter användare"
+			on:input={filterUsers}
 		/>
 	</div>
 	<Paginator
