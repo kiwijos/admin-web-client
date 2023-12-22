@@ -18,14 +18,12 @@
 
 	let bikePointFeatures: BikePointFeature[] = [];
 
-	const updateBike = (data: { id: string; coords: [number, number] }) => {
-		const id = data.id;
-
+	const updateBike = (id: string, coords: [number, number]) => {
 		const updatedFeature: BikePointFeature = {
 			type: 'Feature',
 			geometry: {
 				type: 'Point',
-				coordinates: data.coords
+				coordinates: coords
 			},
 			properties: {
 				id: id
@@ -78,19 +76,9 @@
 			});
 
 			evtSource.onmessage = function (event) {
-				// reduce load by only updating id's in the 20s range
-
 				const data = JSON.parse(event.data);
 
-				// Uncomment and customize to reduce load
-				// if (parseInt(data.id) > 50) {
-				// 	return;
-				// }
-
-				updateBike({
-					id: data.id,
-					coords: data.coords
-				});
+				updateBike(data.id, data.coords);
 
 				// check if the bike is already in the array
 				// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
