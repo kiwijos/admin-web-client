@@ -10,9 +10,11 @@
 
 		const map: Map = new Map({
 			container: mapContainer,
-			style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${PUBLIC_MAPTILER_API_KEY}`,
+			style: `https://api.maptiler.com/maps/dataviz/style.json?key=${PUBLIC_MAPTILER_API_KEY}`,
 			center: [initialState.lng, initialState.lat],
 			zoom: initialState.zoom,
+			maxZoom: 12,
+			minZoom: 5,
 			attributionControl: false
 		});
 		map.addControl(new AttributionControl({ compact: true }), 'bottom-right');
