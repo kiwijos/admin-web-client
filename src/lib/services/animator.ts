@@ -1,9 +1,7 @@
+import type { AnimatedPointCallback } from '$lib/types/AnimatedPointCallback';
+
 function lerp(a: number, b: number, t: number): number {
 	return a + (b - a) * t;
-}
-
-interface AnimatedPointCallback {
-	(animatedPoint: [number, number]): void;
 }
 
 export const animateToPoint = (
