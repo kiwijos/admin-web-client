@@ -10,6 +10,7 @@ export const animateToPoint = (
 	startPoint: [number, number],
 	endPoint: [number, number],
 	duration: number,
+	fps: number,
 	callback: AnimatedPointCallback
 ) => {
 	// set start to a zero value, which is equivalent to the 0th frame of the animation
@@ -17,25 +18,27 @@ export const animateToPoint = (
 	const start = document.timeline.currentTime;
 
 	function animate(currentTime: number) {
-		// @ts-expect-error – start should be a number
+		// @ts-expect-error – start should be a number (hopefully)
 		const elapsed = currentTime - start;
 		const progress = elapsed / duration;
 
-		if (progress < 1) {
-			const animatedPoint: [number, number] = [
-				lerp(startPoint[0], endPoint[0], progress),
-				lerp(startPoint[1], endPoint[1], progress)
-			];
+		setTimeout(() => {
+			if (progress < 1) {
+				const animatedPoint: [number, number] = [
+					lerp(startPoint[0], endPoint[0], progress),
+					lerp(startPoint[1], endPoint[1], progress)
+				];
 
-			callback(animatedPoint); // draw the in-between points
+				callback(animatedPoint); // draw the in-between points
 
-			// call function before the next repaint.
-			requestAnimationFrame((t) => animate(t));
-		} else {
-			// Animation complete
-			callback(endPoint); // draw the end point
-		}
+				// call function before the next repaint
+				requestAnimationFrame((t) => animate(t));
+			} else {
+				// Animation complete
+				callback(endPoint); // draw the end point
+			}
+		}, 1000 / fps);
 	}
-	// call function before the next repaint.
+	// call function before the next repaint
 	requestAnimationFrame(animate);
 };
