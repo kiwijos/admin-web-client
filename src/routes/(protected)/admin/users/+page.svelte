@@ -38,7 +38,7 @@
 	};
 </script>
 
-<div class="bg-surface-50 dark:bg-transparent flex gap-4 p-8">
+<div class="bg-surface-50 dark:bg-transparent flex flex-col lg:flex-row gap-4 p-8">
 	<div class="input-group grid-cols-[auto_1fr_auto] border-none">
 		<div class="input-group-shim bg-white dark:bg-surface-600">
 			<Fa size="sm" icon={faSearch} />
@@ -56,6 +56,7 @@
 		showPreviousNextButtons={true}
 		amountText="per sida"
 		separatorText="av"
+		justify="justify-between"
 		select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
 		controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
 	/>
