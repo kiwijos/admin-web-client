@@ -52,6 +52,7 @@
 		<a
 			href="/admin/account"
 			class="flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
+			on:click={drawerClose}
 		>
 			<div>
 				<Avatar
