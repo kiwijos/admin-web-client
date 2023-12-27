@@ -28,13 +28,12 @@
 			class="flex flex-col space-y-8"
 		>
 			<label class="label">
-				<span class="text-sm font-bold">Din mail</span>
+				<span class="text-sm font-bold">Ditt användarnamn</span>
 				<input
 					class="input bg-surface-50 dark:bg-surface-700"
-					title="Input (mail)"
-					type="email"
-					placeholder="exempel@email.com"
-					name="email"
+					title="Input (användarnamn)"
+					placeholder="användarnamn"
+					name="username"
 				/>
 			</label>
 			<label class="label">

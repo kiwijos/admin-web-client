@@ -12,10 +12,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 const login: Action = async ({ cookies, request }) => {
 	const data = await request.formData();
 
-	const email = data.get('email');
+	const username = data.get('username');
 	const password = data.get('password');
 
-	if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
+	if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
 		return fail(400, { invalid: true });
 	}
 
@@ -25,7 +25,7 @@ const login: Action = async ({ cookies, request }) => {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ username: email, password: password })
+			body: JSON.stringify({ username, password })
 		});
 
 		const result = await response.json();
