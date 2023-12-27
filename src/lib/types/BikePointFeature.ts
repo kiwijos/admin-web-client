@@ -3,5 +3,6 @@ export interface BikePointFeature {
 	geometry: { type: string; coordinates: [number, number] };
 	properties: {
 		id: string;
+		battery_percentage: number;
 	};
 }
