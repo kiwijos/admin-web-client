@@ -16,7 +16,7 @@ const login: Action = async ({ cookies, request }) => {
 	const password = data.get('password');
 
 	if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
-		return fail(400, { invalid: true });
+		return fail(400, { invalid: true, message: 'Ange både användarnamn och lösenord' });
 	}
 
 	try {
@@ -28,9 +28,35 @@ const login: Action = async ({ cookies, request }) => {
 			body: JSON.stringify({ username, password })
 		});
 
+		if (!response.ok) {
+			// Handle non-successful responses
+			const result = await response.json();
+
+			if (response.status === 401) {
+				// Unauthorized - wrong password
+				console.warn(result.errors.detail);
+				return fail(401, {
+					invalid: true,
+					message: 'Lösenordet stämmer inte med användarnamnet, försök igen'
+				});
+			} else {
+				// Other errors (e.g., server errors)
+				console.error(result.errors.detail);
+				return fail(500, {
+					error: true,
+					message: 'Hittade inte användaren, försök igen'
+				});
+			}
+		}
+
 		const result = await response.json();
 
-		const token = result.data.token;
+		const token = result?.data?.token;
+
+		if (typeof token !== 'string' || !token) {
+			console.error('Unexpected response structure or no token');
+			return fail(500, { error: true, message: 'Något gick fel hos servern, försök igen senare' });
+		}
 
 		cookies.set('session', token, {
 			path: '/',
@@ -40,8 +66,12 @@ const login: Action = async ({ cookies, request }) => {
 
 		throw redirect(302, '/admin/dashboard');
 	} catch (error) {
+		// Handle fetch or other unexpected errors
 		console.error(error);
-		return fail(500, { error: true });
+		return fail(500, {
+			error: true,
+			message: 'Något gick fel med förfrågan till servern, försök igen senare'
+		});
 	}
 };
 
