@@ -47,6 +47,7 @@
 	"dependencies": {
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"dotenv": "^16.3.1",
+		"jwt-decode": "^4.0.0",
 		"maplibre-gl": "^3.6.2"
 	}
 }
