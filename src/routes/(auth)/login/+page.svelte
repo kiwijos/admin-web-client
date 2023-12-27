@@ -7,6 +7,14 @@
 	export let form: ActionData;
 
 	let isFocused: boolean = true;
+
+	let errorMessage = '';
+
+	$: {
+		if (form?.invalid || form?.error) {
+			errorMessage = form?.message ?? 'Nått gick fel. Försök igen senare.';
+		}
+	}
 </script>
 
 <div
@@ -45,10 +53,7 @@
 			/>
 		</label>
 		<button class="btn variant-filled-primary" type="submit">Logga in</button>
-		{#if form?.invalid}
-			<p class="text-error-400">Both email and password are required.</p>
-		{:else}
-			<p>&nbsp;</p>
-		{/if}
+
+		<p class="text-error-500 text-sm">&nbsp;{errorMessage}</p>
 	</form>
 </div>
