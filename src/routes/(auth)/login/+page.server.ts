@@ -19,6 +19,8 @@ const login: Action = async ({ cookies, request }) => {
 		return fail(400, { invalid: true, message: 'Ange både användarnamn och lösenord' });
 	}
 
+	let token: string | undefined;
+
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/login/admin`, {
 			method: 'POST',
@@ -51,20 +53,12 @@ const login: Action = async ({ cookies, request }) => {
 
 		const result = await response.json();
 
-		const token = result?.data?.token;
+		token = result?.data?.token;
 
 		if (typeof token !== 'string' || !token) {
 			console.error('Unexpected response structure or no token');
 			return fail(500, { error: true, message: 'Något gick fel hos servern, försök igen senare' });
 		}
-
-		cookies.set('session', token, {
-			path: '/',
-			sameSite: 'strict',
-			maxAge: 60 * 60 * 24 * 30
-		});
-
-		throw redirect(302, '/admin/dashboard');
 	} catch (error) {
 		// Handle fetch or other unexpected errors
 		console.error(error);
@@ -73,6 +67,14 @@ const login: Action = async ({ cookies, request }) => {
 			message: 'Något gick fel med förfrågan till servern, försök igen senare'
 		});
 	}
+
+	cookies.set('session', token, {
+		path: '/',
+		sameSite: 'strict',
+		maxAge: 60 * 60 * 24 * 30
+	});
+
+	throw redirect(302, '/admin/dashboard');
 };
 
 export const actions: Actions = { login };
