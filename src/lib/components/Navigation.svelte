@@ -58,13 +58,13 @@
 				<Avatar
 					width="w-10"
 					background="bg-gray-100 dark:bg-surface-500"
-					initials={$page.data.user.email[0]}
+					initials={$page.data?.user?.id ?? '?'}
 				/>
 			</div>
 			<div class="overflow-auto">
 				<span class="ms-3 block text-sm text-surface-900 truncate dark:text-white">Namn</span>
 				<span class="ms-3 block text-sm text-surface-400 truncate dark:text-surface-400"
-					>{$page.data.user.email}</span
+					>{$page.data.user.id}</span
 				>
 			</div>
 		</a>
