@@ -18,7 +18,7 @@
 </script>
 
 <div
-	class="flex flex-col justify-center md:max-w-sm max-w-full h-full bg-surface-100 dark:bg-surface-800 p-4 space-y-8"
+	class="flex flex-col justify-center md:max-w-sm max-w-full h-full bg-surface-500/5 p-4 space-y-8"
 >
 	<div>
 		<h1 class="text-4xl font-thin">Logga in i adminportalen</h1>
