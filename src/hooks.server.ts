@@ -34,7 +34,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// Invalid token, force the user to log in again
 		event.locals.user = null;
-		event.cookies.delelte('session', { path: '/' });
+		event.cookies.delete('session', { path: '/' });
 	}
 
 	return await resolve(event);
