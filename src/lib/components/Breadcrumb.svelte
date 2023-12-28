@@ -5,7 +5,8 @@
 	const names: { [key: string]: string } = {
 		users: 'Användare',
 		transactions: 'Betalningar',
-		trips: 'Resor'
+		trips: 'Resor',
+		search: 'Sök'
 	};
 
 	// create breadcrumbs for all pages after /admin
