@@ -2,9 +2,9 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { PUBLIC_REST_API_URL } from '$env/static/public';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
-		// redirect logged in users to the dashboard
+export const load: PageServerLoad = async ({ cookies }) => {
+	if (typeof cookies.get('session') === 'string') {
+		// attempt to redirect logged in users to the dashboard
 		throw redirect(302, '/admin/dashboard');
 	}
 };
