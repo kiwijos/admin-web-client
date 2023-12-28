@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	// ONLY RUN this hook for admin pages (e.g. /admin/dashboard, /admin/users)
-	// DON'T RUN this hook for the auth pages (e.g. /login, /callback, /logout)
+	// DON'T RUN this hook for the auth pages (e.g. /login, /logout)
 	if (!event.url.pathname.startsWith('/admin')) {
 		return await resolve(event);
 	}
