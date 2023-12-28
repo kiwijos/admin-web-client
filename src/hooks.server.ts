@@ -2,9 +2,15 @@ import type { Handle } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
 
 export const handle: Handle = async ({ event, resolve }) => {
+	// ONLY RUN this hook for admin pages (e.g. /admin/dashboard, /admin/users)
+	// DON'T RUN this hook for the auth pages (e.g. /login, /callback, /logout)
+	if (!event.url.pathname.startsWith('/admin')) {
+		return await resolve(event);
+	}
+
 	const token = event.cookies.get('session');
 
-	// Resolve early if there's no token to check
+	// Redirect early to login page if the user is not logged in
 	if (typeof token !== 'string' || !token) {
 		// Sometimes the user object is still in the request locals, for example if:
 		// 	- the cookie expired
@@ -12,8 +18,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// The user object is only explicitly set to null when:
 		// 	- the user logs out via /logout
 		// 	- the token check fails (e.g. invalid or expired token)
-		event.locals.user = null;
-		return await resolve(event);
+		event.locals.user = null; // <-- make sure the user object is null in any case
+		throw redirect(302, '/login');
 	}
 
 	try {
@@ -35,7 +41,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// Invalid token, force the user to log in again
 		event.locals.user = null;
 		event.cookies.delete('session', { path: '/' });
+		throw redirect(302, '/login');
 	}
 
-	return await resolve(event);
+	return await resolve(event); // <-- all good, allow the request to proceed
 };
