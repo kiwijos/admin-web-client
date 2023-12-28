@@ -12,7 +12,6 @@
 
 	function inputFromDate(event: Event) {
 		fromDate = new Date((event.target as HTMLInputElement).value);
-		console.log(fromDate);
 	}
 
 	function inputToDate(event: Event) {
@@ -108,7 +107,7 @@
 					</tr>
 				</thead>
 				<tbody class="overflow-y-scroll text-sm">
-					{#each filteredBody as transaction, i}
+					{#each sourceBodySliced as transaction, i}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
