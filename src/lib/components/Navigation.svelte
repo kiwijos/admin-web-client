@@ -29,6 +29,7 @@
 			path: '/admin/users',
 			icon: faUsersCog,
 			subpaths: [
+				{ name: 'Sök användare', path: '/admin/users/search' },
 				{ name: 'Betalningar', path: '/admin/users/transactions' },
 				{ name: 'Resor', path: '/admin/users/trips' }
 			]
