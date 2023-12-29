@@ -48,6 +48,7 @@
 <div
 	role="navigation"
 	class="flex flex-col h-full divide-y divide-gray-100 dark:divide-surface-700"
+	data-sveltekit-preload-data="false"
 >
 	{#if $page.data.user}
 		<a
