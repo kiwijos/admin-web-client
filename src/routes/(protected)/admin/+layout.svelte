@@ -20,7 +20,7 @@
 >
 	<svelte:fragment slot="header">
 		<button
-			class="absolute lg:hidden btn-icon btn-sm bg-primary-500 mt-4 ml-4 z-10"
+			class="absolute lg:hidden btn-icon btn-sm bg-primary-500 right-0 mt-2 mr-4 z-10"
 			on:click={drawerOpen}
 		>
 			<span>
