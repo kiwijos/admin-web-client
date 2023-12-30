@@ -23,6 +23,9 @@ export const formatDateReadable = (date: string): string => {
 		weekday: 'long',
 		year: 'numeric',
 		month: 'long',
-		day: 'numeric'
+		day: 'numeric',
+		hour: 'numeric',
+		minute: 'numeric',
+		hour12: false // Use 24-hour format
 	});
 };
