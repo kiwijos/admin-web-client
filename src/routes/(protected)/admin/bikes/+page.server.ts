@@ -1,5 +1,16 @@
 import type { Action, Actions } from './$types';
+import type { PageServerLoad } from './$types';
+import { PUBLIC_REST_API_URL } from '$env/static/public';
+
 import { fail } from '@sveltejs/kit';
+
+export const load: PageServerLoad = async () => {
+	return {
+		bikes: await fetch(`${PUBLIC_REST_API_URL}/bikes`, {
+			method: 'GET'
+		}).then((r) => r.json())
+	};
+};
 
 const stop: Action = async ({ request }) => {
 	const data = await request.formData();
