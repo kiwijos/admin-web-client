@@ -12,18 +12,39 @@ export const load: PageServerLoad = async () => {
 	};
 };
 
-const stop: Action = async ({ request }) => {
+const stop: Action = async ({ request, cookies }) => {
 	const data = await request.formData();
 
-	const id = data.get('id'); // this is the id of the bike to stop
+	const id = data.get('id');
 
 	if (typeof id !== 'string' || !id) {
-		return fail(400, { invalid: true }); // use this in the client to show an error message
+		return fail(400, { invalid: true });
 	}
 
-	// TODO: stop the bike with the given id
+	console.log('id', id);
 
-	console.log(id); // temporary until we implement the above
+	try {
+		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${id}/deactivate`, {
+			method: 'PUT',
+			headers: {
+				'x-access-token': cookies.get('session')
+			}
+		});
+
+		if (!response.ok) {
+			const result = await response.json();
+
+			console.error(result.errors.message);
+
+			return fail(response.status, { invalid: true, message: result.errors.message });
+		}
+	} catch (error) {
+		console.error(error);
+
+		return fail(500, { invalid: true, message: error.message });
+	}
+
+	return { success: true };
 };
 
 export const actions: Actions = { stop };
