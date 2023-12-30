@@ -62,6 +62,7 @@
 		justify="justify-between"
 		select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
 		controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
+		class="sm:!flex-row gap-4 !space-x-0 !space-y-0 [&>label]:w-fit"
 	/>
 </div>
 {#await data.users}
@@ -94,7 +95,7 @@
 								>{user.balance} kr</span
 							>
 						</td>
-						<td class="px-6 py-4 text-right">
+						<td class="px-6 py-4 text-right whitespace-nowrap">
 							<a
 								href="/admin/users/{user.id}"
 								class="font-medium text-secondary-500 hover:underline">Profil</a
