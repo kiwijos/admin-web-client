@@ -6,7 +6,7 @@
 		users: 'Användare',
 		transactions: 'Betalningar',
 		trips: 'Resor',
-		search: 'Sök'
+		bikes: 'Cyklar'
 	};
 
 	// create breadcrumbs for all pages after /admin
