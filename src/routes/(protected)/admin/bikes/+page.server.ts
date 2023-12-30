@@ -12,7 +12,7 @@ export const load: PageServerLoad = async () => {
 	};
 };
 
-const stop: Action = async ({ request, cookies }) => {
+const deactivate: Action = async ({ request, cookies }) => {
 	const data = await request.formData();
 
 	const id = data.get('id');
@@ -20,8 +20,6 @@ const stop: Action = async ({ request, cookies }) => {
 	if (typeof id !== 'string' || !id) {
 		return fail(400, { invalid: true });
 	}
-
-	console.log('id', id);
 
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${id}/deactivate`, {
@@ -47,4 +45,4 @@ const stop: Action = async ({ request, cookies }) => {
 	return { success: true };
 };
 
-export const actions: Actions = { stop };
+export const actions: Actions = { deactivate };
