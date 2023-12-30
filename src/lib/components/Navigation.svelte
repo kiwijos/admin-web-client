@@ -10,6 +10,7 @@
 		faUsersCog,
 		faMapLocation,
 		faChartPie,
+		faBicycle,
 		faSignOutAlt
 	} from '@fortawesome/free-solid-svg-icons';
 
@@ -20,8 +21,8 @@
 			path: '/admin/map',
 			icon: faMapLocation,
 			subpaths: [
-				{ name: 'Zoner', path: '/admin/map/zones' },
-				{ name: 'Cyklar', path: '/admin/map/live' }
+				{ name: 'Zonkarta', path: '/admin/map/zones' },
+				{ name: 'Livekarta', path: '/admin/map/live' }
 			]
 		},
 		{
@@ -33,7 +34,8 @@
 				{ name: 'Betalningar', path: '/admin/users/transactions' },
 				{ name: 'Resor', path: '/admin/users/trips' }
 			]
-		}
+		},
+		{ name: 'Cyklar', path: '/admin/bikes', icon: faBicycle, subpaths: [] }
 	];
 
 	const drawerStore = getDrawerStore();
