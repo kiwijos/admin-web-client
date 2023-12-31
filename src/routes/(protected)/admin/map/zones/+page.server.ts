@@ -1,12 +1,13 @@
 import type { PageServerLoad } from './$types';
-import { cities } from '$lib/data/cities';
-import { zones } from '$lib/data/zones';
+import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 export const load: PageServerLoad = async () => {
 	return {
-		props: {
-			cities,
-			zones
-		}
+		zones: await fetch(`${PUBLIC_REST_API_URL}/zones`, {
+			method: 'GET'
+		}).then((r) => r.json()),
+		cities: await fetch(`${PUBLIC_REST_API_URL}/cities`, {
+			method: 'GET'
+		}).then((r) => r.json())
 	};
 };
