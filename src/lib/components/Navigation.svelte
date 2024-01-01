@@ -51,7 +51,7 @@
 	class="flex flex-col h-full divide-y divide-gray-100 dark:divide-surface-700"
 	data-sveltekit-preload-data="false"
 >
-	{#if $page.data.user}
+	{#if $page.data.signed_in_as}
 		<a
 			href="/admin/account"
 			class="flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-200 dark:hover:text-white"
@@ -61,13 +61,13 @@
 				<Avatar
 					width="w-10"
 					background="bg-gray-100 dark:bg-surface-500"
-					initials={$page.data?.user?.id ?? '?'}
+					initials={$page.data?.signed_in_as?.id ?? '?'}
 				/>
 			</div>
 			<div class="overflow-auto">
 				<span class="ms-3 block text-sm text-surface-900 truncate dark:text-white">Namn</span>
 				<span class="ms-3 block text-sm text-surface-400 truncate dark:text-surface-400"
-					>{$page.data.user.id}</span
+					>{$page.data.signed_in_as.id}</span
 				>
 			</div>
 		</a>

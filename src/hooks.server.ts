@@ -19,7 +19,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// The user object is only explicitly set to null when:
 		// 	- the user logs out via /logout
 		// 	- the token check fails (e.g. invalid or expired token)
-		event.locals.user = null; // <-- make sure the user object is null in any case
+		event.locals.signed_in_as = null; // <-- make sure the user object is null in any case
 		throw redirect(302, '/login');
 	}
 
@@ -33,14 +33,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (date < new Date()) throw new Error('Token expired');
 
 		// Valid token, pass on the user object via the request locals
-		event.locals.user = {
+		event.locals.signed_in_as = {
 			id: decoded.id
 		};
 	} catch (error) {
 		console.error(error);
 
 		// Invalid token, force the user to log in again
-		event.locals.user = null;
+		event.locals.signed_in_as = null;
 		event.cookies.delete('session', { path: '/' });
 		throw redirect(302, '/login');
 	}
