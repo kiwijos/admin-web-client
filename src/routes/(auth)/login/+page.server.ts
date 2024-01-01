@@ -68,7 +68,7 @@ const login: Action = async ({ cookies, request }) => {
 		});
 	}
 
-	cookies.set('session', token, {
+	cookies.set('access_token', token, {
 		path: '/',
 		sameSite: 'strict',
 		maxAge: 60 * 60 * 24 * 30

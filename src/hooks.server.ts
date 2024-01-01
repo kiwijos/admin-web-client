@@ -9,7 +9,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return await resolve(event);
 	}
 
-	const token = event.cookies.get('session');
+	const token = event.cookies.get('access_token');
 
 	// Redirect early to login page if the user is not logged in
 	if (typeof token !== 'string' || !token) {
@@ -41,7 +41,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// Invalid token, force the user to log in again
 		event.locals.signed_in_as = null;
-		event.cookies.delete('session', { path: '/' });
+		event.cookies.delete('access_token', { path: '/' });
 		throw redirect(302, '/login');
 	}
 
