@@ -3,7 +3,7 @@ import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 	return {
-		user: await fetch(`${PUBLIC_REST_API_URL}/admin/users/${params.slug}`, {
+		user: await fetch(`${PUBLIC_REST_API_URL}/admin/users/${params.id}`, {
 			method: 'GET',
 			headers: {
 				'x-access-token': cookies.get('session')
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 				'Content-Type': 'application/json',
 				'x-access-token': cookies.get('session')
 			},
-			body: JSON.stringify({ user_id: params.slug })
+			body: JSON.stringify({ user_id: params.id })
 		}).then((r) => r.json()),
 		transactions: await fetch(`${PUBLIC_REST_API_URL}/admin/transactions/limit/5/offset/0`, {
 			method: 'POST',
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 				'Content-Type': 'application/json',
 				'x-access-token': cookies.get('session')
 			},
-			body: JSON.stringify({ user_id: params.slug })
+			body: JSON.stringify({ user_id: params.id })
 		}).then((r) => r.json())
 	};
 };
