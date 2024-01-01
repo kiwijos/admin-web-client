@@ -1,9 +1,12 @@
 <script lang="ts">
-	import Map from '$lib/components/Map.svelte';
 	import type { Map as MaplibreMap } from 'maplibre-gl';
+	import type { PageData } from './$types';
+	import type { City } from '$lib/types/City';
+	import type { Zone } from '$lib/types/Zone';
+
+	import Map from '$lib/components/Map.svelte';
 	import maplibregl from 'maplibre-gl';
 	import { mapStore } from '$lib/stores/map';
-	import type { PageData } from './$types';
 	import { PUBLIC_MAPTILER_API_KEY } from '$env/static/public';
 
 	export let data: PageData;
@@ -17,9 +20,9 @@
 	const zoneOptions: {
 		[key: string]: { color: string; label: string; minZoom: number };
 	} = {
-		parking: { color: '#B0FC38', label: 'Parking', minZoom: 12 },
-		charging: { color: '#FFFF00', label: 'Charging', minZoom: 12 },
-		forbidden: { color: '#FF0000', label: 'Forbidden', minZoom: 11 }
+		parking: { color: 'blue', label: 'Parkering', minZoom: 12 },
+		charging: { color: 'green', label: 'Laddning', minZoom: 12 },
+		forbidden: { color: 'red', label: 'Förbjuden', minZoom: 11 }
 	};
 
 	const cityZoom = 11;
@@ -28,7 +31,7 @@
 		map.on('load', () => {
 			// extract coordinates for each city
 			// @ts-expect-error - data is not typed but should look like this
-			const coordinates: [number, number][][][] = data.props.cities.map((city) => {
+			const coordinates: [number, number][][][] = data.cities.map((city) => {
 				return city.geometry.coordinates;
 			});
 
@@ -56,7 +59,7 @@
 			});
 
 			///////// ADD CITY SOURCES AND LAYERS //////////
-			const cityFeatures = data.props.cities.map((city) => {
+			const cityFeatures = data.cities.map((city: City) => {
 				return {
 					type: 'Feature',
 					geometry: {
@@ -120,14 +123,14 @@
 			});
 
 			///////// ADD ZONE SOURCES AND LAYERS //////////
-			const zoneFeatures = data.props.zones.map((zone) => {
+			const zoneFeatures = data.zones.map((zone: Zone) => {
 				return {
 					type: 'Feature',
 					geometry: {
 						type: zone.geometry.type,
 						coordinates: zone.geometry.coordinates
 					},
-					properties: { zone_type: zone.zone_type, city_id: zone.city_id }
+					properties: { zone_type: zone.descr, city_id: zone.city_id }
 				};
 			});
 
@@ -167,6 +170,7 @@
 							source: 'zones',
 							layout: {},
 							paint: {
+								// 'fill-pattern': zoneOptions[zoneType].pattern,
 								'fill-color': zoneOptions[zoneType].color,
 								'fill-opacity': 0.5,
 								'fill-outline-color': '#ffffff'
@@ -186,12 +190,14 @@
 						minzoom: zoneOptions[zoneType].minZoom,
 						source: 'zones',
 						layout: {
+							'icon-allow-overlap': true,
 							'text-field': zoneOptions[zoneType].label,
 							'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-							'text-size': 12
+							'text-size': 9,
+							'text-transform': 'uppercase'
 						},
 						paint: {
-							'text-color': '#000000'
+							'text-color': zoneOptions[zoneType].color
 						},
 						filter: ['==', 'zone_type', zoneType]
 					});
