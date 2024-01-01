@@ -1,14 +1,30 @@
+import type { Bike } from '$lib/types/bike';
+import type { Trip } from '$lib/types/trip';
+import type { Transaction } from '$lib/types/transaction';
+import type { City } from '$lib/types/city';
+import type { Zone } from '$lib/types/zone';
+import type { User } from '$lib/types/user';
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: {
-				email: string;
+			signed_in_as: {
+				id: number;
 			};
 		}
-		// interface PageData {}
+		interface PageData {
+			bike?: Bike;
+			bikes?: Bike[];
+			trips?: Trip[];
+			transactions?: Transaction[];
+			user?: User;
+			users?: User[];
+			cities?: City[];
+			zones?: Zone[];
+		}
 		// interface Platform {}
 	}
 }
