@@ -3,7 +3,7 @@ import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ cookies, fetch }) => {
 	return {
-		users: await fetch(`${PUBLIC_REST_API_URL}/admin/users`, {
+		trips: await fetch(`${PUBLIC_REST_API_URL}/admin/trips/all`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
