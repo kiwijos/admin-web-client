@@ -88,8 +88,18 @@
 				{#each sourceBodySliced as user, i}
 					{@const negative = user.balance < 0}
 					<tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
-						<td class="px-6 py-4 table-cell-fit">{user.id}</td>
-						<td class="px-6 py-4">{user.email}</td>
+						<td class="px-6 py-4 table-cell-fit"
+							><a
+								href="/admin/users/{user.id}"
+								class="font-medium text-secondary-500 hover:underline">{user.id}</a
+							></td
+						>
+						<td class="px-6 py-4"
+							><a
+								href="/admin/users/{user.id}"
+								class="font-medium text-secondary-500 hover:underline">{user.email}</a
+							></td
+						>
 						<td class="px-6 py-4 table-cell-fit text-right"
 							><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
 								>{user.balance} kr</span
