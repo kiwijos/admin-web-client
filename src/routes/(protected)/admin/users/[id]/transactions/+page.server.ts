@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 				'Content-Type': 'application/json',
 				'x-access-token': cookies.get('session')
 			},
-			body: JSON.stringify({ user_id: params.slug })
+			body: JSON.stringify({ user_id: params.id })
 		}).then((r) => r.json())
 	};
 };
