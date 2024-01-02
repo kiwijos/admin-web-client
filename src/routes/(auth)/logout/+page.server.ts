@@ -8,7 +8,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default({ locals, cookies }) {
 		cookies.delete('access_token', { path: '/' });
-		locals.user = null;
+		locals.signed_in_as = null;
 
 		throw redirect(302, '/login');
 	}
