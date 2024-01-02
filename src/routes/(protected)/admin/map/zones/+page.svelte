@@ -3,6 +3,8 @@
 	import type { PageData } from './$types';
 	import type { City } from '$lib/types/City';
 	import type { Zone } from '$lib/types/Zone';
+	import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
+	import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
 
 	import Map from '$lib/components/Map.svelte';
 	import maplibregl from 'maplibre-gl';
@@ -110,7 +112,7 @@
 			});
 
 			///////// ADD CITY SOURCES AND LAYERS //////////
-			const cityFeatures = data.cities.map((city: City) => {
+			const cityFeatures: CityPolygonFeature[] = data.cities.map((city: City) => {
 				return {
 					type: 'Feature',
 					geometry: {
@@ -129,7 +131,7 @@
 				}
 			});
 
-			cityFeatures.forEach((feature) => {
+			cityFeatures.forEach((feature: CityPolygonFeature) => {
 				const cityId: string = feature.properties['id'];
 				const fillLayerId = `${cityId}-fill`;
 
@@ -189,7 +191,7 @@
 			});
 
 			///////// ADD ZONE SOURCES AND LAYERS //////////
-			const zoneFeatures = data.zones.map((zone: Zone) => {
+			const zoneFeatures: ZonePolygonFeature[] = data.zones.map((zone: Zone) => {
 				return {
 					type: 'Feature',
 					geometry: {
@@ -222,7 +224,7 @@
 				}
 			}
 
-			zoneFeatureCollection.features.forEach((feature) => {
+			zoneFeatureCollection.features.forEach((feature: ZonePolygonFeature) => {
 				const zoneType: string = feature.properties['zone_type'];
 				const cityId: string = feature.properties['city_id'];
 				const fillLayerID = `${cityId}-${zoneType}-fill`;
