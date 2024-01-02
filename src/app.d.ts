@@ -11,7 +11,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			signed_in_as: {
+			signed_in_as: null | {
 				id: number;
 			};
 		}
