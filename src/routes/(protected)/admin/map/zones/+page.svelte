@@ -57,11 +57,26 @@
 	const cityMaxZoom = 11;
 
 	const zoneOptions: {
-		[key: string]: { color: string; label: string; text_color: string; minZoom: number };
+		[key: string]: { fill_color: string; label: string; text_color: string; minZoom: number };
 	} = {
-		parking: { color: '#0ea5e9', label: 'Parkering', text_color: '#0c4a6e', minZoom: 11 },
-		charging: { color: '#10b981', label: 'Laddning', text_color: '#064e3b', minZoom: 11 },
-		forbidden: { color: '#ef4444', label: 'Förbjuden', text_color: '#7f1d1d', minZoom: 11 }
+		parking: {
+			fill_color: '#0ea5e9',
+			label: 'Parkering',
+			text_color: '#0c4a6e',
+			minZoom: cityMaxZoom
+		},
+		charging: {
+			fill_color: '#10b981',
+			label: 'Laddning',
+			text_color: '#064e3b',
+			minZoom: cityMaxZoom
+		},
+		forbidden: {
+			fill_color: '#ef4444',
+			label: 'Förbjuden',
+			text_color: '#7f1d1d',
+			minZoom: cityMaxZoom
+		}
 	};
 
 	$: if (map) {
@@ -223,7 +238,7 @@
 							layout: {},
 							paint: {
 								// 'fill-pattern': zoneOptions[zoneType].pattern,
-								'fill-color': zoneOptions[zoneType].color,
+								'fill-color': zoneOptions[zoneType].fill_color,
 								'fill-opacity': 0.5,
 								'fill-outline-color': '#ffffff'
 							},
