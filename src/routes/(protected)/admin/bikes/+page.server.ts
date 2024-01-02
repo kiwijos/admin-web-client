@@ -114,8 +114,6 @@ const changeStatus: Action = async ({ request, cookies }) => {
 		return fail(500, { invalid: true, message: error.message });
 	}
 
-	console.log(result);
-
 	return { success: true };
 };
 
