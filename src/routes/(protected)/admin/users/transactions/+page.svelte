@@ -66,7 +66,7 @@
 	<div class="w-full h-full flex items-center justify-center placeholder animate-pulse">
 		Hämtar betalningar...
 	</div>
-{:then transactions}
+{:then}
 	<div class="bg-surface-50 dark:bg-transparent flex flex-col xl:flex-row gap-4 p-8">
 		<div class="flex flex-col sm:flex-row gap-4 grow">
 			<div class="input-group grid-cols-[auto_1fr_auto] border-none">
@@ -124,7 +124,7 @@
 						<td colspan="5" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
 					</tr>
 				{:else}
-					{#each sourceBodySliced as transaction, i}
+					{#each sourceBodySliced as transaction}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>

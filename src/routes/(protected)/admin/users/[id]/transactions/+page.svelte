@@ -25,10 +25,10 @@
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
 				{#if transactions.length === 0}
 					<tr>
-						<td colspan="6" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
+						<td colspan="4" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
 					</tr>
 				{:else}
-					{#each transactions as transaction, i}
+					{#each transactions as transaction}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>

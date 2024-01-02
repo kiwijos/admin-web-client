@@ -90,7 +90,7 @@
 						<td colspan="10" class="px-6 py-4 text-center">Inga användare hittades.</td>
 					</tr>
 				{:else}
-					{#each sourceBodySliced as user, i}
+					{#each sourceBodySliced as user}
 						{@const negative = user.balance < 0}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"

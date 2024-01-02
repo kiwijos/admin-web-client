@@ -66,7 +66,7 @@
 	<div class="w-full h-full flex items-center justify-center placeholder animate-pulse">
 		Hämtar resor...
 	</div>
-{:then trips}
+{:then}
 	<div class="bg-surface-50 dark:bg-transparent flex flex-col lg:flex-row gap-4 p-8">
 		<div class="flex flex-col sm:flex-row gap-4 grow">
 			<div class="input-group grid-cols-[auto_1fr_auto] border-none">
@@ -129,7 +129,7 @@
 						<td colspan="10" class="px-6 py-4 text-center">Inga resor hittades.</td>
 					</tr>
 				{:else}
-					{#each sourceBodySliced as trip, i}
+					{#each sourceBodySliced as trip}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>

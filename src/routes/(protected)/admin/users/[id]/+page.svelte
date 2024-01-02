@@ -108,7 +108,7 @@
 									<td colspan="6" class="px-6 py-4 text-center">Inga resor hittades.</td>
 								</tr>
 							{:else}
-								{#each trips as trip, i}
+								{#each trips as trip}
 									<tr
 										class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 									>
@@ -194,7 +194,7 @@
 									<td colspan="6" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
 								</tr>
 							{:else}
-								{#each transactions as transaction, i}
+								{#each transactions as transaction}
 									<tr
 										class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 									>

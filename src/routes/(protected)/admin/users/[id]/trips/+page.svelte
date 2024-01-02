@@ -29,7 +29,7 @@
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
-				{#each trips as trip, i}
+				{#each trips as trip}
 					<tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
 						<td class="px-6 py-4">{trip.id} </td>
 						<td class="px-6 py-4"
