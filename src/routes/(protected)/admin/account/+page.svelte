@@ -6,7 +6,7 @@
 <div class="p-16 space-y-4 max-w-xl">
 	<div>
 		<h1 class="text-4xl font-bold">Namn</h1>
-		<p class="text-lg text-surface-400">{$page.data.user.email}</p>
+		<p class="text-lg text-surface-400">Mail</p>
 	</div>
 	<hr />
 	<form class="space-y-4">
@@ -16,7 +16,7 @@
 				class="input"
 				title="Input (email)"
 				type="email"
-				placeholder={$page.data.user.email}
+				placeholder="exempel@email.com"
 				name="email"
 				disabled
 			/>
