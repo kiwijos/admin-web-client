@@ -62,7 +62,7 @@
 					</tr>
 				</thead>
 				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
-					{#each sourceBodySliced as bike, i}
+					{#each sourceBodySliced as bike}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
