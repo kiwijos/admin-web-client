@@ -26,7 +26,8 @@
 				coordinates: coords
 			},
 			properties: {
-				id: id
+				id: id,
+				battery_percentage: 0
 			}
 		};
 
@@ -41,7 +42,7 @@
 		}
 
 		// Update map source
-		// @ts-expect-error - setData does exist
+		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
 			type: 'FeatureCollection',
 			features: bikePointFeatures
@@ -50,7 +51,7 @@
 
 	$: if (map)
 		map.on('load', () => {
-			// remove existing symbol layers from the tile provider (they really bog down the map)
+			// remove existing symbol layers from the tile provider (they can really bog down the map)
 			const layers = map.getStyle().layers;
 			console.log(layers);
 			for (let i = 0; i < layers.length; i++) {
@@ -95,6 +96,7 @@
 				}
 			});
 
+			// Point count for clusters
 			map.addLayer({
 				id: 'cluster-count',
 				type: 'symbol',
@@ -108,6 +110,7 @@
 				}
 			});
 
+			// Individual points (not clusters)
 			map.addLayer({
 				id: 'unclustered-point',
 				type: 'circle',
@@ -126,9 +129,10 @@
 				const features = map.queryRenderedFeatures(e.point, {
 					layers: ['clusters']
 				});
+
 				const clusterId = features[0].properties.cluster_id;
 
-				// @ts-expect-error - getClusterExpansionZoom does exist in the types
+				// @ts-expect-error - getClusterExpansionZoom does not exist in the types it seems
 				map.getSource('bikes').getClusterExpansionZoom(clusterId, (err, zoom) => {
 					if (err) return;
 
@@ -150,57 +154,54 @@
 		});
 
 	onMount(() => {
-		// set a delay to allow the map to load
-		setTimeout(() => {
-			evtSource = new EventSource('http://localhost:1337/v1/admin/feed', {
-				withCredentials: true
-			});
+		evtSource = new EventSource('http://localhost:1337/v1/admin/feed', {
+			withCredentials: true
+		});
 
-			evtSource.onmessage = function (event) {
-				const data = JSON.parse(event.data);
+		evtSource.onerror = function (event) {
+			console.error('EventSource failed:', event);
+			evtSource.close();
+			console.log('EventSource closed');
+		};
 
-				if (!map || !map.getBounds().contains(data.coords)) return;
+		evtSource.onmessage = function (event) {
+			const data = JSON.parse(event.data);
 
-				updateBike(data.id, data.coords);
+			if (!map || !map.getBounds().contains(data.coords)) return;
 
-				// check if the bike is already in the array
-				// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
+			updateBike(data.id, data.coords);
 
-				// if (existingIndex === -1) {
-				// 	// Add new bike
-				// 	bikeLines.push({
-				// 		id: data.id,
-				// 		coords: [data.coords]
-				// 	});
+			// check if the bike is already in the array
+			// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
 
-				// 	updateBike({
-				// 		id: data.id,
-				// 		coords: data.coords
-				// 	});
-				// } else {
-				// 	const prevPoint =
-				// 		bikeLines[existingIndex].coords[bikeLines[existingIndex].coords.length - 1];
-				// 	// Update existing bike
-				// 	bikeLines[existingIndex].coords.push(data.coords);
+			// if (existingIndex === -1) {
+			// 	// Add new bike
+			// 	bikeLines.push({
+			// 		id: data.id,
+			// 		coords: [data.coords]
+			// 	});
 
-				// 	animateToPoint(prevPoint, data.coords, 10000, (coords) => {
-				// 		updateBike({
-				// 			id: data.id,
-				// 			coords: coords
-				// 		});
-				// 	});
-				// }
-			};
+			// 	updateBike({
+			// 		id: data.id,
+			// 		coords: data.coords
+			// 	});
+			// } else {
+			// 	const prevPoint =
+			// 		bikeLines[existingIndex].coords[bikeLines[existingIndex].coords.length - 1];
+			// 	// Update existing bike
+			// 	bikeLines[existingIndex].coords.push(data.coords);
 
-			evtSource.onerror = function (event) {
-				console.error('EventSource failed:', event);
-				evtSource.close();
-				console.log('EventSource closed');
-			};
-		}, 3000);
+			// 	animateToPoint(prevPoint, data.coords, 10000, (coords) => {
+			// 		updateBike({
+			// 			id: data.id,
+			// 			coords: coords
+			// 		});
+			// 	});
+			// }
+		};
 	});
 
-	//close the EventSource connection when the component is destroyed
+	// close the EventSource connection when the component is destroyed
 	$: if (evtSource)
 		onDestroy(() => {
 			evtSource.close();
