@@ -7,6 +7,9 @@ node_modules
 .env.*
 !.env.example
 
+# The base layout has some framework specific code that the linting doesn't like
+**/routes/+layout.svelte
+
 # Ignore files for PNPM, NPM and YARN
 pnpm-lock.yaml
 package-lock.json
