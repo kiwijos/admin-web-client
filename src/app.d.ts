@@ -1,9 +1,9 @@
-import type { Bike } from '$lib/types/bike';
-import type { Trip } from '$lib/types/trip';
-import type { Transaction } from '$lib/types/transaction';
-import type { City } from '$lib/types/city';
-import type { Zone } from '$lib/types/zone';
-import type { User } from '$lib/types/user';
+import type { Bike } from '$lib/types/Bike';
+import type { Trip } from '$lib/types/Trip';
+import type { Transaction } from '$lib/types/Transaction';
+import type { City } from '$lib/types/City';
+import type { Zone } from '$lib/types/Zone';
+import type { User } from '$lib/types/User';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
