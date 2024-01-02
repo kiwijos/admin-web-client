@@ -54,6 +54,8 @@
 		}
 	}
 
+	const cityMaxZoom = 11;
+
 	const zoneOptions: {
 		[key: string]: { color: string; label: string; text_color: string; minZoom: number };
 	} = {
@@ -61,8 +63,6 @@
 		charging: { color: '#10b981', label: 'Laddning', text_color: '#064e3b', minZoom: 11 },
 		forbidden: { color: '#ef4444', label: 'Förbjuden', text_color: '#7f1d1d', minZoom: 11 }
 	};
-
-	const cityZoom = 11;
 
 	$: if (map) {
 		map.on('load', () => {
@@ -124,11 +124,11 @@
 						id: fillLayerId,
 						type: 'fill',
 						source: 'cities',
-						maxzoom: cityZoom,
+						maxzoom: cityMaxZoom,
 						layout: {},
 						paint: {
 							'fill-color': '#6366f1',
-							'fill-opacity': ['interpolate', ['linear'], ['zoom'], 1, 1, cityZoom, 0]
+							'fill-opacity': ['interpolate', ['linear'], ['zoom'], 1, 1, cityMaxZoom, 0]
 						},
 						filter: ['==', 'id', cityId]
 					});
@@ -136,10 +136,10 @@
 					// When a click event occurs on a feature in the cities (fill) layer, fly to the point
 					map.on('click', fillLayerId, (e) => {
 						// fly to the city if map is zoomed out
-						if (map.getZoom() < cityZoom) {
+						if (map.getZoom() < cityMaxZoom) {
 							map.flyTo({
 								center: e.lngLat,
-								zoom: cityZoom
+								zoom: cityMaxZoom
 							});
 						}
 					});
