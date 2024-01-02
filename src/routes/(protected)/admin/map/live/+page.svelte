@@ -3,45 +3,48 @@
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
 	import { onMount, onDestroy } from 'svelte';
-	// import { animateToPoint } from '$lib/services/animator';
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
+	import type { PageData } from './$types';
+	import type { Bike } from '$lib/types/Bike';
+
+	export let data: PageData;
 
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
 
-	let evtSource: EventSource;
+	let evtSource: EventSource; // EventSource is a global type
 
-	// let bikeLines: {
-	// 	id: string;
-	// 	coords: [number, number][];
-	// }[] = [];
-
-	let bikePointFeatures: BikePointFeature[] = [];
-
-	const updateBike = (id: string, coords: [number, number]) => {
-		const updatedFeature: BikePointFeature = {
+	let bikePointFeatures: BikePointFeature[] = data.bikes.map((bike: Bike) => {
+		return {
 			type: 'Feature',
 			geometry: {
 				type: 'Point',
-				coordinates: coords
+				coordinates: bike.coords
 			},
 			properties: {
-				id: id,
-				battery_percentage: 0
+				id: bike.id,
+				city_id: bike.city_id,
+				charge_perc: bike.charge_perc
 			}
 		};
+	});
 
-		const existingIndex = bikePointFeatures.findIndex((feature) => feature.properties.id === id);
+	const updateBikePosition = (id: number, coords: [number, number]) => {
+		// find and replace old coordinates with new ones
+		bikePointFeatures = bikePointFeatures.map((bikePointFeature: BikePointFeature) => {
+			if (bikePointFeature.properties.id === id) {
+				return {
+					...bikePointFeature,
+					geometry: {
+						...bikePointFeature.geometry,
+						coordinates: coords
+					}
+				};
+			}
 
-		if (existingIndex === -1) {
-			// Add new feature
-			bikePointFeatures.push(updatedFeature);
-		} else {
-			// Update existing feature
-			bikePointFeatures[existingIndex] = updatedFeature;
-		}
+			return bikePointFeature;
+		});
 
-		// Update map source
 		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
 			type: 'FeatureCollection',
@@ -53,7 +56,7 @@
 		map.on('load', () => {
 			// remove existing symbol layers from the tile provider (they can really bog down the map)
 			const layers = map.getStyle().layers;
-			console.log(layers);
+
 			for (let i = 0; i < layers.length; i++) {
 				const layer = layers[i];
 				if (layer.type === 'symbol') {
@@ -80,17 +83,17 @@
 				paint: {
 					// Use step expressions (https://maplibre.org/maplibre-style-spec/#expressions-step)
 					// with three steps to implement three types of circles:
-					//   * Blue, 20px circles when point count is less than 100
-					//   * Yellow, 30px circles when point count is between 100 and 750
+					//   * Blue/Cyan, 20px circles when point count is less than 100
+					//   * Orange, 30px circles when point count is between 100 and 750
 					//   * Pink, 40px circles when point count is greater than or equal to 750
 					'circle-color': [
 						'step',
 						['get', 'point_count'],
-						'#51bbd6',
+						'#14b8a6',
 						100,
-						'#f1f075',
+						'#f97316',
 						750,
-						'#f28cb1'
+						'#ec4899'
 					],
 					'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
 				}
@@ -169,7 +172,7 @@
 
 			if (!map || !map.getBounds().contains(data.coords)) return;
 
-			updateBike(data.id, data.coords);
+			updateBikePosition(data.id, data.coords);
 
 			// check if the bike is already in the array
 			// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
@@ -181,7 +184,7 @@
 			// 		coords: [data.coords]
 			// 	});
 
-			// 	updateBike({
+			// 	updateBikePosition({
 			// 		id: data.id,
 			// 		coords: data.coords
 			// 	});
@@ -192,7 +195,7 @@
 			// 	bikeLines[existingIndex].coords.push(data.coords);
 
 			// 	animateToPoint(prevPoint, data.coords, 10000, (coords) => {
-			// 		updateBike({
+			// 		updateBikePosition({
 			// 			id: data.id,
 			// 			coords: coords
 			// 		});
