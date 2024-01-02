@@ -85,45 +85,55 @@
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
-				{#each sourceBodySliced as user, i}
-					{@const negative = user.balance < 0}
-					<tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
-						<td class="px-6 py-4 table-cell-fit"
-							><a
-								href="/admin/users/{user.id}"
-								class="font-medium text-secondary-500 hover:underline">{user.id}</a
-							></td
+				{#if sourceBodySliced.length === 0}
+					<tr>
+						<td colspan="10" class="px-6 py-4 text-center">Inga användare hittades.</td>
+					</tr>
+				{:else}
+					{#each sourceBodySliced as user, i}
+						{@const negative = user.balance < 0}
+						<tr
+							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
-						<td class="px-6 py-4"
-							><a
-								href="/admin/users/{user.id}"
-								class="font-medium text-secondary-500 hover:underline">{user.email}</a
-							></td
+							<td class="px-6 py-4 table-cell-fit"
+								><a
+									href="/admin/users/{user.id}"
+									class="font-medium text-secondary-500 hover:underline">{user.id}</a
+								></td
+							>
+							<td class="px-6 py-4"
+								><a
+									href="/admin/users/{user.id}"
+									class="font-medium text-secondary-500 hover:underline">{user.email}</a
+								></td
+							>
+							<td class="px-6 py-4 table-cell-fit text-right"
+								><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
+									>{user.balance} kr</span
+								>
+							</td>
+							<td class="px-6 py-4 text-right whitespace-nowrap">
+								<a
+									href="/admin/users/{user.id}"
+									class="font-medium text-secondary-500 hover:underline">Profil</a
+								>,
+								<a
+									href="/admin/users/{user.id}/trips"
+									class="font-medium text-secondary-500 hover:underline">Resor</a
+								>,
+								<a
+									href="/admin/users/{user.id}/transactions"
+									class="font-medium text-secondary-500 hover:underline">Betalningar</a
+								>
+							</td></tr
 						>
-						<td class="px-6 py-4 table-cell-fit text-right"
-							><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
-								>{user.balance} kr</span
-							>
-						</td>
-						<td class="px-6 py-4 text-right whitespace-nowrap">
-							<a
-								href="/admin/users/{user.id}"
-								class="font-medium text-secondary-500 hover:underline">Profil</a
-							>,
-							<a
-								href="/admin/users/{user.id}/trips"
-								class="font-medium text-secondary-500 hover:underline">Resor</a
-							>,
-							<a
-								href="/admin/users/{user.id}/transactions"
-								class="font-medium text-secondary-500 hover:underline">Betalningar</a
-							>
-						</td></tr
-					>
-				{/each}
+					{/each}
+				{/if}
 			</tbody>
 		</table>
 	</div>
 {:catch error}
-	<p>Fel vid hämtning av användare: {error.message}</p>
+	<div class="w-full h-full flex items-center justify-center">
+		Fel vid hämtning av användare: {error.message}
+	</div>
 {/await}
