@@ -66,13 +66,12 @@
 
 	$: if (map) {
 		map.on('load', () => {
-			// extract coordinates for each city
-			// @ts-expect-error - data is not typed but should look like this
-			const coordinates: [number, number][][][] = data.cities.map((city) => {
+			// Extract coordinates for each city
+			const coordinates: [number, number][][][] = data.cities.map((city: City) => {
 				return city.geometry.coordinates;
 			});
 
-			// fit the map to the bounds of all cities
+			// Fit the map to the bounds of all cities so they are all visible on the map when it loads
 			const bounds = coordinates.reduce(
 				(acc, polygon) => {
 					const polygonBounds = polygon.reduce(
