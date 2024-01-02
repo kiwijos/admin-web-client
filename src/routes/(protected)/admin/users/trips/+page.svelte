@@ -66,67 +66,69 @@
 	<div class="w-full h-full flex items-center justify-center placeholder animate-pulse">
 		Hämtar resor...
 	</div>
-{:then transactions}
-	{#if transactions.length === 0}
-		<div class="w-full h-full flex items-center justify-center">Inga resor hittades.</div>
-	{:else}
-		<div class="bg-surface-50 dark:bg-transparent flex flex-col lg:flex-row gap-4 p-8">
-			<div class="flex flex-col sm:flex-row gap-4 grow">
-				<div class="input-group grid-cols-[auto_1fr_auto] border-none">
-					<div class="input-group-shim bg-white dark:bg-surface-600 text-sm">Från</div>
-					<input
-						type="date"
-						class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
-						on:input|preventDefault={inputFromDate}
-					/>
-				</div>
-				<div class="input-group grid-cols-[auto_1fr_auto] border-none">
-					<div class="input-group-shim bg-white dark:bg-surface-600 text-sm">Till</div>
-					<input
-						type="date"
-						class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
-						on:input|preventDefault={inputToDate}
-					/>
-				</div>
+{:then trips}
+	<div class="bg-surface-50 dark:bg-transparent flex flex-col lg:flex-row gap-4 p-8">
+		<div class="flex flex-col sm:flex-row gap-4 grow">
+			<div class="input-group grid-cols-[auto_1fr_auto] border-none">
+				<div class="input-group-shim bg-white dark:bg-surface-600 text-sm">Från</div>
+				<input
+					type="date"
+					class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
+					on:input|preventDefault={inputFromDate}
+				/>
 			</div>
-			<div class="flex flex-col sm:flex-row gap-4 items-center">
-				<button
-					class="btn bg-white dark:bg-surface-600 text-sm w-fit"
-					disabled={!resetButtonActive}
-					on:click={resetFilters}>Rensa filter</button
-				>
-				<Paginator
-					bind:settings={paginationSettings}
-					showFirstLastButtons={true}
-					showPreviousNextButtons={true}
-					amountText="per sida"
-					separatorText="av"
-					justify="justify-between"
-					select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
-					controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
-					class=" sm:!flex-row gap-4 !space-x-0 !space-y-0 [&>label]:w-fit"
+			<div class="input-group grid-cols-[auto_1fr_auto] border-none">
+				<div class="input-group-shim bg-white dark:bg-surface-600 text-sm">Till</div>
+				<input
+					type="date"
+					class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
+					on:input|preventDefault={inputToDate}
 				/>
 			</div>
 		</div>
-		<div class="relative overflow-x-auto">
-			<table class="w-full text-md text-left text-surface-400 dark:text-surface-300">
-				<thead
-					class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
-				>
+		<div class="flex flex-col sm:flex-row gap-4 items-center">
+			<button
+				class="btn bg-white dark:bg-surface-600 text-sm w-fit"
+				disabled={!resetButtonActive}
+				on:click={resetFilters}>Rensa filter</button
+			>
+			<Paginator
+				bind:settings={paginationSettings}
+				showFirstLastButtons={true}
+				showPreviousNextButtons={true}
+				amountText="per sida"
+				separatorText="av"
+				justify="justify-between"
+				select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
+				controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
+				class=" sm:!flex-row gap-4 !space-x-0 !space-y-0 [&>label]:w-fit"
+			/>
+		</div>
+	</div>
+	<div class="relative overflow-x-auto">
+		<table class="w-full text-md text-left text-surface-400 dark:text-surface-300">
+			<thead
+				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
+			>
+				<tr>
+					<th class="px-6 py-3"><span class="sr-only">ID</span></th>
+					<th class="px-6 py-3">Användare</th>
+					<th class="px-6 py-3">Cykel</th>
+					<th class="px-6 py-3">Startdatum</th>
+					<th class="px-6 py-3">Slutdatum</th>
+					<th class="px-6 py-3 table-cell-fit">Tid</th>
+					<th class="px-6 py-3">Startkostnad</th>
+					<th class="px-6 py-3">Resekostnad</th>
+					<th class="px-6 py-3">Parkeringskostnad</th>
+					<th class="px-6 py-3 table-cell-fit">Summa</th>
+				</tr>
+			</thead>
+			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
+				{#if sourceBodySliced.length === 0}
 					<tr>
-						<th class="px-6 py-3"><span class="sr-only">ID</span></th>
-						<th class="px-6 py-3">Användare</th>
-						<th class="px-6 py-3">Cykel</th>
-						<th class="px-6 py-3">Startdatum</th>
-						<th class="px-6 py-3">Slutdatum</th>
-						<th class="px-6 py-3 table-cell-fit">Tid</th>
-						<th class="px-6 py-3">Startkostnad</th>
-						<th class="px-6 py-3">Resekostnad</th>
-						<th class="px-6 py-3">Parkeringskostnad</th>
-						<th class="px-6 py-3 table-cell-fit">Summa</th>
+						<td colspan="10" class="px-6 py-4 text-center">Inga resor hittades.</td>
 					</tr>
-				</thead>
-				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
+				{:else}
 					{#each sourceBodySliced as trip, i}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
@@ -157,10 +159,12 @@
 							<td class="px-6 py-4 table-cell-fit text-right">{trip.total_cost} kr </td>
 						</tr>
 					{/each}
-				</tbody>
-			</table>
-		</div>
-	{/if}
+				{/if}
+			</tbody>
+		</table>
+	</div>
 {:catch error}
-	<p>Fel vid hämtning av resor: {error.message}</p>
+	<div class="w-full h-full flex items-center justify-center">
+		Fel vid hämtning av resor: {error.message}
+	</div>
 {/await}
