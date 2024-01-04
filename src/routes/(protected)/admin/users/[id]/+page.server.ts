@@ -3,21 +3,21 @@ import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 	const { id } = params;
-	const access_token = cookies.get('access-token');
+	const accessToken = cookies.get('access_token');
 
 	return {
 		user: await fetch(`${PUBLIC_REST_API_URL}/admin/users/${params.id}`, {
 			method: 'GET',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': access_token
+				'x-access-token': accessToken
 			}
 		}).then((r) => r.json()),
 		trips: await fetch(`${PUBLIC_REST_API_URL}/admin/trips/limit/5/offset/0`, {
 			method: 'POST',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': access_token
+				'x-access-token': accessToken
 			},
 			body: JSON.stringify({ user_id: id })
 		}).then((r) => r.json()),
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 			method: 'POST',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': access_token
+				'x-access-token': accessToken
 			},
 			body: JSON.stringify({ user_id: id })
 		}).then((r) => r.json())

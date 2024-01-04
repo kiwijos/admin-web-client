@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ cookies, fetch }) => {
 			method: 'GET',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': cookies.get('access-token')
+				'x-access-token': cookies.get('access_token')
 			}
 		}).then((r) => r.json())
 	};

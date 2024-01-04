@@ -26,7 +26,7 @@ const deactivate: Action = async ({ request, cookies }) => {
 			method: 'PUT',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': cookies.get('session')
+				'x-access-token': cookies.get('access_token')
 			}
 		});
 
@@ -62,7 +62,7 @@ const activate: Action = async ({ request, cookies }) => {
 			method: 'PUT',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': cookies.get('session')
+				'x-access-token': cookies.get('access_token')
 			}
 		});
 
@@ -103,7 +103,7 @@ const changeStatus: Action = async ({ request, cookies }) => {
 				method: 'PUT',
 				// @ts-expect-error - We are aware that 'x-access-token' is not typed
 				headers: {
-					'x-access-token': cookies.get('session')
+					'x-access-token': cookies.get('access_token')
 				}
 			}
 		);

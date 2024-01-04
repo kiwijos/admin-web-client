@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, params }) => {
 			method: 'POST',
 			// @ts-expect-error - We are aware that 'x-access-token' is not typed
 			headers: {
-				'x-access-token': cookies.get('access-token')
+				'x-access-token': cookies.get('access_token')
 			},
 			body: JSON.stringify({ user_id: params.id })
 		}).then((r) => r.json())
