@@ -71,6 +71,7 @@
 	const updateBikePositionsBatched = (batch: BikePoint[]) => {
 		console.log('Updating bike positions in batch', BATCH_SIZE);
 		// Update the bikePointFeatures array in bulk
+		// @ts-expect-error - feature will be typed later
 		bikePointFeatures = bikePointFeatures.map((feature) => {
 			const update = batch.find((u) => u.id === feature.properties.id);
 
@@ -124,6 +125,7 @@
 		}
 	};
 
+	// @ts-expect-error - feature will be typed later
 	const prettyHTMLPopup = (feature) => {
 		const batteryPercentage = feature.properties.charge_perc;
 		const batteryColor =
