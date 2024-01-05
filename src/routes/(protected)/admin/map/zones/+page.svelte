@@ -59,24 +59,24 @@
 	const cityMaxZoom = 11;
 
 	const zoneOptions: {
-		[key: string]: { fill_color: string; label: string; text_color: string; minZoom: number };
+		[key: string]: { fill_color: string; label: string; line_color: string; minZoom: number };
 	} = {
 		parking: {
 			fill_color: '#0ea5e9',
 			label: 'Parkering',
-			text_color: '#0c4a6e',
+			line_color: '#0c4a6e',
 			minZoom: cityMaxZoom
 		},
 		charging: {
 			fill_color: '#10b981',
 			label: 'Laddning',
-			text_color: '#064e3b',
+			line_color: '#064e3b',
 			minZoom: cityMaxZoom
 		},
 		forbidden: {
 			fill_color: '#ef4444',
 			label: 'Förbjuden',
-			text_color: '#7f1d1d',
+			line_color: '#7f1d1d',
 			minZoom: cityMaxZoom
 		}
 	};
@@ -250,8 +250,27 @@
 					);
 				}
 
+				const borderLayerId = `${cityId}-${zoneType}-border`;
+
+				// Add a layer for this city if it hasn't been added already.
+				if (!map.getLayer(borderLayerId)) {
+					map.addLayer({
+						id: borderLayerId,
+						type: 'line',
+						minzoom: zoneOptions[zoneType].minZoom,
+						source: 'zones',
+						layout: {},
+						paint: {
+							'line-color': zoneOptions[zoneType].line_color,
+							'line-width': 1
+						},
+						filter: ['all', ['==', 'zone_type', zoneType], ['==', 'city_id', cityId]]
+					});
+				}
+
 				// Add a layer for the zone type's symbol if it hasn't been added already.
 				const symbolLayerID = `${cityId}-${zoneType}-symbol`;
+
 				if (!map.getLayer(symbolLayerID)) {
 					map.addLayer({
 						id: symbolLayerID,
@@ -266,7 +285,7 @@
 							'text-transform': 'uppercase'
 						},
 						paint: {
-							'text-color': zoneOptions[zoneType].text_color
+							'text-color': zoneOptions[zoneType].line_color
 						},
 						filter: ['all', ['==', 'zone_type', zoneType], ['==', 'city_id', cityId]]
 					});
