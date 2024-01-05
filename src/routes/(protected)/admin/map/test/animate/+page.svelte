@@ -10,7 +10,11 @@
 		generateRandomPointInSweden
 	} from '$lib/services/pointGenerator';
 	import { enhance } from '$app/forms';
-	// import { animateToPoint } from '$lib/services/animator';
+	import { animateToPoint } from '$lib/services/animator';
+	import type { PageData } from './$types';
+	import type { Bike } from '$lib/types/Bike';
+
+	export let data: PageData;
 
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
@@ -19,97 +23,119 @@
 
 	// Define colors for battery levels
 	const colors = {
-		danger: '#ff0000',
-		warning: '#ff9900',
-		low: '#ffff00',
-		high: '#00ff00'
+		danger: 'rgb(210, 127, 129)',
+		warning: 'rgb(228, 194, 94)',
+		high: 'rgb(193, 221, 151)'
 	};
 
 	// Define expressions for battery levels used in layers
-	const battery_danger: ExpressionSpecification = ['<', ['get', 'battery_percentage'], 0.1];
-	const batteery_warning: ExpressionSpecification = [
+	const battery_danger: ExpressionSpecification = ['<', ['get', 'charge_perc'], 0.2];
+	const battery_warning: ExpressionSpecification = [
 		'all',
-		['>=', ['get', 'battery_percentage'], 0.1],
-		['<', ['get', 'battery_percentage'], 0.2]
+		['>=', ['get', 'charge_perc'], 0.2],
+		['<', ['get', 'charge_perc'], 0.4]
 	];
-	const battery_low: ExpressionSpecification = [
-		'all',
-		['>=', ['get', 'battery_percentage'], 0.2],
-		['<', ['get', 'battery_percentage'], 0.4]
-	];
-	const battery_high: ExpressionSpecification = ['>=', ['get', 'battery_percentage'], 0.4];
+	const battery_high: ExpressionSpecification = ['>=', ['get', 'charge_perc'], 0.4];
 
 	// Collect all bikes
-	let bikePointFeatures: BikePointFeature[] = [];
 
-	interface Point {
-		id: string;
+	interface BikePoint {
+		id: number;
 		coords: [number, number];
-		battery_percentage: number;
+		charge_perc: number;
 	}
 
 	// Define props for fake bikes
-	const speedKmPerHour = 2000;
+	const speedKmPerHour = 20;
 	const speedMetersPerSecond = speedKmPerHour / 3.6;
-	const updateInterval = 10000;
+	const updateInterval = 2000;
 	const distancePerUpdate = speedMetersPerSecond * (updateInterval / 1000);
 
-	let points: Point[] = [];
-	const numPoints = 100;
-
-	// Create fake bikes
-	for (let i = 0; i < numPoints; i++) {
-		points.push({
-			id: `${i + 1}`,
-			coords: generateRandomPointInSweden(),
-			battery_percentage: Math.random()
-		});
-	}
-
-	// Add fake bikes to map
-	const updateBikeSource = (data: Point) => {
-		const id = data.id;
-
-		const updatedFeature: BikePointFeature = {
+	let bikePointFeatures = data.bikes.map((bike: Bike) => {
+		return {
 			type: 'Feature',
 			geometry: {
 				type: 'Point',
-				coordinates: data.coords
+				coordinates: bike.coords
 			},
 			properties: {
-				id: id,
-				battery_percentage: data.battery_percentage
+				id: bike.id,
+				charge_perc: bike.charge_perc,
+				city_id: bike.city_id,
+				active: bike.active
 			}
 		};
+	});
 
-		const existingIndex = bikePointFeatures.findIndex((feature) => feature.properties.id === id);
+	let updateBuffer: BikePoint[] = [];
 
-		if (existingIndex !== -1) {
-			// Update existing feature
-			bikePointFeatures[existingIndex] = updatedFeature;
-		} else {
-			// Add new feature
-			bikePointFeatures.push(updatedFeature);
-		}
+	// Set a threshold for the batch size
+	let BATCH_SIZE = 200;
 
-		// Update map source
-		// @ts-expect-error - setData does exist but TS doesn't know that
+	const updateBikePositionsBatched = (batch: BikePoint[]) => {
+		console.log('Updating bike positions in batch', BATCH_SIZE);
+		// Update the bikePointFeatures array in bulk
+		bikePointFeatures = bikePointFeatures.map((feature) => {
+			const update = batch.find((u) => u.id === feature.properties.id);
+
+			if (update) {
+				// Update the existing feature
+				return {
+					...feature,
+					geometry: {
+						...feature.geometry,
+						coordinates: update.coords
+					}
+				};
+			}
+
+			return feature;
+		});
+
+		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
 			type: 'FeatureCollection',
 			features: bikePointFeatures
 		});
 	};
 
-	const prettyHTMLPopup = (feature: BikePointFeature) => {
-		const batteryPercentage = feature.properties.battery_percentage;
+	// Function to process the buffered updates
+	const processBufferedUpdates = () => {
+		if (updateBuffer.length > 0) {
+			// Process the updates in batches
+			const batches = [];
+
+			while (updateBuffer.length > 0) {
+				batches.push(updateBuffer.splice(0, BATCH_SIZE));
+			}
+
+			// Process each batch
+			batches.forEach((batch) => {
+				updateBikePositionsBatched(batch);
+			});
+		}
+	};
+
+	// Function to handle a new point received from the event source
+	const handleNewPoint = (point: BikePoint) => {
+		// Add the update to the buffer
+		updateBuffer.push(point);
+
+		// Check if the buffer size has reached the threshold
+		if (updateBuffer.length >= BATCH_SIZE) {
+			// Process the buffered updates
+			processBufferedUpdates();
+		}
+	};
+
+	const prettyHTMLPopup = (feature) => {
+		const batteryPercentage = feature.properties.charge_perc;
 		const batteryColor =
-			batteryPercentage < 0.1
+			batteryPercentage < 0.2
 				? colors.danger
-				: batteryPercentage < 0.2
+				: batteryPercentage < 0.4
 					? colors.warning
-					: batteryPercentage < 0.4
-						? colors.low
-						: colors.high;
+					: colors.high;
 
 		return `
 			<div class="flex flex-col divide-y divide-gray-100 dark:divide-surface-600">
@@ -142,9 +168,9 @@
 					</table>
 				</div>
 				<div class="flex flex-row justify-between px-2 pt-4 pb-2">	
-					<a href="/bikes/${
+					<a href="/admin/bikes/${
 						feature.properties.id
-					}/info" class="block font-xs text-surface-700 bg-gray-50 dark:bg-surface-600 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-100 dark:hover:text-white px-2 py-1">Mer info</a>
+					}" class="block font-xs text-surface-700 bg-gray-50 dark:bg-surface-600 hover:bg-gray-100 dark:hover:bg-surface-700 dark:text-surface-100 dark:hover:text-white px-2 py-1 rounded-md">Mer info</a>
 					<button
 						aria-describedby="stop-bike-form"
 						form="stop-bike-form"
@@ -157,17 +183,17 @@
 		`;
 	};
 
-	$: if (map)
+	$: if (map) {
 		map.on('load', () => {
 			// remove existing symbol layers from the tile provider
-			const layers = map.getStyle().layers;
+			// const layers = map.getStyle().layers;
 
-			for (let i = 0; i < layers.length; i++) {
-				const layer = layers[i];
-				if (layer.type === 'symbol') {
-					map.removeLayer(layer.id);
-				}
-			}
+			// for (let i = 0; i < layers.length; i++) {
+			// 	const layer = layers[i];
+			// 	if (layer.type === 'symbol') {
+			// 		map.removeLayer(layer.id);
+			// 	}
+			// }
 
 			map.addSource('bikes', {
 				type: 'geojson',
@@ -181,8 +207,7 @@
 				clusterProperties: {
 					// keep separate counts for each battery level
 					battery_danger: ['+', ['case', battery_danger, 1, 0]],
-					battery_warning: ['+', ['case', batteery_warning, 1, 0]],
-					battery_low: ['+', ['case', battery_low, 1, 0]],
+					battery_warning: ['+', ['case', battery_warning, 1, 0]],
 					battery_high: ['+', ['case', battery_high, 1, 0]]
 				}
 			});
@@ -234,10 +259,8 @@
 						'case',
 						battery_danger,
 						colors.danger,
-						batteery_warning,
+						battery_warning,
 						colors.warning,
-						battery_low,
-						colors.low,
 						colors.high // default
 					],
 					'circle-radius': 8,
@@ -255,7 +278,7 @@
 					'icon-allow-overlap': true,
 					'text-field': [
 						'number-format',
-						['get', 'battery_percentage'],
+						['get', 'charge_perc'],
 						{ 'min-fraction-digits': 1, 'max-fraction-digits': 1 }
 					],
 					'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
@@ -263,7 +286,7 @@
 				},
 
 				paint: {
-					'text-color': ['case', ['<', ['get', 'battery_percentage'], 0.2], 'white', 'black']
+					'text-color': ['case', ['<', ['get', 'charge_perc'], 0.2], 'white', 'black'] // white text on dark background
 				}
 			});
 
@@ -314,42 +337,34 @@
 					coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
 				}
 
-				// @ts-expect-error - we expect the feature to be a valid BikePointFeature though it's typed as the generic MapGeoJSONFeature
 				const popupContent = prettyHTMLPopup(e.features[0]);
 
 				new maplibregl.Popup().setLngLat(coordinates).setHTML(popupContent).addTo(map);
 			});
 
-			points.forEach((point) => {
-				updateBikeSource({
-					id: point.id,
-					battery_percentage: point.battery_percentage,
-					coords: point.coords
-				});
-			});
-
 			let i = 0;
 			const timer = window.setInterval(() => {
-				if (i > 10) {
+				if (i > 100) {
 					clearInterval(timer);
 					return;
 				}
-				points.forEach((point) => {
+				data.bikes.forEach((bike: Bike) => {
 					// only update if the point is within the map bounds
-					if (!map.getBounds().contains(point.coords)) return;
+					if (!map.getBounds().contains(bike.coords)) return;
 
-					const newPoint = generatePointWithinRadius(point.coords, distancePerUpdate);
+					const newCoords = generatePointWithinRadius(bike.coords, distancePerUpdate);
 
-					updateBikeSource({
-						id: point.id,
-						battery_percentage: point.battery_percentage,
-						coords: newPoint
-					});
+					const newBike = {
+						...bike,
+						coords: newCoords
+					};
 
-					// animateToPoint(point.coords, newPoint, updateInterval, 10, (animatedPoint) => {
+					handleNewPoint(newBike);
+
+					// animateToPoint(point.coords, newPoint, updateInterval, 0.5, (animatedPoint) => {
 					// 	updateBikeSource({
 					// 		id: point.id,
-					// 		battery_percentage: point.battery_percentage,
+					// 		charge_perc: point.charge_perc,
 					// 		coords: animatedPoint
 					// 	});
 					// });
@@ -358,6 +373,7 @@
 				i++;
 			}, updateInterval);
 		});
+	}
 </script>
 
 <Map />
