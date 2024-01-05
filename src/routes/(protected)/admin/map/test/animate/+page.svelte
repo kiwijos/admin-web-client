@@ -5,12 +5,8 @@
 	import type { ExpressionSpecification } from 'maplibre-gl';
 	import maplibregl from 'maplibre-gl';
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
-	import {
-		generatePointWithinRadius,
-		generateRandomPointInSweden
-	} from '$lib/services/pointGenerator';
+	import { generatePointWithinRadius } from '$lib/services/pointGenerator';
 	import { enhance } from '$app/forms';
-	import { animateToPoint } from '$lib/services/animator';
 	import type { PageData } from './$types';
 	import type { Bike } from '$lib/types/Bike';
 
