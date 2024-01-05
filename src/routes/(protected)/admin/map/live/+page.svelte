@@ -6,6 +6,7 @@
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 	import type { PageData } from './$types';
 	import type { Bike } from '$lib/types/Bike';
+	import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 	export let data: PageData;
 
@@ -31,19 +32,29 @@
 
 	const updateBikePosition = (id: number, coords: [number, number]) => {
 		// find and replace old coordinates with new ones
-		bikePointFeatures = bikePointFeatures.map((bikePointFeature: BikePointFeature) => {
-			if (bikePointFeature.properties.id === id) {
-				return {
-					...bikePointFeature,
-					geometry: {
-						...bikePointFeature.geometry,
-						coordinates: coords
-					}
-				};
-			}
+		// bikePointFeatures = bikePointFeatures.map((bikePointFeature: BikePointFeature) => {
+		// 	if (bikePointFeature.properties.id === id) {
+		// 		return {
+		// 			...bikePointFeature,
+		// 			geometry: {
+		// 				...bikePointFeature.geometry,
+		// 				coordinates: coords
+		// 			}
+		// 		};
+		// 	}
 
-			return bikePointFeature;
+		// 	return bikePointFeature;
+		// });
+
+		const index = bikePointFeatures.findIndex((bikePointFeature: BikePointFeature) => {
+			return bikePointFeature.properties.id === id;
 		});
+
+		try {
+			bikePointFeatures[index].geometry.coordinates = coords;
+		} catch (error) {
+			return;
+		}
 
 		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
@@ -173,34 +184,6 @@
 			if (!map || !map.getBounds().contains(data.coords)) return;
 
 			updateBikePosition(data.id, data.coords);
-
-			// check if the bike is already in the array
-			// const existingIndex = bikeLines.findIndex((bike) => bike.id === data.id);
-
-			// if (existingIndex === -1) {
-			// 	// Add new bike
-			// 	bikeLines.push({
-			// 		id: data.id,
-			// 		coords: [data.coords]
-			// 	});
-
-			// 	updateBikePosition({
-			// 		id: data.id,
-			// 		coords: data.coords
-			// 	});
-			// } else {
-			// 	const prevPoint =
-			// 		bikeLines[existingIndex].coords[bikeLines[existingIndex].coords.length - 1];
-			// 	// Update existing bike
-			// 	bikeLines[existingIndex].coords.push(data.coords);
-
-			// 	animateToPoint(prevPoint, data.coords, 10000, (coords) => {
-			// 		updateBikePosition({
-			// 			id: data.id,
-			// 			coords: coords
-			// 		});
-			// 	});
-			// }
 		};
 	});
 
@@ -212,7 +195,7 @@
 		});
 
 	const startSimulation = () => {
-		const result = fetch('http://localhost:1337/v1/admin/simulate');
+		const result = fetch(`${PUBLIC_REST_API_URL}/admin/simulate`);
 		console.log(result);
 	};
 </script>
