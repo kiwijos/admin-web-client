@@ -1,8 +1,8 @@
-# MapTiler API KEY
+## MapTiler API KEY
 
 The application uses MapLibre GL JS with tiles from MapTiler.
 
-## Adding a free key
+### Adding a free key
 
 Create a `.env` file or simply copy and/or rename the `.env.example` file.
 
@@ -12,21 +12,15 @@ Your MapTiler account access key is on your MapTiler [Cloud](https://cloud.mapti
 
 :information_source: If you don't have an API KEY, you can create it for free at https://www.maptiler.com/cloud/
 
-# create-svelte
+## REST API
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The app uses a REST API. At the other end, there's a server with a database connection. The server is available [here](https://github.com/JuliaLind/vteam-server).
 
-## Creating a project
+If you havn't already, create a `.env` file or copy the `.env.example` file.
 
-If you're seeing this, you've probably already done this step. Congrats!
+Make sure you have the **PUBLIC_REST_API_URL** set to the server's url.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+The url is no secret. You'll find the exact url in the `.env.example` file.
 
 ## Developing
 
@@ -41,7 +35,7 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+To create a production version of the app:
 
 ```bash
 npm run build
@@ -49,4 +43,12 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Docker
+
+To build a production version of the app and run it inside a container:
+
+```bash
+docker compose up --build
+```
+
+> The app uses the node-adapter. You may need to install a different [adapter](https://kit.svelte.dev/docs/adapters) for your target environment and change the app settings accordingly.
