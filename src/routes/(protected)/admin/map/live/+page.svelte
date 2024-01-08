@@ -10,6 +10,12 @@
 
 	export let data: PageData;
 
+	interface BikePoint {
+		id: number;
+		coords: [number, number];
+		charge_perc: number;
+	}
+
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
 
@@ -30,37 +36,65 @@
 		};
 	});
 
-	const updateBikePosition = (id: number, coords: [number, number]) => {
-		// find and replace old coordinates with new ones
-		// bikePointFeatures = bikePointFeatures.map((bikePointFeature: BikePointFeature) => {
-		// 	if (bikePointFeature.properties.id === id) {
-		// 		return {
-		// 			...bikePointFeature,
-		// 			geometry: {
-		// 				...bikePointFeature.geometry,
-		// 				coordinates: coords
-		// 			}
-		// 		};
-		// 	}
+	let updateBuffer: BikePoint[] = [];
 
-		// 	return bikePointFeature;
-		// });
+	// Set a threshold for the batch size
+	let BATCH_SIZE = 200;
 
-		const index = bikePointFeatures.findIndex((bikePointFeature: BikePointFeature) => {
-			return bikePointFeature.properties.id === id;
+	const updateBikePositionsBatched = (batch: BikePoint[]) => {
+		console.log('Updating bike positions in batch', BATCH_SIZE);
+		// Update the bikePointFeatures array in bulk
+		bikePointFeatures = bikePointFeatures.map((feature) => {
+			const update = batch.find((u) => u.id === feature.properties.id);
+
+			if (update) {
+				// Update the existing feature
+				return {
+					...feature,
+					geometry: {
+						...feature.geometry,
+						coordinates: update.coords
+					}
+				};
+			}
+
+			return feature;
 		});
-
-		try {
-			bikePointFeatures[index].geometry.coordinates = coords;
-		} catch (error) {
-			return;
-		}
 
 		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
 			type: 'FeatureCollection',
 			features: bikePointFeatures
 		});
+	};
+
+	// Function to process the buffered updates
+	const processBufferedUpdates = () => {
+		if (updateBuffer.length > 0) {
+			// Process the updates in batches
+			const batches = [];
+
+			while (updateBuffer.length > 0) {
+				batches.push(updateBuffer.splice(0, BATCH_SIZE));
+			}
+
+			// Process each batch
+			batches.forEach((batch) => {
+				updateBikePositionsBatched(batch);
+			});
+		}
+	};
+
+	// Function to handle a new point received from the event source
+	const handleNewPoint = (point: BikePoint) => {
+		// Add the update to the buffer
+		updateBuffer.push(point);
+
+		// Check if the buffer size has reached the threshold
+		if (updateBuffer.length >= BATCH_SIZE) {
+			// Process the buffered updates
+			processBufferedUpdates();
+		}
 	};
 
 	$: if (map)
@@ -181,9 +215,7 @@
 		evtSource.onmessage = function (event) {
 			const data = JSON.parse(event.data);
 
-			if (!map || !map.getBounds().contains(data.coords)) return;
-
-			updateBikePosition(data.id, data.coords);
+			handleNewPoint(data);
 		};
 	});
 
