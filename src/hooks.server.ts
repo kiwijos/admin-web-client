@@ -24,7 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// 	- the user logs out via /logout
 		// 	- the token check fails (e.g. invalid or expired token)
 		event.locals.signed_in_as = null; // <-- make sure the user object `signed_in_as` is null in any case
-		throw redirect(302, '/');
+		throw redirect(302, '/login');
 	}
 
 	try {
