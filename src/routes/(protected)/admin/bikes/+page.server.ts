@@ -4,7 +4,7 @@ import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ fetch }) => {
 	return {
 		bikes: await fetch(`${PUBLIC_REST_API_URL}/bikes`, {
 			method: 'GET'
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async () => {
 	};
 };
 
-const deactivate: Action = async ({ request, cookies }) => {
+const deactivate: Action = async ({ request, cookies, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');
@@ -48,7 +48,7 @@ const deactivate: Action = async ({ request, cookies }) => {
 	return { success: true };
 };
 
-const activate: Action = async ({ request, cookies }) => {
+const activate: Action = async ({ request, cookies, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');
@@ -84,7 +84,7 @@ const activate: Action = async ({ request, cookies }) => {
 	return { success: true };
 };
 
-const changeStatus: Action = async ({ request, cookies }) => {
+const changeStatus: Action = async ({ request, cookies, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');

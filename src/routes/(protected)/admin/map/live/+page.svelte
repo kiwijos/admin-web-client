@@ -227,7 +227,7 @@
 		});
 
 	const startSimulation = () => {
-		const result = fetch(`${PUBLIC_REST_API_URL}/admin/simulate`);
+		const result = fetch(`http://localhost:1337/v1/admin/simulate`);
 		console.log(result);
 	};
 </script>

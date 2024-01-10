@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 	}
 };
 
-const login: Action = async ({ cookies, request }) => {
+const login: Action = async ({ cookies, request, fetch }) => {
 	const data = await request.formData();
 
 	const username = data.get('username');
