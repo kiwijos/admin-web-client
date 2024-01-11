@@ -11,6 +11,7 @@ on:
 env:
   PUBLIC_MAPTILER_API_KEY: ${{secrets.MAPTILER_KEY}}
   PUBLIC_REST_API_URL: ${{secrets.REST_API_URL}}
+  PRIVATE_REST_API_KEY: ${{secrets.REST_API_KEY}}
 
 jobs:
   build:
