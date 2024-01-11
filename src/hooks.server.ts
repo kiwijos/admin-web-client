@@ -21,6 +21,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// 	- the user logs out via /logout
 		// 	- the token check fails (e.g. invalid or expired token)
 		event.locals.signed_in_as = null; // <-- make sure the user object `signed_in_as` is null in any case
+
+		// Resolve the request "as normal" if the user is not trying to access the admin pages
+		if (!event.url.pathname.startsWith('/admin')) {
+			return await resolve(event);
+		}
+
 		throw redirect(302, '/login');
 	}
 
@@ -44,6 +50,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.signed_in_as = null;
 		event.cookies.delete('access_token', { path: '/' });
 		throw redirect(302, '/login');
+	}
+
+	if (event.url.pathname === '/login' || event.url.pathname === '/') {
+		// Attempt to redirect users with the cookie to the dashboard
+		// The cookie works as a proxy for the user being logged in, albeit not totally reliable
+		// If the user is NOT logged in, the hook will redirect to the login page
+		// This is a workaround for the fact that the auth check only runs before /admin pages, not the root route (/)
+		//
+		// There are a couple of cases where the user might have a cookie but is not logged in:
+		// 	- the token inside the cookie expired
+		// 	- the cookie was set manually (e.g. via the browser dev tools) to an invalid value
+		// 	- the token inside the cookie is invalid for some other reason
+		throw redirect(302, '/admin/dashboard');
 	}
 
 	return await resolve(event); // <-- all good, allow the request to proceed
