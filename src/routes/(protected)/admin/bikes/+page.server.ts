@@ -20,7 +20,7 @@ const simulate: Action = async ({ fetch }) => {
 			console.error(result.errors.message);
 
 			return fail(response.status, {
-				invalid: true,
+				error: true,
 				message: 'Simuleringen kunde inte startas på grund av ett serverfel.'
 			});
 		}
@@ -29,7 +29,7 @@ const simulate: Action = async ({ fetch }) => {
 		if (e instanceof Error) message = e.message;
 		else message = String(e);
 
-		return fail(500, { invalid: true, message });
+		return fail(500, { error: true, message });
 	}
 
 	return { success: true };
@@ -41,7 +41,7 @@ const deactivate: Action = async ({ request, fetch }) => {
 	const bikeId = data.get('id');
 
 	if (typeof bikeId !== 'string' || !bikeId) {
-		return fail(400, { invalid: true });
+		return fail(400, { bikeId, invalid: true });
 	}
 
 	try {
@@ -54,14 +54,22 @@ const deactivate: Action = async ({ request, fetch }) => {
 
 			console.error(result.errors.message);
 
-			return fail(response.status, { invalid: true, message: result.errors.message });
+			return fail(response.status, {
+				error: true,
+				message: 'Kunde inte stoppa cykeln på grund av ett serverfel.'
+			});
 		}
 	} catch (error) {
 		let message;
 		if (error instanceof Error) message = error.message;
 		else message = String(error);
 
-		return fail(500, { invalid: true, message });
+		console.error(message);
+
+		return fail(500, {
+			error: true,
+			message: 'Kunde inte stoppa cykeln på grund av ett serverfel.'
+		});
 	}
 
 	return { success: true };
@@ -73,7 +81,7 @@ const activate: Action = async ({ request, fetch }) => {
 	const bikeId = data.get('id');
 
 	if (typeof bikeId !== 'string' || !bikeId) {
-		return fail(400, { invalid: true });
+		return fail(400, { bikeId, invalid: true });
 	}
 
 	try {
@@ -86,14 +94,22 @@ const activate: Action = async ({ request, fetch }) => {
 
 			console.error(result.errors.message);
 
-			return fail(response.status, { invalid: true, message: result.errors.message });
+			return fail(response.status, {
+				invalid: true,
+				message: 'Kunde inte aktivera cykeln på grund av ett serverfel.'
+			});
 		}
 	} catch (error) {
 		let message;
 		if (error instanceof Error) message = error.message;
 		else message = String(error);
 
-		return fail(500, { invalid: true, message });
+		console.error(message);
+
+		return fail(500, {
+			invalid: true,
+			message: 'Kunde inte aktivera cykeln på grund av ett serverfel.'
+		});
 	}
 
 	return { success: true };
@@ -124,14 +140,22 @@ const changeStatus: Action = async ({ request, fetch }) => {
 		if (!response.ok) {
 			console.error(result.errors.message);
 
-			return fail(response.status, { invalid: true, message: result.errors.message });
+			return fail(response.status, {
+				error: true,
+				message: 'Kunde inte ändra status på grund av ett serverfel.'
+			});
 		}
 	} catch (error) {
 		let message;
 		if (error instanceof Error) message = error.message;
 		else message = String(error);
 
-		return fail(500, { invalid: true, message });
+		console.error(message);
+
+		return fail(500, {
+			error: true,
+			message: 'Kunde inte ändra status på grund av ett serverfel.'
+		});
 	}
 
 	return { success: true };
