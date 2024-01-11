@@ -1,15 +1,21 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { jwtDecode } from 'jwt-decode';
 import type { CustomJwtPayload } from './lib/types/CustomJwtPayload';
+import { PUBLIC_REST_API_URL } from '$env/static/public';
+import { PRIVATE_REST_API_KEY } from '$env/static/private';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	// ONLY RUN this hook for admin pages (e.g. /admin/dashboard, /admin/users)
-	// DON'T RUN this hook for the auth pages (e.g. /login, /logout) or the root page (/)
-	if (!event.url.pathname.startsWith('/admin')) {
-		return await resolve(event);
+export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
+	if (request.url.startsWith(PUBLIC_REST_API_URL)) {
+		// Add headers to requests to the public REST API
+		request.headers.set('x-access-token', event.cookies.get('access_token') as string);
+		request.headers.set('x-api-key', PRIVATE_REST_API_KEY);
 	}
 
+	return fetch(request);
+};
+
+export const handle: Handle = async ({ event, resolve }) => {
 	const token = event.cookies.get('access_token');
 
 	// Redirect early to login page if the user is not logged in
