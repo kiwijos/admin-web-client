@@ -10,6 +10,31 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	};
 };
 
+const simulate: Action = async ({ fetch }) => {
+	try {
+		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/simulate`);
+
+		if (!response.ok) {
+			const result = await response.json();
+
+			console.error(result.errors.message);
+
+			return fail(response.status, {
+				invalid: true,
+				message: 'Simuleringen kunde inte startas på grund av ett serverfel.'
+			});
+		}
+	} catch (e) {
+		let message;
+		if (e instanceof Error) message = e.message;
+		else message = String(e);
+
+		return fail(500, { invalid: true, message });
+	}
+
+	return { success: true };
+};
+
 const deactivate: Action = async ({ request, fetch }) => {
 	const data = await request.formData();
 
@@ -112,4 +137,4 @@ const changeStatus: Action = async ({ request, fetch }) => {
 	return { success: true };
 };
 
-export const actions: Actions = { deactivate, activate, changeStatus };
+export const actions: Actions = { simulate, deactivate, activate, changeStatus };
