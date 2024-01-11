@@ -7,7 +7,6 @@
 	import type { PageData } from './$types';
 	import type { Bike } from '$lib/types/Bike';
 	import { applyAction, enhance } from '$app/forms';
-	import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 	export let data: PageData;
 
@@ -203,7 +202,7 @@
 		});
 
 	onMount(() => {
-		evtSource = new EventSource(`${PUBLIC_REST_API_URL}/admin/feed`, {
+		evtSource = new EventSource('http://localhost:1337/v1/admin/feed', {
 			withCredentials: true
 		});
 
