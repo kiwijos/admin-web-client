@@ -4,15 +4,13 @@ import { PUBLIC_REST_API_URL } from '$env/static/public';
 
 import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ fetch }) => {
 	return {
-		bikes: await fetch(`${PUBLIC_REST_API_URL}/bikes`, {
-			method: 'GET'
-		}).then((r) => r.json())
+		bikes: await fetch(`${PUBLIC_REST_API_URL}/bikes`).then((r) => r.json())
 	};
 };
 
-const deactivate: Action = async ({ request, cookies }) => {
+const deactivate: Action = async ({ request, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');
@@ -23,11 +21,7 @@ const deactivate: Action = async ({ request, cookies }) => {
 
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/deactivate`, {
-			method: 'PUT',
-			// @ts-expect-error - We are aware that 'x-access-token' is not typed
-			headers: {
-				'x-access-token': cookies.get('access_token')
-			}
+			method: 'PUT'
 		});
 
 		if (!response.ok) {
@@ -48,7 +42,7 @@ const deactivate: Action = async ({ request, cookies }) => {
 	return { success: true };
 };
 
-const activate: Action = async ({ request, cookies }) => {
+const activate: Action = async ({ request, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');
@@ -59,11 +53,7 @@ const activate: Action = async ({ request, cookies }) => {
 
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/activate`, {
-			method: 'PUT',
-			// @ts-expect-error - We are aware that 'x-access-token' is not typed
-			headers: {
-				'x-access-token': cookies.get('access_token')
-			}
+			method: 'PUT'
 		});
 
 		if (!response.ok) {
@@ -84,7 +74,7 @@ const activate: Action = async ({ request, cookies }) => {
 	return { success: true };
 };
 
-const changeStatus: Action = async ({ request, cookies }) => {
+const changeStatus: Action = async ({ request, fetch }) => {
 	const data = await request.formData();
 
 	const bikeId = data.get('id');
@@ -100,11 +90,7 @@ const changeStatus: Action = async ({ request, cookies }) => {
 		const response = await fetch(
 			`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/status/${statusId}`,
 			{
-				method: 'PUT',
-				// @ts-expect-error - We are aware that 'x-access-token' is not typed
-				headers: {
-					'x-access-token': cookies.get('access_token')
-				}
+				method: 'PUT'
 			}
 		);
 
