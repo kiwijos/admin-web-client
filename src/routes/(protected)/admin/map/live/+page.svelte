@@ -116,8 +116,8 @@
 					features: bikePointFeatures
 				},
 				cluster: true,
-				clusterMaxZoom: 11, // Don't cluster when zoomed in past 11
-				clusterRadius: 50 // Cluster points within 50 pixels of each other
+				clusterMaxZoom: 15, // Don't cluster when zoomed in past 15
+				clusterRadius: 30 // Cluster points within 30 pixels of each other
 			});
 
 			map.addLayer({
