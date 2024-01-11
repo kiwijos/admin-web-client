@@ -6,7 +6,7 @@
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 	import type { PageData } from './$types';
 	import type { Bike } from '$lib/types/Bike';
-	import { PUBLIC_REST_API_URL } from '$env/static/public';
+	import { applyAction, enhance } from '$app/forms';
 
 	export let data: PageData;
 
@@ -226,13 +226,23 @@
 			console.log('EventSource closed');
 		});
 
-	const startSimulation = () => {
-		const result = fetch(`${PUBLIC_REST_API_URL}/admin/simulate`);
-		console.log(result);
+	const handleStartSimulation = () => {
+		// @ts-expect-error - We wholeheartedly accept this untyped variable
+		return async ({ result }) => {
+			if (!result?.success) return;
+
+			await applyAction(result); // Apply the action, which will update the form state
+		};
 	};
 </script>
 
-<button class="absolute top-0 right-0 z-10 btn variant-filled-primary" on:click={startSimulation}
-	>Simulera</button
+<form
+	action="/admin/bikes?/simulate"
+	method="POST"
+	class="absolute top-2 right-4 z-10"
+	use:enhance={handleStartSimulation}
 >
+	<button type="submit" class="btn variant-filled-primary">Simulate</button>
+</form>
+
 <Map />
