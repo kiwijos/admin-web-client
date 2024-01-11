@@ -28,12 +28,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// 	- the token check fails (e.g. invalid or expired token)
 		event.locals.signed_in_as = null; // <-- make sure the user object `signed_in_as` is null in any case
 
-		// Resolve the request "as normal" if the user is not trying to access the admin pages
-		if (!event.url.pathname.startsWith('/admin')) {
-			return await resolve(event);
+		if (event.url.pathname.startsWith('/admin') || event.url.pathname === '/') {
+			throw redirect(302, '/login');
 		}
 
-		throw redirect(302, '/login');
+		// Resolve the request "as normal" if the user is trying to acces the login page for example
+		return await resolve(event);
 	}
 
 	try {
