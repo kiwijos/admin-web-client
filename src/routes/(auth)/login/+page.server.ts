@@ -2,7 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Action, Actions } from './$types';
 import { PUBLIC_REST_API_URL } from '$env/static/public';
 
-const login: Action = async ({ cookies, request }) => {
+const login: Action = async ({ cookies, request, fetch }) => {
 	const data = await request.formData();
 
 	const username = data.get('username');
