@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Map as MaplibreMap } from 'maplibre-gl';
+	import { onMount } from 'svelte';
+	import maplibregl, { Map as MaplibreMap } from 'maplibre-gl';
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
 	import { onMount } from 'svelte';
