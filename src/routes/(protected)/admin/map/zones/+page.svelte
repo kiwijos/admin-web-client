@@ -49,34 +49,7 @@
 
 	$: if (map) {
 		map.on('load', () => {
-			// Extract coordinates for each city
-			const coordinates: [number, number][][][] = data.cities.map((city: City) => {
-				return city.geometry.coordinates;
-			});
-
-			// Fit the map to the bounds of all cities so they are all visible on the map when it loads
-			const bounds = coordinates.reduce(
-				(acc, polygon) => {
-					const polygonBounds = polygon.reduce(
-						(innerAcc, coord) => {
-							coord.forEach((point) => {
-								innerAcc.extend(point);
-							});
-							return innerAcc;
-						},
-						new maplibregl.LngLatBounds(polygon[0][0], polygon[0][0])
-					);
-
-					acc.extend(polygonBounds);
-					return acc;
-				},
-				new maplibregl.LngLatBounds(coordinates[0][0][0], coordinates[0][0][0])
-			);
-
-			map.fitBounds(bounds, {
-				padding: 40
-			});
-
+			if (!map.getSource('cities')) {
 			///////// ADD CITY SOURCES AND LAYERS //////////
 			const cityFeatures: CityPolygonFeature[] = data.cities.map((city: City) => {
 				return {
