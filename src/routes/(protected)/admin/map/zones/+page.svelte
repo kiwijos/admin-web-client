@@ -284,6 +284,127 @@
 				});
 			}
 
+			if (!map.getLayer('clusters')) {
+				map.addLayer({
+					id: 'clusters',
+					type: 'circle',
+					source: 'bikes',
+					filter: ['==', 'cluster', true],
+					paint: {
+						// Use step expressions (https://maplibre.org/maplibre-style-spec/#expressions-step)
+						// with three steps to implement three types of circles:
+						//   * Blue, 20px circles when point count is less than 100
+						//   * Yellow, 30px circles when point count is between 100 and 750
+						//   * Pink, 40px circles when point count is greater than or equal to 750
+						'circle-color': [
+							'step',
+							['get', 'point_count'],
+							'#14b8a6',
+							100,
+							'#f97316',
+							750,
+							'#ec4899'
+						],
+						'circle-radius': ['step', ['get', 'point_count'], 12, 100, 18, 750, 24],
+						'circle-stroke-width': 1,
+						'circle-stroke-color': '#fff'
+					}
+				});
+			}
+
+			if (!map.getLayer('cluster-count')) {
+				// Point count for clusters
+				map.addLayer({
+					id: 'cluster-count',
+					type: 'symbol',
+					source: 'bikes',
+					filter: ['has', 'point_count'],
+					layout: {
+						'icon-allow-overlap': true,
+						'text-field': '{point_count_abbreviated}',
+						'text-font': ['Arial Unicode MS Bold'],
+						'text-size': 12
+					}
+				});
+			}
+
+			// inspect a cluster on click
+			map.on('click', 'clusters', (e) => {
+				const features = map.queryRenderedFeatures(e.point, {
+					layers: ['clusters']
+				});
+				const clusterId = features[0].properties.cluster_id;
+
+				// @ts-expect-error - getSource is not in the typings
+				map.getSource('bikes').getClusterExpansionZoom(clusterId, (err, zoom) => {
+					if (err) return;
+
+					map.easeTo({
+						// @ts-expect-error - The features have a geometry, I've just not typed it out here
+						center: features[0].geometry.coordinates,
+						zoom
+					});
+				});
+			});
+
+			map.on('mouseenter', 'clusters', () => {
+				map.getCanvas().style.cursor = 'pointer';
+			});
+
+			map.on('mouseleave', 'clusters', () => {
+				map.getCanvas().style.cursor = '';
+			});
+
+			// Cache and keep track of markers for better performance
+			const markers: { [key: number]: maplibregl.Marker } = {};
+			let markersOnScreen: { [key: number]: maplibregl.Marker } = {};
+
+			function updateMarkers() {
+				const newMarkers: { [key: number]: maplibregl.Marker } = {};
+
+				// @ts-expect-error - Out custom feature type is compatible with MapGeoJsonFeature for our intents and purposes, this is fine
+				const features: BikeFeature[] = map.querySourceFeatures('bikes');
+
+				// for every unclustered point, create an HTML marker
+				// and add it to the map if it's not there already
+				for (let i = 0; i < features.length; i++) {
+					const coords = features[i].geometry.coordinates;
+					const props = features[i].properties;
+
+					if (props.cluster) continue;
+					const id = props.id;
+
+					let marker = markers[id];
+					if (!marker) {
+						const el: HTMLElement = createBikePin();
+						const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
+							`<span class="px-2 py-1 rounded-container-token font-bold bg-primary-800 text-primary-50">${props.id}</span>`
+						);
+						marker = markers[id] = new maplibregl.Marker({ element: el })
+							.setLngLat(coords)
+							.setPopup(popup);
+					}
+					newMarkers[id] = marker;
+
+					if (!markersOnScreen[id]) marker.addTo(map);
+				}
+				// for every marker we've added previously, remove those that are no longer visible
+				for (const id in markersOnScreen) {
+					if (!newMarkers[id]) markersOnScreen[id].remove();
+				}
+				markersOnScreen = newMarkers;
+			}
+
+			// Update markers when the GeoJSON data is loaded and on every map move/moveend
+			map.on('data', (e) => {
+				// @ts-expect-error - I put my fate in the Maplibre tutorial and assume these properties exist (it seems to work fine)
+				if (e.sourceId !== 'bikes' || !e.isSourceLoaded) return;
+
+				map.on('move', updateMarkers);
+				map.on('moveend', updateMarkers);
+				updateMarkers();
+			});
+
 			loading = false;
 		});
 	}
