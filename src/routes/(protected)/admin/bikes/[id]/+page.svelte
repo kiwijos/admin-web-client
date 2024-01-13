@@ -131,29 +131,12 @@
 			<input value={bike.id} name="id" hidden />
 		</label>
 	</form>
-
-	<div
-		class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-4 divide-y divide-gray-100 dark:divide-surface-700"
-	>
-		<div>
-			<span class="inline-block px-2 py-4 text-xs font-bold uppercase">Position</span>
-			<ul class="text-left text-surface-400 dark:text-surface-300">
-				<li
-					class="px-6 py-4 text-sm grid grid-cols-2 odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
-				>
-					<span>Stad</span><span>{bike.city_id}</span>
-				</li>
-				<li
-					class="px-6 py-4 text-sm grid grid-cols-2 odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
-				>
-					<span>Latitud</span><span>{bike.coords[0]}</span>
-				</li>
-				<li
-					class="px-6 py-4 text-sm grid grid-cols-2 odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
-				>
-					<span>Longitud</span><span>{bike.coords[1]}</span>
-				</li>
-			</ul>
+		</div>
+	</div>
+	<div class="rounded-container-token p-2 sm:p-4 bg-white dark:bg-surface-800">
+		<div class="text-left text-surface-400 dark:text-surface-300 p-4 text-sm">
+			<p class="text-surface-700 dark:text-surface-100 text-base">{cityName} ({bike.city_id})</p>
+			<p>(Lat. {bike.coords[0]}, Lon. {bike.coords[1]})</p>
 		</div>
 	</div>
 	<div
