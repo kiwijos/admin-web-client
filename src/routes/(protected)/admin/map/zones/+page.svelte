@@ -271,6 +271,19 @@
 				);
 			}
 
+			if (!map.getSource('bikes')) {
+				map.addSource('bikes', {
+					type: 'geojson',
+					data: {
+						type: 'FeatureCollection',
+						features: data.bikes
+					},
+					cluster: true,
+					clusterMaxZoom: 15, // Max zoom to cluster points on
+					clusterRadius: 30 // Radius of each cluster when clustering points (defaults to 50)
+				});
+			}
+
 			loading = false;
 		});
 	}
