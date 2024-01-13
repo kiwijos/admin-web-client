@@ -21,7 +21,7 @@
 
 	let evtSource: EventSource; // EventSource is a global type
 
-	let bikePointFeatures: BikePointFeature[] = data.bikes.map((bike: Bike) => {
+	let loading = true;
 		return {
 			type: 'Feature',
 			geometry: {
@@ -199,6 +199,7 @@
 			map.on('mouseleave', 'clusters', () => {
 				map.getCanvas().style.cursor = '';
 			});
+			loading = false;
 		});
 
 	onMount(() => {
