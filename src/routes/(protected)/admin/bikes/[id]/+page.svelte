@@ -40,13 +40,42 @@
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
+	$: charge = bike.charge_perc * 100;
+	$: meterColor =
+		charge <= 20 ? 'stroke-error-500' : charge <= 40 ? 'stroke-warning-500' : 'stroke-success-500';
+	$: trackColor =
+		charge <= 20
+			? 'stroke-error-700/30'
+			: charge <= 40
+				? 'stroke-warning-700/30'
+				: 'stroke-success-700/30';
+	$: glowColor =
+		charge <= 20
+			? 'shadow-[0_0px_30px_2px_rgba(255,204,203,0.3)]'
+			: charge <= 40
+				? 'shadow-[0_0px_30px_2px_rgba(255,255,237,0.3)]'
+				: 'shadow-[0_0px_30px_2px_rgba(144,238,144,0.3)]';
 </script>
 
-<div class="p-4 md:p-8 max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-	<div class="w-full rounded-full">
-		<ProgressRadial
-			stroke={60}
-		<div class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-8">
+<!-- border dark:border-surface-600 bg-white dark:bg-surface-800 -->
+<div class="p-4 md:p-8 max-w-2xl">
+	<div
+		class="w-full flex bg-white dark:bg-surface-800 border dark:border-surface-600 rounded-full md:rounded-l-full"
+	>
+		<div class="sm:w-fit p-4">
+			<div
+				class="w-fit mx-auto dark:ring-2 ring-surface-600 rounded-full {!bike.active || glowColor}"
+			>
+				<ProgressRadial
+					stroke={60}
+					width="w-56 sm:w-36"
+					meter={meterColor}
+					track={trackColor}
+					strokeLinecap="round"
+					value={charge}>{charge}%</ProgressRadial
+				>
+			</div>
+		</div>
 		<form
 			method="POST"
 			use:enhance={handleBikeActiveStatus}
