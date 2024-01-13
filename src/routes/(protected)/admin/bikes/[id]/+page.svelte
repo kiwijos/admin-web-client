@@ -27,7 +27,7 @@
 	// @ts-expect-error - untyped variables are fine
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
-		if (!formData.get('id')) {
+		if (!formData.get('id') || !action.search) {
 			cancel();
 			return;
 		}
