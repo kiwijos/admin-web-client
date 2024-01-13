@@ -12,7 +12,6 @@
 	import type { PageData } from './$types';
 	import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
 	import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
-	import type { Bike } from '$lib/types/Bike';
 	import type { BikeFromFeed } from '$lib/types/BikeFromFeed';
 
 	export let data: PageData;
