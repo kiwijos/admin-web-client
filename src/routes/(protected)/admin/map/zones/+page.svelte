@@ -10,10 +10,8 @@
 	import maplibregl from 'maplibre-gl';
 	import { mapStore } from '$lib/stores/map';
 	import { PUBLIC_MAPTILER_API_KEY } from '$env/static/public';
-	import Fa from 'svelte-fa';
-	import { faChevronRight, faXmark } from '@fortawesome/free-solid-svg-icons';
 
-	import { TreeView, TreeViewItem, type TreeViewNode } from '@skeletonlabs/skeleton';
+	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
 
@@ -24,37 +22,6 @@
 	});
 
 	let loading = true; // used to show a loading indicator while we add the sources and layers to the map
-
-	// Typing this as a TreeViewNode[] is not strictly neccessary as that typing is used for the TreeView component's recursive mode specifically,
-	// but the format is convenient for the TreeView component generally.
-	let treeViewNodes: TreeViewNode[] = [];
-
-	// The tree structure is generated from the data in the cities array to create a hierarchical checkbox list.
-	// Each city has three zones: parking, charging and forbidden because we want to be able to toggle the visibility of each zone on a city level.
-	// Each zone has one or more layers in the map matching the zone's id (e.g. `STHLM-parking-fill` and `STHLM-parking-symbol`).
-	$: treeViewNodes = data.cities.map((city: City) => {
-		return {
-			id: city.id,
-			content: city.name,
-			children: [
-				{ id: `${city.id}-parking`, content: 'Parkering' },
-				{ id: `${city.id}-charging`, content: 'Laddning' },
-				{ id: `${city.id}-forbidden`, content: 'Förbjuden' }
-			]
-		};
-	});
-
-	// Here we refer to the treeViewNodes, but really thinking of the `nodes` as checkboxes might be more intuitive.
-	function onNodeChange(e: Event) {
-		const { id, checked } = e.target as HTMLInputElement;
-
-		// If the node is a city, we want to also toggle the visibility of all the city's zones.
-		for (const layer of map.getStyle().layers) {
-			if (layer.id.startsWith(id)) {
-				map.setLayoutProperty(layer.id, 'visibility', checked ? 'visible' : 'none');
-			}
-		}
-	}
 
 	const cityMaxZoom = 11;
 
@@ -342,64 +309,13 @@
 			loading = false;
 		});
 	}
-
-	let filtersOpen = false;
 </script>
 
 {#if loading}
-	<div class="fixed top-2 left-4 lg:left-56 z-[11] placeholder-circle animate-pulse w-10"></div>
-{:else}
-	<button
-		title="Öppna filter"
-		class="btn btn-sm btn-icon fixed top-2 left-4 lg:left-56 z-[11] focus:ring-2 focus:ring-primary-500 bg-white dark:bg-surface-900 drop-shadow"
-		on:click={() => (filtersOpen = true)}
-	>
-		<Fa icon={faChevronRight} class="text-gray-500 dark:text-surface-400" />
-	</button>
-
 	<div
-		class="absolute top-0 left-0 lg:left-52 w-52 h-full z-[12] bg-gray-50 dark:bg-surface-900 px-4 py-2 rounded-r-xl {filtersOpen
-			? 'visible'
-			: 'hidden'}"
+		class="relative rounded-none w-full h-full z-[11] bg-surface-50 dark:bg-surface-500 flex justify-center items-center"
 	>
-		<div class="flex items-center justify-between">
-			<h2 class="text-lg font-semibold">Filter</h2>
-			<button
-				class="btn btn-sm btn-icon focus:ring-2 focus:ring-primary-500 bg-white dark:bg-surface-800 hover:bg-gray-100 dark:hover:bg-surface-700"
-				on:click={() => (filtersOpen = false)}
-			>
-				<Fa icon={faXmark} class="text-gray-500 dark:text-surface-400" />
-			</button>
-		</div>
-
-		<TreeView>
-			{#each treeViewNodes as node}
-				<TreeViewItem>
-					<svelte:fragment slot="lead">
-						<input type="checkbox" id={node.id} checked class="checkbox" on:change={onNodeChange} />
-					</svelte:fragment>
-					<p>{node.content}</p>
-					<svelte:fragment slot="children">
-						{#if node.children}
-							{#each node.children as child}
-								<TreeViewItem>
-									<svelte:fragment slot="lead">
-										<input
-											type="checkbox"
-											id={child.id}
-											checked
-											class="checkbox"
-											on:change={onNodeChange}
-										/>
-									</svelte:fragment>
-									<p>{child.content}</p>
-								</TreeViewItem>
-							{/each}
-						{/if}
-					</svelte:fragment>
-				</TreeViewItem>
-			{/each}
-		</TreeView>
+		<ProgressRadial stroke={50} meter="stroke-primary-500" track="stroke-primary-900/30" />
 	</div>
 {/if}
 
