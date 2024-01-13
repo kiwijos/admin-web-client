@@ -12,14 +12,9 @@
 	import type { PageData } from './$types';
 	import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
 	import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
+	import type { Bike } from '$lib/types/Bike';
 
 	export let data: PageData;
-
-	interface BikePoint {
-		id: number;
-		coords: [number, number];
-		charge_perc: number;
-	}
 
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
@@ -53,12 +48,12 @@
 	// Cache popups
 	let popups: { [key: number]: maplibregl.Popup } = {};
 
-	let updateBuffer: BikePoint[] = [];
+	let updateBuffer: Bike[] = [];
 
 	// Set a threshold for the batch size
 	let BATCH_SIZE = 500;
 
-	const updateBikePositionsBatched = (batch: BikePoint[]) => {
+	const updateBikePositionsBatched = (batch: Bike[]) => {
 		// Update the bikePointFeatures array in bulk
 		data.bikes = data.bikes.map((feature: BikePointFeature) => {
 			const update = batch.find((u) => u.id === feature.properties.id);
@@ -69,6 +64,13 @@
 					geometry: {
 						...feature.geometry,
 						coordinates: update.coords
+					},
+					properties: {
+						...feature.properties,
+						charge_perc: update.charge_perc,
+						active: update.active,
+						status_descr: update.status_descr,
+						status_id: update.status_id
 					}
 				};
 			}
@@ -100,7 +102,7 @@
 	};
 
 	// Function to handle a new point received from the event source
-	const handleNewPoint = (point: BikePoint) => {
+	const handleNewPoint = (point: Bike) => {
 		// Add the update to the buffer
 		updateBuffer.push(point);
 
