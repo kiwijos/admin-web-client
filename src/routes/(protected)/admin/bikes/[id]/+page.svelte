@@ -3,12 +3,12 @@
 	// @ts-nocheck - TS doesn't like the `bike` object and expects it to be called `bikes`, which I think has to do with the flow of data through the load functions
 	// In any case, it works, so I'm disabling TS for this file for now as all other checks pass
 	import type { PageData, ActionData } from '../$types';
-	import ChargeMeter from '$lib/components/ChargeMeter.svelte';
+
 	import { applyAction, enhance } from '$app/forms';
 	import { statusCodes } from '$lib/help/statusCodes';
 	import Fa from 'svelte-fa';
 	import { faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
-	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+	import { Accordion, AccordionItem, ProgressRadial } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
 	export let form: ActionData;
