@@ -289,6 +289,7 @@
 	}
 </script>
 
+<!-- Loading animation -->
 {#if loading}
 	<div
 		class="relative rounded-none w-full h-full z-[11] bg-surface-50 dark:bg-surface-500 flex justify-center items-center"
@@ -296,5 +297,6 @@
 		<ProgressRadial stroke={50} meter="stroke-primary-500" track="stroke-primary-900/30" />
 	</div>
 {/if}
+<!-- Loading animation -->
 
 <Map />
