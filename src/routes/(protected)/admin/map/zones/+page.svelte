@@ -12,6 +12,11 @@
 
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
+	import { createBikeCountPin, createBikePin } from '$lib/services/markerMaker';
+
+	// @ts-expect-error - Don't bother
+	import centerOfMass from '@turf/center-of-mass';
+
 	export let data: PageData;
 
 	// Get the map from the store
