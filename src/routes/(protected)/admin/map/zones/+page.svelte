@@ -16,6 +16,7 @@
 
 	// @ts-expect-error - Don't bother
 	import centerOfMass from '@turf/center-of-mass';
+	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 
 	export let data: PageData;
 
@@ -363,7 +364,7 @@
 				const newMarkers: { [key: number]: maplibregl.Marker } = {};
 
 				// @ts-expect-error - Out custom feature type is compatible with MapGeoJsonFeature for our intents and purposes, this is fine
-				const features: BikeFeature[] = map.querySourceFeatures('bikes');
+				const features: BikePointFeature[] = map.querySourceFeatures('bikes');
 
 				// for every unclustered point, create an HTML marker
 				// and add it to the map if it's not there already

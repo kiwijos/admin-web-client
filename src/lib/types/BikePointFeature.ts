@@ -8,5 +8,8 @@ export interface BikePointFeature {
 		active: boolean;
 		status_id?: number;
 		status_descr?: string;
+		cluster_id?: number;
+		cluster?: boolean;
+		point_count?: number;
 	};
 }
