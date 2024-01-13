@@ -272,6 +272,7 @@
 	};
 </script>
 
+<Map />
 <form
 	action="/admin/bikes?/simulate"
 	method="POST"
@@ -285,4 +286,38 @@
 	>
 </form>
 
-<Map />
+<!-- STOP: Submitted via a button inside popup  -->
+<form
+	aria-hidden="true"
+	class="absolute translate-x-full w-0"
+	id="stop-bike-form"
+	action="/admin/bikes?/deactivate"
+	method="POST"
+	use:enhance={handleBikeActiveStatus}
+>
+	<input
+		type="hidden"
+		name="id"
+		title="id på cykel som ska stoppas"
+		value={selectedBike?.properties?.id}
+	/>
+</form>
+<!-- STOP: Submitted via a button inside popup -->
+
+<!-- START: Submitted via a button inside popup  -->
+<form
+	aria-hidden="true"
+	class="absolute translate-x-full w-0"
+	id="start-bike-form"
+	action="/admin/bikes?/activate"
+	method="POST"
+	use:enhance={handleBikeActiveStatus}
+>
+	<input
+		type="hidden"
+		name="id"
+		title="id på cykel som ska stoppas"
+		value={selectedBike?.properties?.id}
+	/>
+</form>
+<!-- START: Submitted via a button inside popup -->
