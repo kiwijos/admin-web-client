@@ -194,7 +194,7 @@
 							'text-transform': 'uppercase'
 						},
 						paint: {
-							'text-color': zoneOptions[zoneType].line_color
+							'text-color': zoneOptions[zoneDescr].line_color,
 							'text-halo-color': '#fff',
 							'text-halo-width': 1,
 							'text-opacity': ['interpolate', ['exponential', 2], ['zoom'], 11, 0, 13, 1]
