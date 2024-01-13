@@ -32,7 +32,7 @@
 	let updateBuffer: BikePoint[] = [];
 
 	// Set a threshold for the batch size
-	let BATCH_SIZE = 200;
+	let BATCH_SIZE = 500;
 
 	const updateBikePositionsBatched = (batch: BikePoint[]) => {
 		console.log('Updating bike positions in batch', BATCH_SIZE);
