@@ -1,4 +1,5 @@
 import type { BikePointFeature } from '$lib/types/BikePointFeature';
+import { statusCodes } from '$lib/help/statusCodes';
 
 export const createBikeCountPin = (count: number): HTMLElement => {
 	const pinSize = 30; // Adjust the size of the pin
@@ -87,6 +88,8 @@ export const singleBikeFormPopupHTML = (feature: BikePointFeature) => {
 	const batteryColor =
 		chargPerc < 0.2 ? 'text-red-500' : chargPerc < 0.4 ? 'text-yellow-500' : 'text-green-500';
 
+	const statusId = feature.properties?.status_id;
+
 	const buttonHTML = feature.properties.active
 		? `
             <button
@@ -121,6 +124,11 @@ export const singleBikeFormPopupHTML = (feature: BikePointFeature) => {
 								<td class="p-2">${Math.round(chargPerc * 100)}% <span class="text-xs ${batteryColor}">■</span></td>
 							</tr>
 							<tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
+								<td class="p-2"><span class="font-bold">Hastighet</span></td>
+								</td>
+								<td class="p-2">${feature.properties.speed} km/h</td>
+							</tr>
+							<tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
 								<td class="p-2"><span class="font-bold">Latitud</span></td>
 								</td>
 								<td class="p-2">${feature.geometry.coordinates[1].toFixed(4)}</td>
@@ -133,12 +141,18 @@ export const singleBikeFormPopupHTML = (feature: BikePointFeature) => {
                             <tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
 								<td class="p-2"><span class="font-bold">Status</span></td>
 								</td>
-								<td class="p-2">${feature.properties.status_descr}</td>
+								<td class="p-2">${statusId ? statusCodes[statusId] : '--'}</td>
 							</tr>
 							 <tr class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800">
 								<td class="p-2"><span class="font-bold">Aktiv</span></td>
 								</td>
-								<td class="p-2">${feature.properties.active ? 'Ja' : 'Nej'}</td>
+								<td class="p-2">${
+									feature.properties.active === true
+										? 'Ja'
+										: feature.properties.active === false
+											? 'Nej'
+											: '--'
+								}</td>
 							</tr>
 						</tbody>
 					</table>
