@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Map as MaplibreMap } from 'maplibre-gl';
 	import type { PageData } from './$types';
-	import type { City } from '$lib/types/City';
-	import type { Zone } from '$lib/types/Zone';
+
 	import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
 	import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
 
