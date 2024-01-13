@@ -57,7 +57,7 @@
 			}
 
 			data.cities.forEach((feature: CityPolygonFeature) => {
-				const cityId: string = feature.properties['id'];
+				const cityId: string = feature.properties.id;
 				const fillLayerId = `${cityId}-fill`;
 
 				// Add a layer for this city if it hasn't been added already.
@@ -136,9 +136,9 @@
 			}
 
 			zoneFeatureCollection.features.forEach((feature: ZonePolygonFeature) => {
-				const zoneType: string = feature.properties['zone_type'];
-				const cityId: string = feature.properties['city_id'];
-				const fillLayerID = `${cityId}-${zoneType}-fill`;
+				const zoneDescr: string = feature.properties.descr;
+				const cityId: string = feature.properties.city_id;
+				const fillLayerID = `${cityId}-${zoneDescr}-fill`;
 
 				// Add a layer for this type (parking/charging/forbidden) if it hasn't been added already.
 				if (!map.getLayer(fillLayerID)) {
@@ -150,18 +150,18 @@
 							source: 'zones',
 							layout: {},
 							paint: {
-								// 'fill-pattern': zoneOptions[zoneType].pattern,
-								'fill-color': zoneOptions[zoneType].fill_color,
+								'fill-color': zoneOptions[zoneDescr].fill_color,
+								'fill-opacity': ['interpolate', ['exponential', 2], ['zoom'], 10, 0, 13, 0.4]
 								'fill-opacity': 0.5,
 								'fill-outline-color': '#ffffff'
 							},
-							filter: ['all', ['==', 'zone_type', zoneType], ['==', 'city_id', cityId]]
+							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 						},
 						labelLayerId // insert before the label layer id
 					);
 				}
 
-				const borderLayerId = `${cityId}-${zoneType}-border`;
+				const borderLayerId = `${cityId}-${zoneDescr}-border`;
 
 				// Add a layer for this city if it hasn't been added already.
 				if (!map.getLayer(borderLayerId)) {
@@ -172,10 +172,10 @@
 						source: 'zones',
 						layout: {},
 						paint: {
-							'line-color': zoneOptions[zoneType].line_color,
+								'line-color': zoneOptions[zoneDescr].line_color,
 							'line-width': 1
 						},
-						filter: ['all', ['==', 'zone_type', zoneType], ['==', 'city_id', cityId]]
+							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 					});
 				}
 
@@ -190,7 +190,7 @@
 						source: 'zones',
 						layout: {
 							'icon-allow-overlap': true,
-							'text-field': zoneOptions[zoneType].label,
+							'text-field': zoneOptions[zoneDescr].label,
 							'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
 							'text-size': 9,
 							'text-transform': 'uppercase'
@@ -198,7 +198,7 @@
 						paint: {
 							'text-color': zoneOptions[zoneType].line_color
 						},
-						filter: ['all', ['==', 'zone_type', zoneType], ['==', 'city_id', cityId]]
+						filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 					});
 				}
 			});
