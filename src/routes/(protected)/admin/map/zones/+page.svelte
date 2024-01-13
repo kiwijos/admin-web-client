@@ -77,7 +77,7 @@
 
 					// When a click event occurs on a feature in the cities (fill) layer, fly to the point
 					map.on('click', fillLayerId, (e) => {
-						// fly to the city if map is zoomed out
+						// Fly to the city if the map is zoomed out beyond cityMaxZoom
 						if (map.getZoom() < cityMaxZoom) {
 							map.flyTo({
 								center: e.lngLat,
@@ -91,7 +91,7 @@
 						map.getCanvas().style.cursor = 'pointer';
 					});
 
-					// Change it back to a pointer when it leaves.
+					// Change it back to normal when it leaves.
 					map.on('mouseleave', fillLayerId, () => {
 						map.getCanvas().style.cursor = '';
 					});
@@ -99,7 +99,7 @@
 
 				const borderLayerId = `${cityId}-border`;
 
-				// Add a layer for this city if it hasn't been added already.
+				// Add a border if it hasn't been added already.
 				if (!map.getLayer(borderLayerId)) {
 					map.addLayer({
 						id: borderLayerId,
@@ -122,12 +122,13 @@
 				});
 			}
 
-			// Insert the zone layers beneath any symbol layer with a "text-field" property.
+			// Insert the zone layers beneath any symbol layer with a text-field property
+			// Basically, make sure names of places and streets and other labels are always visible on top of zones
 			const layers = map.getStyle().layers;
 
 			let labelLayerId: string;
 			for (let i = 0; i < layers.length; i++) {
-				// @ts-expect-error - we are aware that it might be undefined
+				// @ts-expect-error - TS doesn't know about text-field
 				if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
 					labelLayerId = layers[i].id;
 					break;
