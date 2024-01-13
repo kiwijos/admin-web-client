@@ -160,10 +160,18 @@
 									? `~${calculateTimeDifference(trip.start_time, dateNow)}`
 									: calculateTimeDifference(trip.start_time, trip.end_time)}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right">{trip.start_cost} kr </td>
-							<td class="px-6 py-4 table-cell-fit text-right">{trip.var_cost} kr </td>
-							<td class="px-6 py-4 table-cell-fit text-right">{trip.park_cost} kr </td>
-							<td class="px-6 py-4 table-cell-fit text-right">{trip.total_cost} kr </td>
+							<td class="px-6 py-4 table-cell-fit text-right"
+								>{trip.start_cost ? `${trip.start_cost} kr` : '--'}</td
+							>
+							<td class="px-6 py-4 table-cell-fit text-right"
+								>{trip.var_cost ? `${trip.var_cost.toFixed(2)} kr` : '--'}</td
+							>
+							<td class="px-6 py-4 table-cell-fit text-right"
+								>{trip.park_cost ? `${trip.park_cost} kr` : '--'}</td
+							>
+							<td class="px-6 py-4 table-cell-fit text-right"
+								>{trip.total_cost ? `${trip.total_cost.toFixed(2)} kr` : '--'}
+							</td>
 						</tr>
 					{/each}
 				{/if}
