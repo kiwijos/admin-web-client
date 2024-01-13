@@ -25,25 +25,22 @@
 	const cityMaxZoom = 11;
 
 	const zoneOptions: {
-		[key: string]: { fill_color: string; label: string; line_color: string; minZoom: number };
+		[key: string]: { fill_color: string; label: string; line_color: string };
 	} = {
 		parking: {
 			fill_color: '#0ea5e9',
 			label: 'Parkering',
-			line_color: '#0c4a6e',
-			minZoom: cityMaxZoom
+			line_color: '#0c4a6e'
 		},
 		charging: {
 			fill_color: '#10b981',
 			label: 'Laddning',
-			line_color: '#064e3b',
-			minZoom: cityMaxZoom
+			line_color: '#064e3b'
 		},
 		forbidden: {
 			fill_color: '#ef4444',
 			label: 'Förbjuden',
-			line_color: '#7f1d1d',
-			minZoom: cityMaxZoom
+			line_color: '#7f1d1d'
 		}
 	};
 
