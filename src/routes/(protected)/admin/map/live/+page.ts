@@ -35,7 +35,7 @@ export const load: PageLoad = async ({ data }) => {
 					charge_perc: bike.charge_perc,
 					active: bike.active,
 					status_id: bike.status_id,
-					status_descr: bike.status_descr
+					speed: 0 // <-- speed is set during simulation
 				}
 			};
 		})),
