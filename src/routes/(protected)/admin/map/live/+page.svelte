@@ -246,11 +246,27 @@
 		};
 	});
 
-	const handleStartSimulation = () => {
-		// @ts-expect-error - We wholeheartedly accept this untyped variable
-		return async ({ result }) => {
-			if (!result?.success) return;
+	let simulationHasStarted = false;
 
+	// @ts-expect-error - We wholeheartedly accept these unused variables
+	const handleStartSimulation = ({ formElement, formData, action, cancel, submitter }) => {
+		if (simulationHasStarted === true) {
+			cancel();
+			return;
+		}
+
+		simulationHasStarted = true;
+
+		// @ts-expect-error - We wholeheartedly accept this untyped variable too
+		return async ({ result }) => {
+			if (!result?.data?.success) {
+				simulationHasStarted = false; // Something went wrong, so we can try again
+				return;
+			}
+
+			await applyAction(result); // Apply the action, which will update the form state
+		};
+	};
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
@@ -259,10 +275,14 @@
 <form
 	action="/admin/bikes?/simulate"
 	method="POST"
-	class="absolute top-2 right-4 z-10"
+	class="absolute w-fit top-2 left-2 lg:left-56 z-[11] {!loading || 'animate-pulse'}"
 	use:enhance={handleStartSimulation}
 >
-	<button type="submit" class="btn variant-filled-primary">Simulate</button>
+	<button
+		type="submit"
+		class="btn variant-filled-primary"
+		disabled={simulationHasStarted ? true : loading ? true : false}>Starta simulering</button
+	>
 </form>
 
 <Map />
