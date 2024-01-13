@@ -133,6 +133,10 @@ html.dark .maplibregl-popup-anchor-right .maplibregl-popup-tip {
 }
 
 .maplibregl-popup-content {
-	@apply rounded-md bg-white drop-shadow-sm font-token dark:bg-surface-800;
+	@apply rounded-md drop-shadow-sm font-token;
 	padding: 0 !important;
+}
+
+html.dark .maplibregl-popup-content {
+	background-color: rgba(var(--color-surface-800));
 }
