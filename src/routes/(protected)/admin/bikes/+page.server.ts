@@ -74,7 +74,7 @@ const deactivate: Action = async ({ request, fetch }) => {
 		});
 	}
 
-	return { success: true };
+	return { success: true, bike: result.bike };
 };
 
 const activate: Action = async ({ request, fetch }) => {
@@ -116,7 +116,7 @@ const activate: Action = async ({ request, fetch }) => {
 		});
 	}
 
-	return { success: true };
+	return { success: true, bike: result };
 };
 
 const changeStatus: Action = async ({ request, fetch }) => {
