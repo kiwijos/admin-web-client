@@ -217,51 +217,54 @@
 			});
 
 			if (!map.getSource('openmaptiles')) {
-			map.addSource('openmaptiles', {
-				url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${PUBLIC_MAPTILER_API_KEY}`,
-				type: 'vector'
-			});
+				map.addSource('openmaptiles', {
+					url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${PUBLIC_MAPTILER_API_KEY}`,
+					type: 'vector'
+				});
+			}
 
 			// Adapted from maplibre tutorial (https://maplibre.org/maplibre-gl-js/docs/examples/3d-buildings/)
-			map.addLayer(
-				{
-					id: '3d-buildings',
-					source: 'openmaptiles',
-					'source-layer': 'building',
-					type: 'fill-extrusion',
-					minzoom: 15,
-					paint: {
-						'fill-extrusion-color': [
-							'interpolate',
-							['linear'],
-							['get', 'render_height'],
-							0,
-							'lightgray',
-							200,
-							'royalblue',
-							400,
-							'lightblue'
-						],
-						'fill-extrusion-height': [
-							'interpolate',
-							['linear'],
-							['zoom'],
-							15,
-							0,
-							16,
-							['get', 'render_height']
-						],
-						'fill-extrusion-base': [
-							'case',
-							['>=', ['get', 'zoom'], 16],
-							['get', 'render_min_height'],
-							0
-						]
-					}
-				},
+			if (!map.getLayer('3d-buildings')) {
+				map.addLayer(
+					{
+						id: '3d-buildings',
+						source: 'openmaptiles',
+						'source-layer': 'building',
+						type: 'fill-extrusion',
+						minzoom: 15,
+						paint: {
+							'fill-extrusion-color': [
+								'interpolate',
+								['linear'],
+								['get', 'render_height'],
+								0,
+								'lightgray',
+								200,
+								'royalblue',
+								400,
+								'lightblue'
+							],
+							'fill-extrusion-height': [
+								'interpolate',
+								['linear'],
+								['zoom'],
+								15,
+								0,
+								16,
+								['get', 'render_height']
+							],
+							'fill-extrusion-base': [
+								'case',
+								['>=', ['get', 'zoom'], 16],
+								['get', 'render_min_height'],
+								0
+							]
+						}
+					},
 					// @ts-expect-error - The labelLayerId is defined, TS just doesn't know it.
-				labelLayerId
-			);
+					labelLayerId
+				);
+			}
 
 			loading = false;
 		});
