@@ -44,14 +44,16 @@ const deactivate: Action = async ({ request, fetch }) => {
 		return fail(400, { bikeId, invalid: true });
 	}
 
+	let result;
+
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/deactivate`, {
 			method: 'PUT'
 		});
 
-		if (!response.ok) {
-			const result = await response.json();
+		result = await response.json();
 
+		if (!response.ok) {
 			console.error(result.errors.message);
 
 			return fail(response.status, {
@@ -84,14 +86,16 @@ const activate: Action = async ({ request, fetch }) => {
 		return fail(400, { bikeId, invalid: true });
 	}
 
+	let result;
+
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/activate`, {
 			method: 'PUT'
 		});
 
-		if (!response.ok) {
-			const result = await response.json();
+		result = await response.json();
 
+		if (!response.ok) {
 			console.error(result.errors.message);
 
 			return fail(response.status, {
