@@ -76,6 +76,13 @@
 				>
 			</div>
 		</div>
+		<div class="flex flex-col justify-center">
+			<h1 class="text-2xl font-bold">Cykelnr {bike.id}</h1>
+			<p class="text-sm text-surface-400 dark:text-surface-300">
+				{bike.active ? 'Aktiv' : 'Avstängd'} - {statusCodes[bike.status_id]}
+			</p>
+		</div>
+	</div>
 		<form
 			method="POST"
 			use:enhance={handleBikeActiveStatus}
