@@ -109,32 +109,36 @@
 					{bike.active ? 'Aktiv' : 'Avstängd'} ({statusCodes[bike.status_id]})
 				</p>
 			</div>
-	<form
-		method="POST"
-		use:enhance={handleBikeActiveStatus}
-		class="space-y-4"
-		aria-describedby="helper-text-explanation"
-	>
-		<label class="label flex items-center justify-between">
-			<span class="block px-2 uppercase inline-block text-xs font-bold"
-				>{bike.active ? 'Aktiv' : 'Inaktiv'}</span
+			<form
+				method="POST"
+				use:enhance={handleBikeActiveStatus}
+				aria-describedby="helper-text-explanation"
+				class="-ml-2"
 			>
-			{#if bike.active}
-				<button
-					title="Stäng av cykeln"
-					formaction="/admin/bikes?/deactivate"
-					class="btn btn-sm variant-ringed-error w-full">Stäng av</button
-				>
-			{:else}
-				<button
-					title="Aktivera cykeln"
-					formaction="/admin/bikes?/activate"
-					class="btn btn-sm variant-ringed-success w-full">Aktivera</button
-				>
-			{/if}
-			<input value={bike.id} name="id" hidden />
-		</label>
-	</form>
+				<label class="label flex items-center justify-between">
+					<div
+						class="btn-group sm:text-sm ring-1 ring-surface-50 dark:ring-surface-500 [&>*+*]:border-surface-50 [&>*+*]:dark:border-surface-500"
+					>
+						<button
+							title="Stäng av cykeln"
+							formaction="/admin/bikes?/deactivate"
+							disabled={!bike.active}
+							class={!bike.active
+								? 'shadow-inner bg-gray-100 dark:bg-surface-700'
+								: 'bg-white dark:bg-surface-800'}>Stäng av</button
+						>
+						<button
+							title="Aktivera cykeln"
+							formaction="/admin/bikes?/activate"
+							disabled={bike.active}
+							class={bike.active
+								? 'shadow-inner bg-gray-100 dark:bg-surface-700'
+								: 'bg-white dark:bg-surface-800'}>Aktivera</button
+						>
+					</div>
+					<input value={bike.id} name="id" hidden />
+				</label>
+			</form>
 		</div>
 	</div>
 	<div class="rounded-container-token p-2 sm:p-4 bg-white dark:bg-surface-800">
