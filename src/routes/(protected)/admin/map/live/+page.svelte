@@ -2,7 +2,7 @@
 	import type { Map as MaplibreMap } from 'maplibre-gl';
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 	import type { PageData } from './$types';
 	import type { Bike } from '$lib/types/Bike';
@@ -218,14 +218,13 @@
 
 			handleNewPoint(data);
 		};
-	});
 
-	// close the EventSource connection when the component is destroyed
-	$: if (evtSource)
-		onDestroy(() => {
+		// close the EventSource connection when the component is destroyed
+		return () => {
 			evtSource.close();
 			console.log('EventSource closed');
-		});
+		};
+	});
 
 	const handleStartSimulation = () => {
 		// @ts-expect-error - We wholeheartedly accept this untyped variable
