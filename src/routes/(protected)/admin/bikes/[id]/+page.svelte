@@ -49,21 +49,34 @@
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
-	$: charge = bike.charge_perc * 100;
-	$: meterColor =
-		charge <= 20 ? 'stroke-error-500' : charge <= 40 ? 'stroke-warning-500' : 'stroke-success-500';
-	$: trackColor =
-		charge <= 20
-			? 'stroke-error-700/30'
-			: charge <= 40
-				? 'stroke-warning-700/30'
-				: 'stroke-success-700/30';
-	$: glowColor =
-		charge <= 20
-			? 'shadow-[0_0px_30px_2px_rgba(255,204,203,0.3)]'
-			: charge <= 40
-				? 'shadow-[0_0px_30px_2px_rgba(255,255,237,0.3)]'
-				: 'shadow-[0_0px_30px_2px_rgba(144,238,144,0.3)]';
+
+	let meterColor: string;
+	let trackColor: string;
+	let glowColor: string;
+
+	$: charge = 0.5 * 100;
+
+	$: {
+		if (charge <= 20) {
+			meterColor = bike.active
+				? 'stroke-red-500 dark:stroke-error-500'
+				: 'stroke-red-800 dark:stroke-error-800';
+			trackColor = 'stroke-error-700/30';
+			glowColor = 'shadow-[0_0px_30px_2px_rgba(210,127,129,0.3)]';
+		} else if (charge <= 40) {
+			meterColor = bike.active
+				? 'stroke-yellow-300 dark:stroke-warning-600'
+				: 'stroke-warning-600 dark:stroke-warning-800';
+			trackColor = 'stroke-warning-800/40 dark:stroke-warning-700/30';
+			glowColor = 'shadow-[0_0px_30px_2px_rgba(244,231,191,0.3)]';
+		} else {
+			meterColor = bike.active
+				? 'stroke-green-500 dark:stroke-success-600'
+				: 'stroke-green-800 dark:stroke-success-800';
+			trackColor = 'stroke-success-700/30';
+			glowColor = 'shadow-[0_0px_30px_2px_rgba(144,238,144,0.3)]';
+		}
+	}
 </script>
 
 <!-- border dark:border-surface-600 bg-white dark:bg-surface-800 -->
