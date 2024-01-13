@@ -88,16 +88,6 @@
 
 	$: if (map)
 		map.on('load', () => {
-			// remove existing symbol layers from the tile provider (they can really bog down the map)
-			const layers = map.getStyle().layers;
-
-			for (let i = 0; i < layers.length; i++) {
-				const layer = layers[i];
-				if (layer.type === 'symbol') {
-					map.removeLayer(layer.id);
-				}
-			}
-
 			map.addSource('bikes', {
 				type: 'geojson',
 				data: {
