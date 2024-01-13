@@ -267,12 +267,71 @@
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
+
+	// @ts-expect-error - We wholeheartedly accept these unused variables
+	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
+		if (!formData.get('id')) {
+			cancel();
+			return;
+		}
+
+		console.log(action);
+
+		if (action.search === '?/deactivate' && selectedBike?.properties.active === false) {
+			cancel();
+			return;
+		}
+
+		if (action.search === '?/activate' && selectedBike?.properties.active === true) {
+			cancel();
+			return;
+		}
+
+		// @ts-expect-error - We wholeheartedly accept this untyped variable too
+		return async ({ result }) => {
+			if (!result?.data?.success) return;
+
+			const updated = result.data.bike;
+
+			const updatedFeature: BikePointFeature = {
+				type: 'Feature',
+				geometry: {
+					type: 'Point',
+					coordinates: updated.coords
+				},
+				properties: {
+					id: updated.id,
+					active: updated.active,
+					charge_perc: updated.charge_perc,
+					city_id: updated.city_id,
+					status_id: updated.status_id,
+					status_descr: updated.status_descr
+				}
+			};
+
+			// splice the updated feature into the data
+			const index = data.bikes.findIndex((bike) => bike.properties.id === updated.id);
+			data.bikes.splice(index, 1, updatedFeature);
+
+			selectedBike = selectedBike?.properties.id === updated.id ? updatedFeature : selectedBike;
+
+			// @ts-expect-error - setData does exist but the types don't know about it
+			map.getSource('bikes').setData({
+				type: 'FeatureCollection',
+				features: data.bikes
+			});
+
+			const popup = popups[parseInt(formData.get('id') as string)];
+
+			if (popup) popup.setHTML(singleBikeFormPopupHTML(updatedFeature));
+
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
 </script>
 
 <Map />
+
 <form
 	action="/admin/bikes?/simulate"
 	method="POST"
