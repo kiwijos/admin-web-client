@@ -147,7 +147,7 @@
 								><a
 									href="/admin/bikes/{trip.bike_id}"
 									class="font-medium text-secondary-500 hover:underline whitespace-nowrap"
-									>Cykel {trip.bike_id}</a
+									>{trip.bike_id}</a
 								></td
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{formatDateReadable(trip.start_time)}</td>
