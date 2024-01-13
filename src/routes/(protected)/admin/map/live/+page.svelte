@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { applyAction, enhance } from '$app/forms';
+
 	import maplibregl, { Map as MaplibreMap } from 'maplibre-gl';
+
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
-	import { onMount } from 'svelte';
+	import { singleBikeFormPopupHTML } from '$lib/services/markerMaker';
+
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 	import type { PageData } from './$types';
-	import type { Bike } from '$lib/types/Bike';
-	import { applyAction, enhance } from '$app/forms';
 
 	export let data: PageData;
 
