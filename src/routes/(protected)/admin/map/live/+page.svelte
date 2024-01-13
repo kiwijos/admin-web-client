@@ -69,9 +69,8 @@
 					properties: {
 						...feature.properties,
 						charge_perc: update.charge_perc,
-						active: update.active,
-						status_descr: update.status_descr,
-						status_id: update.status_id
+						status_id: update.status_id,
+						speed: update.speed
 					}
 				};
 			}
