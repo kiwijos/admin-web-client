@@ -5,5 +5,8 @@ export interface BikePointFeature {
 		id: number;
 		city_id: string;
 		charge_perc: number;
+		active: boolean;
+		status_id?: number;
+		status_descr?: string;
 	};
 }
