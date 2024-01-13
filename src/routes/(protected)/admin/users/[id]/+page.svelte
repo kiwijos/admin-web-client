@@ -34,7 +34,7 @@
 					initials={user.email[0] ?? '?'}
 				/>
 				<div class="max-w-36 sm:max-w-fit">
-					<h1 class="h2 font-bold">{user.email.split('@')[0]}</h1>
+					<h1 class="text-3xl font-bold">{user.email.split('@')[0]}</h1>
 					<p class="text-surface-400 truncate">{user.email}</p>
 				</div>
 			</div>
