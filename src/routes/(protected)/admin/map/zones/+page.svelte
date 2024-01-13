@@ -154,7 +154,7 @@
 							},
 							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 						},
-						labelLayerId // insert before the label layer id
+						labelLayerId // <-- insert under text labels
 					);
 				}
 
@@ -177,8 +177,9 @@
 						},
 				}
 
-				// Add a layer for the zone type's symbol if it hasn't been added already.
+				// Add bike count pins for each zone.
 				const symbolLayerID = `${cityId}-${zoneType}-symbol`;
+				// Add zone labels if they haven't been added already.
 
 				if (!map.getLayer(symbolLayerID)) {
 					map.addLayer({
@@ -203,13 +204,13 @@
 				}
 			});
 
-			///////// ADD 3D BUILDING SOURCES AND LAYERS //////////
-
+			if (!map.getSource('openmaptiles')) {
 			map.addSource('openmaptiles', {
 				url: `https://api.maptiler.com/tiles/v3/tiles.json?key=${PUBLIC_MAPTILER_API_KEY}`,
 				type: 'vector'
 			});
 
+			// Adapted from maplibre tutorial (https://maplibre.org/maplibre-gl-js/docs/examples/3d-buildings/)
 			map.addLayer(
 				{
 					id: '3d-buildings',
@@ -246,7 +247,7 @@
 						]
 					}
 				},
-				// @ts-expect-error - the labelLayerId is in fact defined
+					// @ts-expect-error - The labelLayerId is defined, TS just doesn't know it.
 				labelLayerId
 			);
 
