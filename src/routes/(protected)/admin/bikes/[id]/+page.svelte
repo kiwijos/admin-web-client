@@ -47,40 +47,32 @@
 		<ProgressRadial
 			stroke={60}
 		<div class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-8">
-			<form method="POST" use:enhance class="space-y-4" aria-describedby="helper-text-explanation">
-				<label class="label flex items-center justify-between">
-					<span class="block px-2 uppercase inline-block text-xs font-bold"
-						>{bike.active ? 'Aktiv' : 'Inaktiv'}</span
+		<form
+			method="POST"
+			use:enhance={handleBikeActiveStatus}
+			class="space-y-4"
+			aria-describedby="helper-text-explanation"
+		>
+			<label class="label flex items-center justify-between">
+				<span class="block px-2 uppercase inline-block text-xs font-bold"
+					>{bike.active ? 'Aktiv' : 'Inaktiv'}</span
+				>
+				{#if bike.active}
+					<button
+						title="Stäng av cykeln"
+						formaction="/admin/bikes?/deactivate"
+						class="btn btn-sm variant-ringed-error w-full">Stäng av</button
 					>
-					<div class="flex gap-1 items-center shrink">
-						{#if bike.active}
-							<button
-								title="Den här cykeln är redan aktiv"
-								type="button"
-								disabled
-								class="btn btn-sm">Aktivera</button
-							>
-							<button
-								title="Stäng av cykeln"
-								formaction="/admin/bikes?/deactivate"
-								class="btn btn-sm variant-ringed-error w-full">Stäng av</button
-							>
-						{:else}
-							<button
-								title="Aktivera cykeln"
-								formaction="/admin/bikes?/activate"
-								class="btn btn-sm variant-ringed-success w-full">Aktivera</button
-							><button
-								title="Den här cykeln är redan avstängd"
-								type="button"
-								class="btn btn-sm"
-								disabled>Stäng av</button
-							>
-						{/if}
-					</div>
-					<input value={bike.id} name="id" hidden />
-				</label>
-			</form>
+				{:else}
+					<button
+						title="Aktivera cykeln"
+						formaction="/admin/bikes?/activate"
+						class="btn btn-sm variant-ringed-success w-full">Aktivera</button
+					>
+				{/if}
+				<input value={bike.id} name="id" hidden />
+			</label>
+		</form>
 			<Accordion>
 				<AccordionItem closed>
 					<svelte:fragment slot="lead"><Fa icon={faInfoCircle} /></svelte:fragment>
