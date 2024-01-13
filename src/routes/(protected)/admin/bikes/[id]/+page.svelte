@@ -15,6 +15,15 @@
 
 	$: bike = form?.success ? form.bike ?? data.bike : data.bike;
 
+	$: cityName =
+		bike.city_id === 'STHLM'
+			? 'Stockholm'
+			: bike.city_id === 'GBG'
+				? 'Göteborg'
+				: bike.city_id === 'KRLST'
+					? 'Karlstad'
+					: '--';
+
 	// @ts-expect-error - untyped variables are fine
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
