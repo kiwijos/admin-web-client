@@ -135,7 +135,7 @@
 				}
 			}
 
-			zoneFeatureCollection.features.forEach((feature: ZonePolygonFeature) => {
+			data.zones.forEach((feature: ZonePolygonFeature) => {
 				const zoneDescr: string = feature.properties.descr;
 				const cityId: string = feature.properties.city_id;
 				const fillLayerID = `${cityId}-${zoneDescr}-fill`;
