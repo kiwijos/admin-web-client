@@ -80,17 +80,20 @@
 </script>
 
 <!-- border dark:border-surface-600 bg-white dark:bg-surface-800 -->
-<div class="p-4 md:p-8 max-w-2xl">
+<div class="p-4 md:p-8 max-w-2xl space-y-4">
 	<div
-		class="w-full flex bg-white dark:bg-surface-800 border dark:border-surface-600 rounded-full md:rounded-l-full"
+		class="w-full flex sm:bg-white sm:dark:bg-surface-800 sm:border-r sm:border-t sm:border-b sm:dark:border-surface-600 rounded-full"
 	>
-		<div class="sm:w-fit p-4">
+		<div
+			class="p-2 sm:p-4 sm:border rounded-full dark:border-surface-600 bg-gray-100 dark:bg-surface-900"
+		>
 			<div
-				class="w-fit mx-auto dark:ring-2 ring-surface-600 rounded-full {!bike.active || glowColor}"
+				class="w-fit dark:ring-1 sm:dark:ring-2 dark:ring-surface-600 rounded-full {!bike.active ||
+					glowColor}"
 			>
 				<ProgressRadial
 					stroke={60}
-					width="w-56 sm:w-36"
+					width="w-24 sm:w-36"
 					meter={meterColor}
 					track={trackColor}
 					strokeLinecap="round"
@@ -98,13 +101,14 @@
 				>
 			</div>
 		</div>
-		<div class="flex flex-col justify-center">
-			<h1 class="text-2xl font-bold">Cykelnr {bike.id}</h1>
-			<p class="text-sm text-surface-400 dark:text-surface-300">
-				{bike.active ? 'Aktiv' : 'Avstängd'} - {statusCodes[bike.status_id]}
-			</p>
-		</div>
-	</div>
+
+		<div class="flex flex-col justify-end items-start p-2 sm:p-4 space-y-2 sm:space-y-4">
+			<div class="px-2">
+				<h1 class="text-xl sm:text-3xl font-bold">Cykelnr {bike.id}</h1>
+				<p class="text-sm sm:text-base text-surface-400 dark:text-surface-300 truncate">
+					{bike.active ? 'Aktiv' : 'Avstängd'} ({statusCodes[bike.status_id]})
+				</p>
+			</div>
 	<form
 		method="POST"
 		use:enhance={handleBikeActiveStatus}
@@ -182,7 +186,7 @@
 			</AccordionItem>
 		</Accordion>
 	</div>
-	<div class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-8">
+	<div class="rounded-container-token p-2 sm:p-4 bg-white dark:bg-surface-800">
 		<Accordion>
 			<AccordionItem closed>
 				<svelte:fragment slot="lead"><Fa icon={faInfoCircle} /></svelte:fragment>
