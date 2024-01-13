@@ -175,11 +175,23 @@
 							},
 							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 						},
+						labelLayerId // <-- insert under text labels
+					);
 				}
 
 				// Add bike count pins for each zone.
-				const symbolLayerID = `${cityId}-${zoneType}-symbol`;
+				if (feature.properties?.bike_count) {
+					const center = centerOfMass(feature).geometry.coordinates;
+
+					const el: HTMLElement = createBikeCountPin(feature.properties.bike_count);
+
+					new maplibregl.Marker({ element: el, anchor: 'bottom', offset: [0, -3] })
+						.setLngLat(center)
+						.addTo(map);
+				}
+
 				// Add zone labels if they haven't been added already.
+				const symbolLayerID = `${cityId}-${zoneDescr}-symbol`;
 
 				if (!map.getLayer(symbolLayerID)) {
 					map.addLayer({
