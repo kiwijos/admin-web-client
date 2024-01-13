@@ -50,27 +50,16 @@
 	$: if (map) {
 		map.on('load', () => {
 			if (!map.getSource('cities')) {
-			///////// ADD CITY SOURCES AND LAYERS //////////
-			const cityFeatures: CityPolygonFeature[] = data.cities.map((city: City) => {
-				return {
-					type: 'Feature',
-					geometry: {
-						type: city.geometry.type,
-						coordinates: city.geometry.coordinates
-					},
-					properties: { name: city.name, id: city.id }
-				};
-			});
+				map.addSource('cities', {
+					type: 'geojson',
+					data: {
+						type: 'FeatureCollection',
+						features: data.cities
+					}
+				});
+			}
 
-			map.addSource('cities', {
-				type: 'geojson',
-				data: {
-					type: 'FeatureCollection',
-					features: cityFeatures
-				}
-			});
-
-			cityFeatures.forEach((feature: CityPolygonFeature) => {
+			data.cities.forEach((feature: CityPolygonFeature) => {
 				const cityId: string = feature.properties['id'];
 				const fillLayerId = `${cityId}-fill`;
 
@@ -129,27 +118,12 @@
 				}
 			});
 
-			///////// ADD ZONE SOURCES AND LAYERS //////////
-			const zoneFeatures: ZonePolygonFeature[] = data.zones.map((zone: Zone) => {
-				return {
-					type: 'Feature',
-					geometry: {
-						type: zone.geometry.type,
-						coordinates: zone.geometry.coordinates
-					},
-					properties: { zone_type: zone.descr, city_id: zone.city_id }
-				};
-			});
-
-			const zoneFeatureCollection = {
-				type: 'FeatureCollection',
-				features: zoneFeatures
-			};
-
-			map.addSource('zones', {
-				type: 'geojson',
-				data: zoneFeatureCollection
-			});
+			if (!map.getSource('zones')) {
+				map.addSource('zones', {
+					type: 'geojson',
+					data: { type: 'FeatureCollection', features: data.zones }
+				});
+			}
 
 			// Insert the zone layers beneath any symbol layer with a "text-field" property.
 			const layers = map.getStyle().layers;
