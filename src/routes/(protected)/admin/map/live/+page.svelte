@@ -423,6 +423,7 @@
 					coordinates: updated.coords
 				},
 				properties: {
+					...selectedBike?.properties,
 					id: updated.id,
 					active: updated.active,
 					charge_perc: updated.charge_perc,
