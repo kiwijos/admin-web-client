@@ -10,6 +10,8 @@
 
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
 	import type { PageData } from './$types';
+	import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
+	import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
 
 	export let data: PageData;
 
@@ -21,6 +23,26 @@
 
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
+
+	const zoneOptions: {
+		[key: string]: { fill_color: string; label: string; line_color: string };
+	} = {
+		parking: {
+			fill_color: '#0ea5e9',
+			label: 'Parkering',
+			line_color: '#0c4a6e'
+		},
+		charging: {
+			fill_color: '#10b981',
+			label: 'Laddning',
+			line_color: '#064e3b'
+		},
+		forbidden: {
+			fill_color: '#ef4444',
+			label: 'Förbjuden',
+			line_color: '#7f1d1d'
+		}
+	};
 
 	let evtSource: EventSource; // EventSource is a global type
 
@@ -90,6 +112,101 @@
 
 	$: if (map)
 		map.on('load', () => {
+			if (!map.getSource('cities')) {
+				map.addSource('cities', {
+					type: 'geojson',
+					data: {
+						type: 'FeatureCollection',
+						features: data.cities
+					}
+				});
+			}
+
+			data.cities.forEach((feature: CityPolygonFeature) => {
+				const cityId: string = feature.properties.id;
+				const borderLayerId = `${cityId}-border`;
+
+				// Add a border if it hasn't been added already.
+				if (!map.getLayer(borderLayerId)) {
+					map.addLayer({
+						id: borderLayerId,
+						type: 'line',
+						source: 'cities',
+						layout: {},
+						paint: {
+							'line-color': '#4f46e5',
+							'line-width': 2
+						},
+						filter: ['==', 'id', cityId]
+					});
+				}
+			});
+
+			if (!map.getSource('zones')) {
+				map.addSource('zones', {
+					type: 'geojson',
+					data: { type: 'FeatureCollection', features: data.zones }
+				});
+			}
+
+			// Insert the zone layers beneath any symbol layer with a text-field property
+			// Basically, make sure names of places and streets and other labels are always visible on top of zones
+			const layers = map.getStyle().layers;
+
+			let labelLayerId: string;
+			for (let i = 0; i < layers.length; i++) {
+				// @ts-expect-error - TS doesn't know about text-field
+				if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+					labelLayerId = layers[i].id;
+					break;
+				}
+			}
+
+			data.zones.forEach((feature: ZonePolygonFeature) => {
+				const zoneDescr: string = feature.properties.descr;
+				const cityId: string = feature.properties.city_id;
+				const fillLayerID = `${cityId}-${zoneDescr}-fill`;
+
+				// Add a layer for this type (parking/charging/forbidden) if it hasn't been added already.
+				if (!map.getLayer(fillLayerID)) {
+					map.addLayer(
+						{
+							id: fillLayerID,
+							type: 'fill',
+							source: 'zones',
+							layout: {},
+							paint: {
+								'fill-color': zoneOptions[zoneDescr].fill_color,
+								'fill-opacity': ['interpolate', ['exponential', 2], ['zoom'], 10, 0, 13, 0.4]
+							},
+							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
+						},
+						labelLayerId // <-- insert under text labels
+					);
+				}
+
+				const borderLayerId = `${cityId}-${zoneDescr}-border`;
+
+				// Add a layer for this city if it hasn't been added already.
+				if (!map.getLayer(borderLayerId)) {
+					map.addLayer(
+						{
+							id: borderLayerId,
+							type: 'line',
+							source: 'zones',
+							layout: {},
+							paint: {
+								'line-color': zoneOptions[zoneDescr].line_color,
+								'line-width': 2,
+								'line-opacity': ['interpolate', ['exponential', 2], ['zoom'], 11, 0, 13, 0.9]
+							},
+							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
+						},
+						labelLayerId // <-- insert under text labels
+					);
+				}
+			});
+
 			map.addSource('bikes', {
 				type: 'geojson',
 				data: {
@@ -250,7 +367,8 @@
 
 	let simulationHasStarted = false;
 
-	// @ts-expect-error - We wholeheartedly accept these unused variables
+	// @ts-expect-error - untyped variables are fine
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleStartSimulation = ({ formElement, formData, action, cancel, submitter }) => {
 		if (simulationHasStarted === true) {
 			cancel();
@@ -270,7 +388,8 @@
 		};
 	};
 
-	// @ts-expect-error - We wholeheartedly accept these unused variables
+	// @ts-expect-error - untyped variables are fine
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
 		if (!formData.get('id')) {
 			cancel();
