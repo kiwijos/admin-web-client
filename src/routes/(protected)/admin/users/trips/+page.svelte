@@ -11,6 +11,8 @@
 	let fromDate: Date | undefined;
 	let toDate: Date | undefined;
 
+	let dateNow = String(new Date());
+
 	let resetButtonActive: boolean;
 	$: resetButtonActive = fromDate ? true : toDate ? true : false;
 
@@ -130,6 +132,7 @@
 					</tr>
 				{:else}
 					{#each sourceBodySliced as trip}
+						{@const hasEndTime = trip.end_time ? true : false}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
@@ -149,9 +152,13 @@
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{formatDateReadable(trip.start_time)}</td>
 
-							<td class="px-6 py-4 whitespace-nowrap">{formatDateReadable(trip.end_time)}</td>
+							<td class="px-6 py-4 whitespace-nowrap"
+								>{hasEndTime ? formatDateReadable(trip.end_time) : '--'}</td
+							>
 							<td class="px-6 py-4 table-cell-fit text-center"
-								>{calculateTimeDifference(trip.start_time, trip.end_time)}</td
+								>{!hasEndTime
+									? `~${calculateTimeDifference(trip.start_time, dateNow)}`
+									: calculateTimeDifference(trip.start_time, trip.end_time)}</td
 							>
 							<td class="px-6 py-4 table-cell-fit text-right">{trip.start_cost} kr </td>
 							<td class="px-6 py-4 table-cell-fit text-right">{trip.var_cost} kr </td>
