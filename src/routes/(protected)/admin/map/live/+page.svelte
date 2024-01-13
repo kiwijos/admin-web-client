@@ -35,13 +35,11 @@
 	let BATCH_SIZE = 500;
 
 	const updateBikePositionsBatched = (batch: BikePoint[]) => {
-		console.log('Updating bike positions in batch', BATCH_SIZE);
 		// Update the bikePointFeatures array in bulk
 		data.bikes = data.bikes.map((feature: BikePointFeature) => {
 			const update = batch.find((u) => u.id === feature.properties.id);
 
 			if (update) {
-				// Update the existing feature
 				return {
 					...feature,
 					geometry: {
@@ -64,7 +62,6 @@
 	// Function to process the buffered updates
 	const processBufferedUpdates = () => {
 		if (updateBuffer.length > 0) {
-			// Process the updates in batches
 			const batches = [];
 
 			while (updateBuffer.length > 0) {
@@ -85,7 +82,6 @@
 
 		// Check if the buffer size has reached the threshold
 		if (updateBuffer.length >= BATCH_SIZE) {
-			// Process the buffered updates
 			processBufferedUpdates();
 		}
 	};
@@ -192,6 +188,7 @@
 			map.on('mouseleave', 'clusters', () => {
 				map.getCanvas().style.cursor = '';
 			});
+
 			loading = false;
 		});
 
