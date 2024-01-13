@@ -2,21 +2,50 @@
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-nocheck - TS doesn't like the `bike` object and expects it to be called `bikes`, which I think has to do with the flow of data through the load functions
 	// In any case, it works, so I'm disabling TS for this file for now as all other checks pass
-	import type { PageData } from '../$types';
+	import type { PageData, ActionData } from '../$types';
 	import ChargeMeter from '$lib/components/ChargeMeter.svelte';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { statusCodes } from '$lib/help/statusCodes';
 	import Fa from 'svelte-fa';
 	import { faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
+	export let form: ActionData;
+
+	$: bike = form?.success ? form.bike ?? data.bike : data.bike;
+
+	// @ts-expect-error - untyped variables are fine
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
+		if (!formData.get('id')) {
+			cancel();
+			return;
+		}
+
+		if (action.search === '?/deactivate' && bike.active === false) {
+			cancel();
+			return;
+		}
+
+		if (action.search === '?/activate' && bike.active === true) {
+			cancel();
+			return;
+		}
+
+		// @ts-expect-error - We wholeheartedly accept this untyped variable too
+		return async ({ result }) => {
+			if (!result?.data?.success) return;
+
+			await applyAction(result); // Apply the action, which will update the form state
+		};
+	};
 </script>
 
 <div class="p-4 md:p-8 max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-	{#await data.bike}
-		<div class="col-span-3 text-center">Hämtar cykel...</div>
-	{:then bike}
+	<div class="w-full rounded-full">
+		<ProgressRadial
+			stroke={60}
 		<div class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-8">
 			<form method="POST" use:enhance class="space-y-4" aria-describedby="helper-text-explanation">
 				<label class="label flex items-center justify-between">
