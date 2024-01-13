@@ -1,6 +1,7 @@
 import { join } from 'path';
 import type { Config } from 'tailwindcss';
 import forms from '@tailwindcss/forms';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 // 1. Import the Skeleton plugin
 import { skeleton } from '@skeletonlabs/tw-plugin';
@@ -14,7 +15,12 @@ const config: Config = {
 		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
 	],
 	theme: {
-		extend: {}
+		extend: {
+			screens: {
+				xs: '475px',
+				...defaultTheme.screens
+			}
+		}
 	},
 	plugins: [
 		forms,
