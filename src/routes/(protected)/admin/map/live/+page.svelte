@@ -37,7 +37,7 @@
 	const updateBikePositionsBatched = (batch: BikePoint[]) => {
 		console.log('Updating bike positions in batch', BATCH_SIZE);
 		// Update the bikePointFeatures array in bulk
-		bikePointFeatures = bikePointFeatures.map((feature) => {
+		data.bikes = data.bikes.map((feature: BikePointFeature) => {
 			const update = batch.find((u) => u.id === feature.properties.id);
 
 			if (update) {
@@ -57,7 +57,7 @@
 		// @ts-expect-error - setData does exist but the types don't know about it
 		map.getSource('bikes').setData({
 			type: 'FeatureCollection',
-			features: bikePointFeatures
+			features: data.bikes
 		});
 	};
 
@@ -106,7 +106,7 @@
 				type: 'geojson',
 				data: {
 					type: 'FeatureCollection',
-					features: bikePointFeatures
+					features: data.bikes
 				},
 				cluster: true,
 				clusterMaxZoom: 15, // Don't cluster when zoomed in past 15
