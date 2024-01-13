@@ -108,7 +108,7 @@
 						layout: {},
 						paint: {
 							'line-color': '#4f46e5',
-							'line-width': 3
+							'line-width': 2
 						},
 						filter: ['==', 'id', cityId]
 					});
@@ -146,14 +146,11 @@
 						{
 							id: fillLayerID,
 							type: 'fill',
-							minzoom: zoneOptions[zoneType].minZoom,
 							source: 'zones',
 							layout: {},
 							paint: {
 								'fill-color': zoneOptions[zoneDescr].fill_color,
 								'fill-opacity': ['interpolate', ['exponential', 2], ['zoom'], 10, 0, 13, 0.4]
-								'fill-opacity': 0.5,
-								'fill-outline-color': '#ffffff'
 							},
 							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 						},
@@ -165,18 +162,19 @@
 
 				// Add a layer for this city if it hasn't been added already.
 				if (!map.getLayer(borderLayerId)) {
-					map.addLayer({
-						id: borderLayerId,
-						type: 'line',
-						minzoom: zoneOptions[zoneType].minZoom,
-						source: 'zones',
-						layout: {},
-						paint: {
+					map.addLayer(
+						{
+							id: borderLayerId,
+							type: 'line',
+							source: 'zones',
+							layout: {},
+							paint: {
 								'line-color': zoneOptions[zoneDescr].line_color,
-							'line-width': 1
-						},
+								'line-width': 2,
+								'line-opacity': ['interpolate', ['exponential', 2], ['zoom'], 11, 0, 13, 0.9]
+							},
 							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
-					});
+						},
 				}
 
 				// Add a layer for the zone type's symbol if it hasn't been added already.
@@ -186,17 +184,19 @@
 					map.addLayer({
 						id: symbolLayerID,
 						type: 'symbol',
-						minzoom: zoneOptions[zoneType].minZoom,
 						source: 'zones',
 						layout: {
 							'icon-allow-overlap': true,
 							'text-field': zoneOptions[zoneDescr].label,
-							'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-							'text-size': 9,
+							'text-font': ['Arial Unicode MS Bold'],
+							'text-size': 12,
 							'text-transform': 'uppercase'
 						},
 						paint: {
 							'text-color': zoneOptions[zoneType].line_color
+							'text-halo-color': '#fff',
+							'text-halo-width': 1,
+							'text-opacity': ['interpolate', ['exponential', 2], ['zoom'], 11, 0, 13, 1]
 						},
 						filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
 					});
