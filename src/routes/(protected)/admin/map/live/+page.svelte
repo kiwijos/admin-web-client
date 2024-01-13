@@ -151,6 +151,46 @@
 				}
 			});
 
+			// Open a popup when clicking on a unclustered point
+			map.on('click', 'unclustered-point', (e) => {
+				if (!e.features || !e.features[0]) return;
+
+				// @ts-expect-error - We know this can be used as a BikePointFeature
+				const feature = (selectedBike = e.features[0] as BikePointFeature);
+				const id = feature.properties.id;
+				const coordinates = feature.geometry.coordinates.slice();
+
+				// Make sure that if the map is zoomed out (very far!) such that
+				// multiple copies of the feature are visible, the popup appears over the copy being clicked
+				while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+					coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+				}
+
+				let popup = popups[id];
+
+				if (!popup) {
+					const popupContent = singleBikeFormPopupHTML(feature);
+
+					popup = popups[id] = new maplibregl.Popup()
+						// @ts-expect-error - Coordinates are valid, just typed differently
+						.setLngLat(coordinates)
+						.setHTML(popupContent)
+						.addTo(map);
+					return;
+				}
+
+				// @ts-expect-error - Coordinates are valid, just typed differently
+				if (!popup.isOpen()) popup.setLngLat(coordinates).addTo(map);
+			});
+
+			map.on('mouseenter', 'unclustered-point', () => {
+				map.getCanvas().style.cursor = 'pointer';
+			});
+
+			map.on('mouseleave', 'unclustered-point', () => {
+				map.getCanvas().style.cursor = '';
+			});
+
 			// Inspect cluster on click
 			map.on('click', 'clusters', (e) => {
 				const features = map.queryRenderedFeatures(e.point, {
