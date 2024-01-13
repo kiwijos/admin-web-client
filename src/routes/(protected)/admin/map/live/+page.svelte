@@ -23,19 +23,11 @@
 	let evtSource: EventSource; // EventSource is a global type
 
 	let loading = true;
-		return {
-			type: 'Feature',
-			geometry: {
-				type: 'Point',
-				coordinates: bike.coords
-			},
-			properties: {
-				id: bike.id,
-				city_id: bike.city_id,
-				charge_perc: bike.charge_perc
-			}
-		};
-	});
+
+	let selectedBike: BikePointFeature | undefined;
+
+	// Cache popups
+	let popups: { [key: number]: maplibregl.Popup } = {};
 
 	let updateBuffer: BikePoint[] = [];
 
