@@ -27,15 +27,15 @@
 	}
 
 	.charge-meter::-webkit-meter-optimum-value {
-		background: rgb(var(--color-success-500));
+		background-color: rgb(34 197 94);
 	}
 
 	.charge-meter::-webkit-meter-suboptimum-value {
-		background: rgb(var(--color-warning-500));
+		background-color: rgb(250 204 21);
 	}
 
 	.charge-meter::-webkit-meter-even-less-good-value {
-		background: rgb(var(--color-error-500));
+		background-color: rgb(239 68 68);
 	}
 
 	.charge-meter::-moz-meter-bar {
@@ -43,15 +43,15 @@
 	}
 
 	.charge-meter::-moz-meter-optimum {
-		background: rgb(var(--color-success-500));
+		background-color: rgb(34 197 94);
 	}
 
 	.charge-meter::-moz-meter-sub-optimum {
-		background: rgb(var(--color-warning-500));
+		background-color: rgb(250 204 21);
 	}
 
 	.charge-meter::-moz-meter-sub-sub-optimum {
-		background: rgb(var(--color-error-500));
+		background-color: rgb(239 68 68);
 	}
 
 	.charge-meter::-ms-fill {
@@ -59,10 +59,55 @@
 	}
 
 	.charge-meter::-ms-fill-lower {
-		background: rgb(var(--color-error-500));
+		background-color: rgb(239 68 68);
 	}
 
 	.charge-meter::-ms-fill-upper {
+		background-color: rgb(34 197 94);
+	}
+
+	/* svelte-ignore */
+	:global(html.dark .charge-meter::-webkit-meter-bar) {
+		background: rgba(var(--color-surface-500), 0.5);
+	}
+
+	:global(html.dark .charge-meter::-webkit-meter-optimum-value) {
+		background: rgb(var(--color-success-500));
+	}
+
+	:global(html.dark .charge-meter::-webkit-meter-suboptimum-value) {
+		background: rgb(var(--color-warning-500));
+	}
+
+	:global(html.dark .charge-meter::-webkit-meter-even-less-good-value) {
+		background: rgb(var(--color-error-500));
+	}
+
+	:global(html.dark .charge-meter::-moz-meter-bar) {
+		background: rgba(var(--color-surface-500), 0.5);
+	}
+
+	:global(html.dark .charge-meter::-moz-meter-optimum) {
+		background: rgb(var(--color-success-500));
+	}
+
+	:global(html.dark .charge-meter::-moz-meter-sub-optimum) {
+		background: rgb(var(--color-warning-500));
+	}
+
+	:global(html.dark .charge-meter::-moz-meter-sub-sub-optimum) {
+		background: rgb(var(--color-error-500));
+	}
+
+	:global(html.dark .charge-meter::-ms-fill) {
+		background: rgba(var(--color-surface-500), 0.5);
+	}
+
+	:global(html.dark .charge-meter::-ms-fill-lower) {
+		background: rgb(var(--color-error-500));
+	}
+
+	:global(html.dark .charge-meter::-ms-fill-upper) {
 		background: rgb(var(--color-success-500));
 	}
 </style>
