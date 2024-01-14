@@ -239,3 +239,67 @@ export const singleBikeCardPopupHTML = (feature: BikePointFeature): string => {
 			</div>
 		`;
 };
+
+export const multipleBikeCardsPopupHTML = (feature: ZonePolygonFeature): string => {
+	const props = feature.properties;
+
+	const count = props.bike_count;
+	const zoneId = props.zone_id;
+
+	if (!count || !zoneId) return '';
+
+	let zoneColorScheme = '';
+
+	if (zoneId === 1)
+		zoneColorScheme = 'bg-blue-400 dark:bg-blue-600 border-blue-500 dark:border-blue-700';
+	else if (zoneId === 2)
+		zoneColorScheme =
+			'bg-emerald-400 dark:bg-emerald-600 border-emerald-500 dark:border-emerald-700';
+	else if (zoneId === 3)
+		zoneColorScheme = 'bg-yellow-400 dark:bg-yellow-600 border-yellow-500 dark:border-yellow-700';
+
+	const zoneName =
+		zoneId === 1
+			? 'Parkeringzon'
+			: zoneId === 2
+				? 'Laddstation'
+				: zoneId === 3
+					? 'Förbjuden zon'
+					: 'Okänd zon';
+
+	const bikeCards = props?.bikes
+		? props.bikes
+				?.map((bike) => {
+					return `
+					<a class="group flex items-center px-2 py-1 space-y-1 gap-2 odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800" href="/admin/bikes/${
+						bike.id
+					}" target="_blank">
+						<div class="flex-grow">
+							<div class="flex justify-between">
+								<p class="text-xs ">#${bike.id}</p>
+								<p class="text-xs text-gray-500 dark:text-surface-300">${bike.active ? 'Aktiv' : 'Avstängd'} (${
+									statusCodes[bike.status_id]
+								})</p>
+							</div>
+							${chargeMeterHTML(bike.charge_perc, 'h-2', false)}
+						</div>
+						<div class="my-auto group-hover:text-surface-700 group-hover:dark:text-white text-gray-500 dark:text-surface-300 text-xl">
+							↗
+						</div>	
+					</a>`;
+				})
+				.join('')
+		: '<p class="text-center">Inga cyklar i zonen</p>';
+
+	return `
+			<div class="rounded-full text-xs border text-surface-700 dark:text-surface-50 ${zoneColorScheme} text-center m-2 px-2 py-0.5 w-fit p-1">${zoneName}</div>
+			<div class="px-2 pt-4 pb-4">
+			<p class="text-gray-500 dark:text-surface-300 ml-2 mb-2"><span class="text-surface-700 dark:text-surface-50">${count} cyklar</span> i zonen</p>
+			<div class="min-w-56  overflow-auto max-h-72 scrollbar-hide">
+				<div class=" divide-y divide-gray-100 dark:divide-surface-600"></div>
+					${bikeCards}
+				</div>
+			</div>
+			</div>
+		`;
+};
