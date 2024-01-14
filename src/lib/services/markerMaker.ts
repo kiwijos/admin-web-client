@@ -1,7 +1,27 @@
 import type { BikePointFeature } from '$lib/types/BikePointFeature';
 import { statusCodes } from '$lib/help/statusCodes';
+import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
 
-export const createBikeCountPin = (count: number): HTMLElement => {
+export const createBikeCountPin = (props: ZonePolygonFeature['properties']): HTMLElement => {
+	const count = props.bike_count;
+	const zoneId = props.zone_id;
+
+	if (!count || !zoneId) return document.createElement('div');
+
+	let markerFill = '';
+	let markerBorder = '';
+
+	if (zoneId === 1) {
+		markerFill = 'bg-blue-400 dark:bg-blue-600';
+		markerBorder = 'border-blue-500 dark:border-blue-700';
+	} else if (zoneId === 2) {
+		markerFill = 'bg-emerald-400 dark:bg-emerald-600';
+		markerBorder = 'border-emerald-500 dark:border-emerald-700';
+	} else if (zoneId === 3) {
+		markerFill = 'bg-red-400 dark:bg-red-600';
+		markerBorder = 'border-red-500 dark:border-red-700';
+	}
+
 	const pinSize = 30; // Adjust the size of the pin
 	const svgPathSize = 16; // Adjust the size of the inner SVG
 	const bikeStroke = 'fill-token'; // Replace with the desired stroke color
