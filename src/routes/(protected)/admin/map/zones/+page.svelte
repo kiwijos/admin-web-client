@@ -360,13 +360,14 @@
 			const markers: { [key: number]: maplibregl.Marker } = {};
 			let markersOnScreen: { [key: number]: maplibregl.Marker } = {};
 
+			// Adapted from maplibre tutorial (https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/)
 			function updateMarkers() {
 				const newMarkers: { [key: number]: maplibregl.Marker } = {};
 
 				// @ts-expect-error - Out custom feature type is compatible with MapGeoJsonFeature for our intents and purposes, this is fine
 				const features: BikePointFeature[] = map.querySourceFeatures('bikes');
 
-				// for every unclustered point, create an HTML marker
+				// For every unclustered point, create an HTML marker
 				// and add it to the map if it's not there already
 				for (let i = 0; i < features.length; i++) {
 					const coords = features[i].geometry.coordinates;
@@ -389,7 +390,8 @@
 
 					if (!markersOnScreen[id]) marker.addTo(map);
 				}
-				// for every marker we've added previously, remove those that are no longer visible
+
+				// Remove markers that are no longer visible
 				for (const id in markersOnScreen) {
 					if (!newMarkers[id]) markersOnScreen[id].remove();
 				}
