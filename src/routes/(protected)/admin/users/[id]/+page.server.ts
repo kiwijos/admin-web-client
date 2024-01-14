@@ -8,10 +8,12 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 		user: await fetch(`${PUBLIC_REST_API_URL}/admin/users/${params.id}`).then((r) => r.json()),
 		trips: await fetch(`${PUBLIC_REST_API_URL}/admin/trips/limit/5/offset/0`, {
 			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ user_id: id })
 		}).then((r) => r.json()),
 		transactions: await fetch(`${PUBLIC_REST_API_URL}/admin/transactions/limit/5/offset/0`, {
 			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ user_id: id })
 		}).then((r) => r.json())
 	};
