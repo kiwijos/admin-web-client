@@ -547,7 +547,6 @@
 </script>
 
 <Map />
-
 <button
 	on:click={handleToolBoxOpen}
 	class="btn-icon text-lg text-surface-800 absolute top-0 left-0 lg:left-52 z-[11] transition-opacity duration-300 {!showToolBox
@@ -558,7 +557,8 @@
 	aria-hidden={showToolBox ? 'false' : 'true'}
 	class="absolute drop-shadow bg-white dark:bg-surface-800 divide-y dark:divide-surface-600 rounded-md w-fit top-2 left-2 lg:left-[13.5rem] z-[11] transition-all transform duration-200 ease-in-out {showToolBox
 		? 'opacity-100 translate-y-0 translate-x-0'
-		: 'opacity-0 pointer-events-none transform -translate-y-full -translate-x-full'}"
+		: 'opacity-0 pointer-events-none transform -translate-y-full -translate-x-full'}
+        {loading ? 'animate-pulse' : ''}"
 >
 	<div class="flex justify-between">
 		<button
@@ -588,6 +588,7 @@
 				type="checkbox"
 				on:change={toggleLayer}
 				value="battery"
+				disabled={loading}
 				title="Visa batterinivå"
 				checked
 				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
@@ -607,6 +608,7 @@
 				value="forbidden"
 				on:change={toggleLayer}
 				title="Visa förbjuda zoner"
+				disabled={loading}
 				checked
 				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
 			/>
@@ -618,6 +620,7 @@
 				on:change={toggleLayer}
 				value="parking"
 				title="Visa parkeringszoner"
+				disabled={loading}
 				checked
 				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
 			/>
@@ -629,6 +632,7 @@
 				on:change={toggleLayer}
 				value="charging"
 				title="Visa laddstationer"
+				disabled={loading}
 				checked
 				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
 			/>
