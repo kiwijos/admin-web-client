@@ -75,7 +75,7 @@ export const createBikePin = (): HTMLElement => {
             <!-- Outer circle -->
             <circle cx="${pinSize / 2}" cy="${
 							pinSize / 2
-						}" r="${circleRadius}" stroke="${circleStroke}" stroke-width="2" fill="none" class="${circleFill}" />
+						}" r="${circleRadius}" stroke="${circleStroke}" stroke-width="1" fill="none" class="${circleFill}" />
 
             <!-- Inner SVG with transparent background -->
             <svg x="${(pinSize - svgPathSize) / 2}" y="${
