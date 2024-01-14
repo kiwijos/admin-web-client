@@ -253,11 +253,11 @@
 								['linear'],
 								['get', 'render_height'],
 								0,
-								'lightgray',
+								['rgba', 173, 216, 230, 0.9],
 								200,
-								'royalblue',
+								['rgba', 65, 105, 225, 0.9],
 								400,
-								'lightblue'
+								['rgba', 169, 169, 169, 0.9]
 							],
 							'fill-extrusion-height': [
 								'interpolate',
@@ -273,7 +273,8 @@
 								['>=', ['get', 'zoom'], 16],
 								['get', 'render_min_height'],
 								0
-							]
+							],
+							'fill-extrusion-opacity': 0.8
 						}
 					},
 					// @ts-expect-error - The labelLayerId is defined, TS just doesn't know it.
