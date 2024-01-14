@@ -323,6 +323,9 @@
 						'text-field': '{point_count_abbreviated}',
 						'text-font': ['Arial Unicode MS Bold'],
 						'text-size': 12
+					},
+					paint: {
+						'text-color': '#fff'
 					}
 				});
 			}
