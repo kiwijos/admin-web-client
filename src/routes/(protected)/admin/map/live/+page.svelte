@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { applyAction, enhance } from '$app/forms';
 
-	import maplibregl, { Map as MaplibreMap } from 'maplibre-gl';
+	import maplibregl, { type Map as MaplibreMap, type ExpressionSpecification } from 'maplibre-gl';
 
 	import Map from '$lib/components/Map.svelte';
 	import { mapStore } from '$lib/stores/map';
@@ -19,6 +19,21 @@
 	let map: MaplibreMap;
 	mapStore.subscribe((value) => (map = value));
 
+	// Define colors for battery levels
+	const colors = {
+		low: 'rgb(239, 68, 68)',
+		medium: 'rgb(250, 204, 21)',
+		high: 'rgb(34, 197, 94)'
+	};
+	// Define expressions for battery levels used in layers
+	const batteryLow: ExpressionSpecification = ['<=', ['get', 'charge_perc'], 0.15];
+	const batteryMedium: ExpressionSpecification = [
+		'all',
+		['>', ['get', 'charge_perc'], 0.2],
+		['<=', ['get', 'charge_perc'], 0.4]
+	];
+	// eslint-disable-next-line no-unused-vars -- keep for reference
+	const batteryHigh: ExpressionSpecification = ['>', ['get', 'charge_perc'], 0.4];
 	const zoneOptions: {
 		[key: string]: { fill_color: string; label: string; line_color: string };
 	} = {
@@ -266,8 +281,51 @@
 				paint: {
 					'circle-color': '#11b4da',
 					'circle-radius': 8,
+			map.addLayer({
+				id: 'battery-fill',
+				type: 'circle',
+				source: 'bikes',
+				filter: ['!', ['has', 'point_count']],
+				paint: {
+					'circle-color': [
+						'case',
+						batteryLow,
+						colors.low,
+						batteryMedium,
+						colors.medium,
+						colors.high // default
+					],
+					'circle-radius': 9,
 					'circle-stroke-width': 1,
 					'circle-stroke-color': '#fff'
+				}
+			});
+
+			map.addLayer({
+				id: 'battery-label',
+				type: 'symbol',
+				source: 'bikes',
+				filter: ['!', ['has', 'point_count']],
+				layout: {
+					'icon-allow-overlap': true,
+					'text-field': [
+						'concat',
+						[
+							'number-format',
+							['*', ['get', 'charge_perc'], 100],
+							{ 'min-fraction-digits': 0, 'max-fraction-digits': 0 }
+						],
+						'%'
+					],
+					'text-font': ['Arial Unicode MS Bold'],
+					'text-size': 9,
+					'text-offset': [1.2, -1.6]
+				},
+
+				paint: {
+					'text-halo-color': '#fff',
+					'text-halo-width': 2,
+					'text-color': 'black'
 				}
 			});
 
