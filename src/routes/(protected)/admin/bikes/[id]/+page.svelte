@@ -108,7 +108,7 @@
 	$: charge = bike.charge_perc * 100;
 
 	$: {
-		if (charge <= 20) {
+		if (charge <= 15) {
 			meterColor = bike.active
 				? 'stroke-red-500 dark:stroke-error-500'
 				: 'stroke-red-800 dark:stroke-error-800';

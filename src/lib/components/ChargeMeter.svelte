@@ -6,7 +6,7 @@
 	class="charge-meter"
 	min="0"
 	max="1"
-	low="0.2"
+	low="0.15"
 	high="0.4"
 	optimum="0.8"
 	value={fraction}
