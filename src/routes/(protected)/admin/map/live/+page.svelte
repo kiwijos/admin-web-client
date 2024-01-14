@@ -197,8 +197,7 @@
 
 			data.zones.forEach((feature: ZonePolygonFeature) => {
 				const zoneDescr: string = feature.properties.descr;
-				const cityId: string = feature.properties.city_id;
-				const fillLayerID = `${cityId}-${zoneDescr}-fill`;
+				const fillLayerID = `${zoneDescr}-fill`;
 
 				// Add a layer for this type (parking/charging/forbidden) if it hasn't been added already.
 				if (!map.getLayer(fillLayerID)) {
@@ -212,13 +211,13 @@
 								'fill-color': zoneOptions[zoneDescr].fill_color,
 								'fill-opacity': ['interpolate', ['exponential', 2], ['zoom'], 10, 0, 13, 0.4]
 							},
-							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
+							filter: ['==', 'descr', zoneDescr]
 						},
 						labelLayerId // <-- insert under text labels
 					);
 				}
 
-				const borderLayerId = `${cityId}-${zoneDescr}-border`;
+				const borderLayerId = `${zoneDescr}-border`;
 
 				// Add a layer for this city if it hasn't been added already.
 				if (!map.getLayer(borderLayerId)) {
@@ -233,7 +232,7 @@
 								'line-width': 2,
 								'line-opacity': ['interpolate', ['exponential', 2], ['zoom'], 11, 0, 13, 0.9]
 							},
-							filter: ['all', ['==', 'descr', zoneDescr], ['==', 'city_id', cityId]]
+							filter: ['==', 'descr', zoneDescr]
 						},
 						labelLayerId // <-- insert under text labels
 					);
