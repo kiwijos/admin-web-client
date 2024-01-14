@@ -40,11 +40,11 @@ export const createBikeCountPin = (props: ZonePolygonFeature['properties']): HTM
     `;
 
 	const fullMarkup = `
-        <div class="relative grid grid-cols-2 items-center justify-center text-center rounded-full border border-surface-900-50-token bg-sky-100 dark:bg-sky-950">
+        <div class="relative grid grid-cols-2 items-center justify-center text-center rounded-full border ${markerBorder} ${markerFill}">
             ${svgMarkup}
-            <span class="inline-block font-bold text-xs text-token">${count}</span>
+            <span class="inline-block border-l ${markerBorder} font-bold text-xs text-token">${count}</span>
             <div
-                class="inset-x-2/4 absolute bottom-0 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 border-r border-b border-surface-900-50-token bg-sky-100 dark:bg-sky-950"
+                class="inset-x-2/4 absolute bottom-0 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 border-r border-b ${markerBorder} ${markerFill}"
             ></div>
         </div>`;
 
