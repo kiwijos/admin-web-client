@@ -25,6 +25,7 @@
 		medium: 'rgb(250, 204, 21)',
 		high: 'rgb(34, 197, 94)'
 	};
+
 	// Define expressions for battery levels used in layers
 	const batteryLow: ExpressionSpecification = ['<=', ['get', 'charge_perc'], 0.15];
 	const batteryMedium: ExpressionSpecification = [
@@ -32,8 +33,24 @@
 		['>', ['get', 'charge_perc'], 0.2],
 		['<=', ['get', 'charge_perc'], 0.4]
 	];
+
 	// eslint-disable-next-line no-unused-vars -- keep for reference
 	const batteryHigh: ExpressionSpecification = ['>', ['get', 'charge_perc'], 0.4];
+
+	// handle checkbox toggle layer based on checked state and value
+	const toggleLayer = (e: Event) => {
+		const target = e.target as HTMLInputElement;
+		const layerId = target.value;
+
+		console.log('toggleLayer', layerId, target.checked);
+
+		map.getStyle().layers?.forEach((layer) => {
+			if (layer.id.startsWith(layerId)) {
+				map.setLayoutProperty(layer.id, 'visibility', target.checked ? 'visible' : 'none');
+			}
+		});
+	};
+
 	const zoneOptions: {
 		[key: string]: { fill_color: string; label: string; line_color: string };
 	} = {
@@ -508,22 +525,110 @@
 			await applyAction(result); // Apply the action, which will update the form state
 		};
 	};
+
+	let showToolBox = true;
+
+	const handleToolBoxOpen = () => {
+		if (showToolBox === true) return;
+		showToolBox = true;
+	};
+
+	const handleToolBoxClose = () => {
+		if (showToolBox === false) return;
+		showToolBox = false;
+	};
 </script>
 
 <Map />
 
-<form
-	action="/admin/bikes?/simulate"
-	method="POST"
-	class="absolute w-fit top-2 left-2 lg:left-56 z-[11] {!loading || 'animate-pulse'}"
-	use:enhance={handleStartSimulation}
+<button
+	on:click={handleToolBoxOpen}
+	class="btn-icon text-lg text-surface-800 absolute top-0 left-0 lg:left-52 z-[11] transition-opacity duration-300 {!showToolBox
+		? 'opacity-100'
+		: 'opacity-0 pointer-events-none'}">&searr;</button
 >
-	<button
-		type="submit"
-		class="btn variant-filled-primary"
-		disabled={simulationHasStarted ? true : loading ? true : false}>Starta simulering</button
-	>
-</form>
+<div
+	aria-hidden={showToolBox ? 'false' : 'true'}
+	class="absolute drop-shadow bg-white dark:bg-surface-800 divide-y dark:divide-surface-600 rounded-md w-fit top-2 left-2 lg:left-[13.5rem] z-[11] transition-all transform duration-200 ease-in-out {showToolBox
+		? 'opacity-100 translate-y-0 translate-x-0'
+		: 'opacity-0 pointer-events-none transform -translate-y-full -translate-x-full'}"
+>
+	<div class="flex justify-between">
+		<button
+			on:click={handleToolBoxClose}
+			class="inline w-6 h-6 rounded-full text-xs text-surface-500 dark:text-surface-300 hover:bg-gray-50 hover:dark:bg-surface-600"
+			>&nwarr;</button
+		>
+		<form
+			action="/admin/bikes?/simulate"
+			method="POST"
+			class="p-2 {loading ? 'animate-pulse' : ''}"
+			use:enhance={handleStartSimulation}
+		>
+			<button
+				type="submit"
+				class="btn btn-sm text-xs ring-1 ring-surface-50 dark:ring-surface-500 hover:ring-surface-200 dark:hover:ring-surface-500 {simulationHasStarted
+					? 'shadow-inner bg-gray-100 dark:bg-surface-700'
+					: 'bg-white dark:bg-surface-800'}"
+				disabled={simulationHasStarted ? true : loading ? true : false}>Starta simulering</button
+			>
+		</form>
+	</div>
+	<label class="label p-2"
+		><p class="text-xs text-surface-500 dark:text-surface-300">Visa batterinivå</p>
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				on:change={toggleLayer}
+				value="battery"
+				title="Visa batterinivå"
+				checked
+				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
+			/>
+			<div class="grid grid-cols-3 gap-1 text-surface-700">
+				<span class="block p-0.5 text-center bg-red-500 text-xs">0-15%</span>
+				<span class="block p-0.5 text-center bg-yellow-400 text-xs">16-40%</span>
+				<span class="block p-0.5 text-center bg-green-500 text-xs">41-100%</span>
+			</div>
+		</div>
+	</label>
+	<label class="label p-2"
+		><p class="text-xs text-surface-500 dark:text-surface-300">Visa zoner</p>
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				value="forbidden"
+				on:change={toggleLayer}
+				title="Visa förbjuda zoner"
+				checked
+				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
+			/>
+			<span class="block text-sm">Förbjudna</span>
+		</div>
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				on:change={toggleLayer}
+				value="parking"
+				title="Visa parkeringszoner"
+				checked
+				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
+			/>
+			<span class="block text-sm">Parkering</span>
+		</div>
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				on:change={toggleLayer}
+				value="charging"
+				title="Visa laddstationer"
+				checked
+				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
+			/>
+			<span class="block text-sm">Laddning</span>
+		</div>
+	</label>
+</div>
 
 <!-- STOP: Submitted via a button inside popup  -->
 <form
