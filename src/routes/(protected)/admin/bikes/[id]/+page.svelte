@@ -135,9 +135,7 @@
 	<div
 		class="w-full flex sm:bg-white sm:dark:bg-surface-800 sm:border-r sm:border-t sm:border-b sm:dark:border-surface-600 rounded-full"
 	>
-		<div
-			class="p-2 sm:p-4 sm:border rounded-full dark:border-surface-600 bg-gray-100 dark:bg-surface-900"
-		>
+		<div class="p-2 sm:p-4 sm:border rounded-full dark:border-surface-600 dark:bg-surface-900">
 			<div
 				class="w-fit dark:ring-1 sm:dark:ring-2 dark:ring-surface-600 rounded-full {!bike.active ||
 					glowColor}"
@@ -201,45 +199,40 @@
 	<div
 		class="rounded-container-token p-4 bg-white dark:bg-surface-800 space-y-8 col-span-1 sm:col-span-2 lg:col-span-1"
 	>
-		<div class="flex items-center justify-between">
-			<span class="px-2 text-xs font-bold uppercase">Status</span><span class="text-sm px-2 py-2"
-				>{statusCodes[bike.status_id]}</span
-			>
-		</div>
-		<Accordion>
-			<AccordionItem closed>
-				<svelte:fragment slot="lead"><Fa icon={faPen} /></svelte:fragment>
-				<svelte:fragment slot="summary"><p class="text-sm">Ändra status</p></svelte:fragment>
-				<svelte:fragment slot="content"
-					><form
-						action="/admin/bikes?/changeStatus"
-						method="POST"
-						use:enhance
-						aria-describedby="helper-text-explanation-2"
-						class="flex flex-col"
-					>
-						<label class="label">
-							<span class="sr-only">Status</span>
-							<select
-								name="status"
+		<form
+			action="/admin/bikes?/changeStatus"
+			method="POST"
+			use:enhance={handleBikeStatusChange}
+			aria-describedby="helper-text-explanation-2"
+			class="flex gap-2 md:gap-4"
+		>
+			<label class="label grow">
+				<span class="sr-only">Ändra status</span>
+				<select
+					name="status"
 					bind:value={currentStatusId}
 					on:change={onSelectChange}
-							>
-								{#each Object.entries(statusCodes) as [id, status]}
-									<option value={id} selected={bike.status_id == id} class="truncate"
-										>{status}</option
-									>
-								{/each}
-							</select>
-						</label>
-
-						<button type="submit" class="btn btn-sm variant-ringed-secondary self-end">Ändra</button
-						>
-						<input value={bike.id} name="id" hidden />
-					</form></svelte:fragment
+					disabled={bike.status_id == 2 || bike.status_id == 5}
+					class="hide-scrollbar block py-2 px-0 w-full text-sm text-surface-700 bg-transparent border-b-2 border-surface-50 focus:border-surface-500 border-0 appearance-none dark:text-surface-300 dark:border-surface-600 focus:outline-none focus:ring-0 peer"
 				>
-			</AccordionItem>
-		</Accordion>
+					{#each Object.entries(statusCodes) as [id, status]}
+						{#if id == 2 || id == 5}
+							<option value={id} disabled class="truncate">{status}</option>
+						{:else}
+							<option value={id} selected={bike.status_id == id} class="truncate">{status}</option>
+						{/if}
+					{/each}
+				</select>
+			</label>
+			<button
+				type="submit"
+				class="btn btn-sm ring-1 ring-surface-50 dark:ring-surface-500 hover:ring-surface-200 dark:hover:ring-surface-500 {lockSelectSubmit
+					? 'bg-gray-100 dark:bg-surface-700'
+					: 'bg-white dark:bg-surface-800'}"
+				disabled={lockSelectSubmit}>Ändra status</button
+			>
+			<input value={bike.id} name="id" hidden />
+		</form>
 	</div>
 	<div class="rounded-container-token p-2 sm:p-4 bg-white dark:bg-surface-800">
 		<Accordion>
