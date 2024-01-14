@@ -193,7 +193,7 @@
 	<div class="rounded-container-token p-2 sm:p-4 bg-white dark:bg-surface-800">
 		<div class="text-left text-surface-400 dark:text-surface-300 p-4 text-sm">
 			<p class="text-surface-700 dark:text-surface-100 text-base">{cityName} ({bike.city_id})</p>
-			<p>(Lat. {bike.coords[0]}, Lon. {bike.coords[1]})</p>
+			<p>(Lat. {bike.coords[1]}, Lon. {bike.coords[0]})</p>
 		</div>
 	</div>
 	<div
