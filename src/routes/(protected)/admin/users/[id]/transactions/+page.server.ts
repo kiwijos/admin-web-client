@@ -5,6 +5,7 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 	return {
 		transactions: await fetch(`${PUBLIC_REST_API_URL}/admin/transactions`, {
 			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ user_id: params.id })
 		}).then((r) => r.json())
 	};
