@@ -106,7 +106,7 @@ export const singleBikeFormPopupHTML = (feature: BikePointFeature) => {
 
 	const chargPerc = feature.properties.charge_perc;
 	const batteryColor =
-		chargPerc < 0.2 ? 'text-red-500' : chargPerc < 0.4 ? 'text-yellow-500' : 'text-green-500';
+		chargPerc <= 0.15 ? 'text-red-500' : chargPerc <= 0.4 ? 'text-yellow-400' : 'text-green-500';
 
 	const statusId = feature.properties?.status_id;
 
