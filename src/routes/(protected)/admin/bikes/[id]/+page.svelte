@@ -7,7 +7,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { statusCodes } from '$lib/help/statusCodes';
 	import Fa from 'svelte-fa';
-	import { faInfoCircle, faPen } from '@fortawesome/free-solid-svg-icons';
+	import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 	import { Accordion, AccordionItem, ProgressRadial } from '@skeletonlabs/skeleton';
 
 	export let data: PageData;
