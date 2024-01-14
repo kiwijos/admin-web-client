@@ -18,7 +18,10 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		const bike = bikes[i];
 		for (let j = 0; j < zones.length; j++) {
 			const zone = zones[j];
-			if (booleanPointInPolygon(bike.coords, zone.geometry) && bike.status_id !== 2) {
+			if (
+				booleanPointInPolygon(bike.coords, zone.geometry) &&
+				(bike.status_id !== 2 || bike.status_id !== 5)
+			) {
 				if (!zone.bikes) zone.bikes = [];
 				if (!zone.bike_count) zone.bike_count = 0;
 				zone.bike_count++;
