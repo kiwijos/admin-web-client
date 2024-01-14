@@ -24,6 +24,18 @@
 					? 'Karlstad'
 					: '--';
 
+	let currentStatusId;
+	let lockSelectSubmit = true;
+
+	// Make select sumbittable when a new status is selected
+	const onSelectChange = () => {
+		if (currentStatusId == bike.status_id) {
+			lockSelectSubmit = true;
+		} else {
+			lockSelectSubmit = false;
+		}
+	};
+
 	// @ts-expect-error - untyped variables are fine
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleBikeActiveStatus = ({ formElement, formData, action, cancel, submitter }) => {
@@ -171,8 +183,8 @@
 							<span class="sr-only">Status</span>
 							<select
 								name="status"
-								class="select bg-white border-none text-sm scrollbar-hide px-0"
-								size="6"
+					bind:value={currentStatusId}
+					on:change={onSelectChange}
 							>
 								{#each Object.entries(statusCodes) as [id, status]}
 									<option value={id} selected={bike.status_id == id} class="truncate"
