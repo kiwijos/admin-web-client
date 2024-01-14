@@ -209,3 +209,33 @@ const chargeMeterHTML = (chargePerc: number, height: string, label: boolean): st
 				</div>
 	`;
 };
+
+export const singleBikeCardPopupHTML = (feature: BikePointFeature): string => {
+	const props = feature.properties;
+	const coordinates = feature.geometry.coordinates;
+
+	const linkTitle = 'Öppna sidan för cykeln i en ny flik';
+	const statusId = props?.status_id;
+
+	return `
+			<div class="min-w-56 px-2 pt-6 pb-4 space-y-2">
+				<a class="group rounded-sm flex gap-2 p-2 border-b-2 border-gray-100 hover:border-gray-300 dark:border-surface-600 hover:dark:border-surface-500" title="${linkTitle}" href="/admin/bikes/${
+					props.id
+				}" target="_blank">
+					<div class="grow">
+						<p class="text-base ">Cykelnr ${props.id}</p>
+						<p class="text-xs text-gray-500 dark:text-surface-300">${props.active ? 'Aktiv' : 'Avstängd'} (${
+							statusCodes[statusId]
+						})</p>
+						<p class="text-xs text-gray-500 dark:text-surface-300">Lat. ${coordinates[1].toFixed(
+							4
+						)}, Lon. ${coordinates[0].toFixed(4)}</p>
+					</div>
+					<div class="my-auto group-hover:text-surface-700 group-hover:dark:text-white text-gray-500 dark:text-surface-300 text-2xl">
+						↗
+					</div>
+				</a>
+				${chargeMeterHTML(props.charge_perc, 'h-4', true)}
+			</div>
+		`;
+};
