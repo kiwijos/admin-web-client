@@ -287,10 +287,9 @@
 				}
 
 				let popup = popups[id];
+				const popupContent = singleBikeFormPopupHTML(feature);
 
 				if (!popup) {
-					const popupContent = singleBikeFormPopupHTML(feature);
-
 					popup = popups[id] = new maplibregl.Popup()
 						// @ts-expect-error - Coordinates are valid, just typed differently
 						.setLngLat(coordinates)
@@ -300,7 +299,7 @@
 				}
 
 				// @ts-expect-error - Coordinates are valid, just typed differently
-				if (!popup.isOpen()) popup.setLngLat(coordinates).addTo(map);
+				popup.setLngLat(coordinates).setHTML(popupContent).addTo(map);
 			});
 
 			map.on('mouseenter', 'unclustered-point', () => {
