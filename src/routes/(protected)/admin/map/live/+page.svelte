@@ -285,6 +285,9 @@
 					'text-field': '{point_count_abbreviated}',
 					'text-font': ['Arial Unicode MS Bold'],
 					'text-size': 12
+				},
+				paint: {
+					'text-color': '#fff'
 				}
 			});
 
@@ -296,7 +299,12 @@
 				filter: ['!', ['has', 'point_count']],
 				paint: {
 					'circle-color': '#11b4da',
-					'circle-radius': 8,
+					'circle-radius': 9,
+					'circle-stroke-width': 1,
+					'circle-stroke-color': '#fff'
+				}
+			});
+
 			map.addLayer({
 				id: 'battery-fill',
 				type: 'circle',
