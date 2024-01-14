@@ -34,8 +34,8 @@
 		['<=', ['get', 'charge_perc'], 0.4]
 	];
 
-	// eslint-disable-next-line no-unused-vars -- keep for reference
-	const batteryHigh: ExpressionSpecification = ['>', ['get', 'charge_perc'], 0.4];
+	// Keep for reference
+	// const batteryHigh: ExpressionSpecification = ['>', ['get', 'charge_perc'], 0.4];
 
 	// handle checkbox toggle layer based on checked state and value
 	const toggleLayer = (e: Event) => {
