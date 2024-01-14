@@ -298,7 +298,7 @@
 				source: 'bikes',
 				filter: ['!', ['has', 'point_count']],
 				paint: {
-					'circle-color': '#11b4da',
+					'circle-color': ['case', ['==', ['get', 'active'], true], '#0ea5e9', '#0369a1'],
 					'circle-radius': 9,
 					'circle-stroke-width': 1,
 					'circle-stroke-color': '#fff'
