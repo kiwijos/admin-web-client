@@ -113,19 +113,19 @@
 				? 'stroke-red-500 dark:stroke-error-500'
 				: 'stroke-red-800 dark:stroke-error-800';
 			trackColor = 'stroke-error-700/30';
-			glowColor = 'shadow-[0_0px_30px_2px_rgba(210,127,129,0.3)]';
+			glowColor = 'ring-8 ring-red-100 dark:shadow-[0_0px_30px_2px_rgba(210,127,129,0.3)]';
 		} else if (charge <= 40) {
 			meterColor = bike.active
 				? 'stroke-yellow-300 dark:stroke-warning-600'
 				: 'stroke-warning-600 dark:stroke-warning-800';
 			trackColor = 'stroke-warning-800/40 dark:stroke-warning-700/30';
-			glowColor = 'shadow-[0_0px_30px_2px_rgba(244,231,191,0.3)]';
+			glowColor = 'ring-8 ring-yellow-100 dark:shadow-[0_0px_30px_2px_rgba(244,231,191,0.3)]';
 		} else {
 			meterColor = bike.active
 				? 'stroke-green-500 dark:stroke-success-600'
 				: 'stroke-green-800 dark:stroke-success-800';
 			trackColor = 'stroke-success-700/30';
-			glowColor = 'shadow-[0_0px_30px_2px_rgba(144,238,144,0.3)]';
+			glowColor = 'ring-8 ring-green-100 dark:shadow-[0_0px_30px_2px_rgba(144,238,144,0.3)]';
 		}
 	}
 </script>
