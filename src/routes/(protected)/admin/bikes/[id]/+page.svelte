@@ -62,6 +62,45 @@
 		};
 	};
 
+	// @ts-expect-error - untyped variables are fine
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const handleBikeStatusChange = ({ formElement, formData, action, cancel, submitter }) => {
+		if (!formData.get('id') || !formData.get('status') || !action.search) {
+			cancel();
+			return;
+		}
+
+		// cancel if the status is the same
+		if (bike.status_id == formData.get('status')) {
+			cancel();
+			return;
+		}
+
+		// cancel if the status of the bike is either 2 or 5
+		if (bike.status_id === 2 || bike.status_id === 5) {
+			cancel();
+			return;
+		}
+
+		// cancel if the new status is 2 or 5
+		if (formData.get('status') == 2 || formData.get('status') == 5) {
+			cancel();
+			return;
+		}
+
+		lockSelectSubmit = true;
+
+		// @ts-expect-error - We wholeheartedly accept this untyped variable too
+		return async ({ result }) => {
+			if (!result?.data?.success) {
+				lockSelectSubmit = false;
+				return;
+			}
+
+			await applyAction(result); // Apply the action, which will update the form state
+		};
+	};
+
 	let meterColor: string;
 	let trackColor: string;
 	let glowColor: string;
