@@ -49,13 +49,7 @@ export const createBikeCountPin = (props: ZonePolygonFeature['properties']): HTM
         </div>`;
 
 	const el = document.createElement('button');
-	el.classList.add(
-		'cursor-pointer',
-		'btn',
-		'focus:ring-2',
-		'focus:ring-blue-500',
-		'transition-none'
-	);
+	el.classList.add('cursor-pointer', 'btn', 'focus:ring-2', 'transition-none');
 
 	el.innerHTML = fullMarkup;
 
@@ -88,13 +82,7 @@ export const createBikePin = (): HTMLElement => {
     `;
 
 	const el = document.createElement('button');
-	el.classList.add(
-		'cursor-pointer',
-		'btn-icon',
-		'focus:ring-2',
-		'focus:ring-blue-500',
-		'transition-none'
-	);
+	el.classList.add('cursor-pointer', 'btn-icon', 'focus:ring-2', 'transition-none');
 
 	el.innerHTML = svgMarkup;
 
