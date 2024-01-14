@@ -129,8 +129,8 @@ const changeStatus: Action = async ({ request, fetch }) => {
 		return fail(400, { invalid: true });
 	}
 
-	console.log(bikeId, statusId);
 	let result;
+
 	try {
 		const response = await fetch(
 			`${PUBLIC_REST_API_URL}/admin/bikes/${bikeId}/status/${statusId}`,
