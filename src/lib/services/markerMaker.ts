@@ -174,3 +174,38 @@ export const singleBikeFormPopupHTML = (feature: BikePointFeature) => {
 			</div>
 		`;
 };
+
+const chargeMeterHTML = (chargePerc: number, height: string, label: boolean): string => {
+	const meterHeight = height ?? 'h-4';
+	const colorLow: string = 'bg-red-500';
+	const colorMedium: string = 'bg-yellow-400';
+	const colorHigh: string = 'bg-green-500';
+
+	const bgLow: string = `${colorLow}/30`;
+	const bgMedium: string = `${colorMedium}/30`;
+	const bgHigh: string = `${colorHigh}/30`;
+
+	const value = chargePerc * 100;
+
+	let color;
+	let bg;
+	if (value <= 15) {
+		color = colorLow;
+		bg = bgLow;
+	} else if (value <= 40) {
+		color = colorMedium;
+		bg = bgMedium;
+	} else {
+		color = colorHigh;
+		bg = bgHigh;
+	}
+
+	const batteryText = label ? 'text-center text-xs font-bold text-surface-800' : '';
+
+	return `
+		<div class="w-full ${meterHeight} ${bg} grid grid-cols-1 grid-rows-1 rounded-full">
+					<div class="${color} ${meterHeight} leading-none rounded-full" style="width: ${value}%"></div>
+					${label ? `<p class="${batteryText}">${value}%</p>` : ''}
+				</div>
+	`;
+};
