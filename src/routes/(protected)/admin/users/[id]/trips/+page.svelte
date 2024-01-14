@@ -17,15 +17,15 @@
 				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 			>
 				<tr>
-					<th class="px-6 py-3"><span class="sr-only">ID</span></th>
-					<th class="px-6 py-3">Cykel</th>
+					<th class="px-6 py-3">Resenr.</th>
+					<th class="px-6 py-3">Cykelnr.</th>
 					<th class="px-6 py-3">Startdatum</th>
 					<th class="px-6 py-3">Slutdatum</th>
-					<th class="px-6 py-3 table-cell-fit">Tid</th>
-					<th class="px-6 py-3">Startkostnad</th>
-					<th class="px-6 py-3">Resekostnad</th>
-					<th class="px-6 py-3">Parkeringskostnad</th>
-					<th class="px-6 py-3 table-cell-fit">Summa</th>
+					<th class="px-6 py-3 table-cell-fit">Resetid</th>
+					<th class="px-6 py-3">Startavgift</th>
+					<th class="px-6 py-3">Tidsavgift</th>
+					<th class="px-6 py-3">Parkering</th>
+					<th class="px-6 py-3 table-cell-fit">Total kostnad</th>
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
