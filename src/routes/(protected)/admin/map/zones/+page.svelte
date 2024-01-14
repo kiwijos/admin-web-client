@@ -12,7 +12,12 @@
 
 	import { ProgressRadial } from '@skeletonlabs/skeleton';
 
-	import { createBikeCountPin, createBikePin } from '$lib/services/markerMaker';
+	import {
+		createBikeCountPin,
+		createBikePin,
+		multipleBikeCardsPopupHTML,
+		singleBikeCardPopupHTML
+	} from '$lib/services/markerMaker';
 
 	// @ts-expect-error - Don't bother
 	import centerOfMass from '@turf/center-of-mass';
@@ -189,10 +194,14 @@
 				if (feature.properties?.bike_count) {
 					const center = centerOfMass(feature).geometry.coordinates;
 
-					const el: HTMLElement = createBikeCountPin(feature.properties.bike_count);
+					const el: HTMLElement = createBikeCountPin(feature.properties);
+					const popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+						multipleBikeCardsPopupHTML(feature)
+					);
 
 					new maplibregl.Marker({ element: el, anchor: 'bottom', offset: [0, -3] })
 						.setLngLat(center)
+						.setPopup(popup)
 						.addTo(map);
 				}
 
@@ -381,7 +390,7 @@
 					if (!marker) {
 						const el: HTMLElement = createBikePin();
 						const popup = new maplibregl.Popup({ offset: 15 }).setHTML(
-							`<span class="px-2 py-1 rounded-container-token font-bold bg-primary-800 text-primary-50">${props.id}</span>`
+							singleBikeCardPopupHTML(features[i])
 						);
 						marker = markers[id] = new maplibregl.Marker({ element: el })
 							.setLngLat(coords)
