@@ -306,9 +306,7 @@
 							750,
 							'#ec4899'
 						],
-						'circle-radius': ['step', ['get', 'point_count'], 12, 100, 18, 750, 24],
-						'circle-stroke-width': 1,
-						'circle-stroke-color': '#fff'
+						'circle-radius': ['step', ['get', 'point_count'], 12, 100, 18, 750, 24]
 					}
 				});
 			}
