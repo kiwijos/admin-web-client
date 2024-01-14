@@ -66,7 +66,7 @@ export const createBikePin = (): HTMLElement => {
 	const pinSize = 32; // Adjust the size of the pin
 	const circleRadius = 14; // Adjust the radius of the outer circle
 	const svgPathSize = 16; // Adjust the size of the inner SVG
-	const circleFill = 'fill-blue-100 dark:fill-blue-900'; // Replace with the desired fill color
+	const circleFill = 'fill-sky-400 dark:fill-sky-600'; // Replace with the desired fill color
 	const circleStroke = 'white'; // Replace with the desired stroke color
 	const bikeStroke = 'fill-token'; // Replace with the desired stroke color
 
