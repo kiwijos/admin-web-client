@@ -66,7 +66,7 @@
 	let trackColor: string;
 	let glowColor: string;
 
-	$: charge = 0.5 * 100;
+	$: charge = bike.charge_perc * 100;
 
 	$: {
 		if (charge <= 20) {
