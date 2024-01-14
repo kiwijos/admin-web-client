@@ -310,6 +310,9 @@
 				type: 'circle',
 				source: 'bikes',
 				filter: ['!', ['has', 'point_count']],
+				layout: {
+					visibility: 'none'
+				},
 				paint: {
 					'circle-color': [
 						'case',
@@ -587,10 +590,21 @@
 			<input
 				type="checkbox"
 				on:change={toggleLayer}
-				value="battery"
+				value="battery-label"
 				disabled={loading}
-				title="Visa batterinivå"
 				checked
+				title="Visa batterinivå (text)"
+				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
+			/>
+			<span class="block text-sm">Etikett</span>
+		</div>
+		<div class="flex items-center space-x-2">
+			<input
+				type="checkbox"
+				on:change={toggleLayer}
+				value="battery-fill"
+				disabled={loading}
+				title="Visa batterinivå (fyllnad)"
 				class="w-4 h-4 rounded-sm bg-surface-100 dark:bg-surface-500 dark:text-surface-900 border focus:ring-1 focus:dark:ring-surface-500"
 			/>
 			<div class="grid grid-cols-3 gap-1 text-surface-700">
