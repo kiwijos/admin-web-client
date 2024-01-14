@@ -162,7 +162,7 @@ const changeStatus: Action = async ({ request, fetch }) => {
 		});
 	}
 
-	return { success: true };
+	return { success: true, bike: result };
 };
 
 export const actions: Actions = { simulate, deactivate, activate, changeStatus };
