@@ -1,5 +1,4 @@
 import { PUBLIC_REST_API_URL } from '$env/static/public';
-
 import type { LayoutServerLoad } from './$types';
 import type { City } from '$lib/types/City';
 import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
