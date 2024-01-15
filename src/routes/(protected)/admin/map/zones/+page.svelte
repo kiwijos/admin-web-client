@@ -22,6 +22,7 @@
 	// @ts-expect-error - Don't bother
 	import centerOfMass from '@turf/center-of-mass';
 	import type { BikePointFeature } from '$lib/types/BikePointFeature';
+	import { invalidate } from '$app/navigation';
 
 	export let data: PageData;
 
@@ -190,20 +191,20 @@
 					);
 				}
 
-				// Add bike count pins for each zone.
-				if (feature.properties?.bike_count) {
-					const center = centerOfMass(feature).geometry.coordinates;
+				// // Add bike count pins for each zone.
+				// if (feature.properties?.bike_count) {
+				// 	const center = centerOfMass(feature).geometry.coordinates;
 
-					const el: HTMLElement = createBikeCountPin(feature.properties);
-					const popup = new maplibregl.Popup({ offset: 25 }).setHTML(
-						multipleBikeCardsPopupHTML(feature)
-					);
+				// 	const el: HTMLElement = createBikeCountPin(feature.properties);
+				// 	const popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+				// 		multipleBikeCardsPopupHTML(feature)
+				// 	);
 
-					new maplibregl.Marker({ element: el, anchor: 'bottom', offset: [0, -3] })
-						.setLngLat(center)
-						.setPopup(popup)
-						.addTo(map);
-				}
+				// 	new maplibregl.Marker({ element: el, anchor: 'bottom', offset: [0, -3] })
+				// 		.setLngLat(center)
+				// 		.setPopup(popup)
+				// 		.addTo(map);
+				// }
 
 				// Add zone labels if they haven't been added already.
 				const symbolLayerID = `${zoneDescr}-symbol`;
@@ -409,14 +410,81 @@
 				markersOnScreen = newMarkers;
 			}
 
+			let moveListenersAdded = false;
 			// Update markers when the GeoJSON data is loaded and on every map move/moveend
 			map.on('data', (e) => {
 				// @ts-expect-error - I put my fate in the Maplibre tutorial and assume these properties exist (it seems to work fine)
 				if (e.sourceId !== 'bikes' || !e.isSourceLoaded) return;
 
-				map.on('move', updateMarkers);
-				map.on('moveend', updateMarkers);
+				if (!moveListenersAdded) {
+					moveListenersAdded = true;
+					map.on('move', updateMarkers);
+					map.on('moveend', updateMarkers);
+				}
 				updateMarkers();
+			});
+
+			let countMarkers: { [key: number]: maplibregl.Marker } = {};
+
+			const createCountMarkers = () => {
+				data.zones.forEach((zone) => {
+					const props = zone.properties;
+
+					if (typeof props?.bike_count !== 'number' || !props?.bike_count) return;
+
+					const el: HTMLElement = createBikeCountPin(props);
+
+					const popup = new maplibregl.Popup({ offset: 25 }).setHTML(
+						multipleBikeCardsPopupHTML(zone)
+					);
+
+					countMarkers[props.id] = new maplibregl.Marker({
+						element: el,
+						anchor: 'bottom',
+						offset: [0, -3]
+					})
+						.setLngLat(centerOfMass(zone).geometry.coordinates)
+						.setPopup(popup);
+				});
+			};
+
+			let countMarkersOnScreen: { [key: number]: maplibregl.Marker } = {};
+
+			const updateCountMarkers = () => {
+				const currentZoom = map.getZoom();
+
+				if (currentZoom < 11) {
+					for (const id in countMarkersOnScreen) {
+						countMarkersOnScreen[id].remove();
+					}
+					countMarkersOnScreen = {};
+					return;
+				}
+
+				if (Object.keys(countMarkersOnScreen).length) return;
+
+				const newMarkers: { [key: number]: maplibregl.Marker } = {};
+
+				for (const id in countMarkers) {
+					if (countMarkersOnScreen[id]) continue;
+					const marker = countMarkers[id];
+					newMarkers[id] = marker;
+					marker.addTo(map);
+				}
+
+				countMarkersOnScreen = newMarkers;
+			};
+
+			let zoomListenerAdded = false;
+			map.on('data', (e) => {
+				// @ts-expect-error - I put my fate in the Maplibre tutorial and assume these properties exist (it seems to work fine)
+				if (e.sourceId !== 'zones' || !e.isSourceLoaded) return;
+
+				createCountMarkers();
+				if (!zoomListenerAdded) {
+					zoomListenerAdded = true;
+					map.on('zoom', updateCountMarkers);
+				}
 			});
 
 			loading = false;
