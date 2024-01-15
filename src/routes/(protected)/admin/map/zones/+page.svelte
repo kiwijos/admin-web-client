@@ -422,6 +422,22 @@
 			loading = false;
 		});
 	}
+
+	const updateSourceData = async () => {
+		invalidate('server:fetch');
+
+		// @ts-expect-error - It's fine
+		map.getSource('bikes').setData({
+			type: 'FeatureCollection',
+			features: data.bikes
+		});
+
+		// @ts-expect-error - It's fine
+		map.getSource('zones').setData({
+			type: 'FeatureCollection',
+			features: data.zones
+		});
+	};
 </script>
 
 <!-- Loading animation -->
@@ -433,5 +449,10 @@
 	</div>
 {/if}
 <!-- Loading animation -->
-
+<button
+	on:click={updateSourceData}
+	class="btn-icon text-lg text-surface-800 absolute top-0 left-0 lg:left-52 z-[11] transition-opacity duration-300 {!loading
+		? 'opacity-100'
+		: 'opacity-0 pointer-events-none'}">&olarr;</button
+>
 <Map />

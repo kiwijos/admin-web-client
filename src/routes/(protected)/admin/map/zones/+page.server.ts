@@ -7,7 +7,7 @@ import type { ZoneWithBikeCount } from '$lib/types/ZoneWithBikeCount';
 // @ts-expect-error - We don't have types for this yet
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+export const load: PageServerLoad = async ({ fetch, depends }) => {
 	const zones: ZoneWithBikeCount[] = await fetch(`${PUBLIC_REST_API_URL}/zones`).then((r) =>
 		r.json()
 	);
@@ -31,6 +31,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		}
 	}
 
+	depends('server:fetch');
 	return {
 		zones,
 		bikes,
