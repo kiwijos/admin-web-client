@@ -267,9 +267,12 @@ export const multipleBikeCardsPopupHTML = (feature: ZonePolygonFeature): string 
 					? 'Förbjuden zon'
 					: 'Okänd zon';
 
+	const [bikesPart, parkedPart] = count === 1 ? ['cykel', 'parkerad'] : ['cyklar', 'parkerade'];
+	const bikeCountText = `Det är <span class="text-surface-700 dark:text-surface-50">${count} ${bikesPart}</span> ${parkedPart} i zonen`;
+
 	const bikeCards = props?.bikes
 		? props.bikes
-				?.map((bike) => {
+				.map((bike) => {
 					return `
 					<a class="group flex items-center px-2 py-1 space-y-1 gap-2 odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800" href="/admin/bikes/${
 						bike.id
@@ -294,7 +297,7 @@ export const multipleBikeCardsPopupHTML = (feature: ZonePolygonFeature): string 
 	return `
 			<div class="rounded-full text-xs border text-surface-700 dark:text-surface-50 ${zoneColorScheme} text-center m-2 px-2 py-0.5 w-fit p-1">${zoneName}</div>
 			<div class="px-2 pt-4 pb-4">
-			<p class="text-gray-500 dark:text-surface-300 ml-2 mb-2"><span class="text-surface-700 dark:text-surface-50">${count} cyklar</span> i zonen</p>
+			<p class="text-gray-500 dark:text-surface-300 ml-2 mb-2">${bikeCountText}</p>
 			<div class="min-w-56  overflow-auto max-h-72 scrollbar-hide">
 				<div class=" divide-y divide-gray-100 dark:divide-surface-600"></div>
 					${bikeCards}
