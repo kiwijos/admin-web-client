@@ -34,6 +34,5 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	return {
 		zones,
 		bikes,
-		cities: await fetch(`${PUBLIC_REST_API_URL}/cities`).then((r) => r.json())
 	};
 };

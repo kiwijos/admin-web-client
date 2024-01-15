@@ -3,8 +3,6 @@ import type { ZoneWithBikeCount } from '$lib/types/ZoneWithBikeCount';
 import type { ZonePolygonFeature } from '$lib/types/ZonePolygonFeature';
 import type { Bike } from '$lib/types/Bike';
 import type { BikePointFeature } from '$lib/types/BikePointFeature';
-import type { City } from '$lib/types/City';
-import type { CityPolygonFeature } from '$lib/types/CityPolygonFeature';
 
 export const load: PageLoad = async ({ data }) => {
 	return {
@@ -37,13 +35,6 @@ export const load: PageLoad = async ({ data }) => {
 					status_id: bike.status_id,
 					status_descr: bike.status_descr
 				}
-			};
-		}),
-		cities: <CityPolygonFeature[]>data.cities.map((city: City) => {
-			return {
-				type: 'Feature',
-				geometry: city.geometry,
-				properties: { name: city.name, id: city.id }
 			};
 		})
 	};
