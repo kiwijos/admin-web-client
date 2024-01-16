@@ -80,6 +80,7 @@
 			>
 				<tr>
 					<th class="px-6 py-3 w-24"><span class="sr-only">Användar-ID</span></th>
+					<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Status</span></th>
 					<th class="px-6 py-3 w-96">Mail</th>
 					<th class="px-6 py-3 w-56">
 						<span class="sr-only">Profil, Resor, Betalningar</span>
@@ -105,6 +106,13 @@
 									class="font-medium text-secondary-500 hover:underline">{user.id}</a
 								></td
 							>
+							<td class="table-cell-fit">
+								<span
+									class="inline-flex p-2 w-6 h-6 items-center justify-center text-xs font-semibold rounded-full {user.active
+										? 'bg-green-100 text-green-800'
+										: 'bg-red-100 text-red-800'}">{user.active ? '✓' : '✕'}</span
+								>
+							</td>
 							<td class="px-6 py-4 w-96"
 								><a
 									href="/admin/users/{user.id}"
