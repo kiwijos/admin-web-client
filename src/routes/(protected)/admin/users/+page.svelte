@@ -13,7 +13,10 @@
 	// Filter the data
 	let filter: string = '';
 	$: filteredBody = data?.users.filter((user: User) => {
-		return user.email.toLowerCase().startsWith(filter.toLowerCase());
+		return (
+			user.email.toLowerCase().includes(filter.toLowerCase()) ||
+			String(user.id).toLowerCase().includes(filter.toLowerCase())
+		);
 	});
 
 	// Filter function
