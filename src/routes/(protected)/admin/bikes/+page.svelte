@@ -56,10 +56,10 @@
 				>
 					<tr>
 						<th class="px-6 py-3"><span class="sr-only">ID</span></th>
-						<th class="px-6 py-3">Stad</th>
+						<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Aktiv</span></th>
 						<th class="px-6 py-3">Status</th>
+						<th class="px-6 py-3">Stad</th>
 						<th class="px-6 py-3">Batteri</th>
-						<th class="px-6 py-3"><span class="sr-only">Aktiv</span></th>
 					</tr>
 				</thead>
 				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -74,21 +74,21 @@
 									>{bike.id}</a
 								></td
 							>
+							<td class="table-cell-fit">
+								<span
+									class="inline-flex p-2 w-6 h-6 items-center justify-center text-xs font-semibold rounded-full {bike.active
+										? 'bg-green-100 text-green-800'
+										: 'bg-red-100 text-red-800'}">{bike.active ? '✓' : '✕'}</span
+								>
+							</td>
+							<td class="px-6 py-4">{statusCodes[bike.status_id]}</td>
 							<td class="px-6 py-4 w-48">{bike.city_id} </td>
-							<td class="px-6 py-4">{statusCodes[bike.status_id]} </td>
 							<td class="px-6 py-4 grid gap-2 grid-cols-[1fr,auto] items-center min-w-48"
 								><ChargeMeter fraction={bike.charge_perc} /><span
 									>{Math.round(bike.charge_perc * 100)}%</span
 								>
 							</td>
-							<td class="px-6 w-48 text-right">
-								{#if bike.active}
-									<span class="rounded-full px-2 py-1 variant-soft-success">Aktiv</span>
-								{:else}
-									<span class="rounded-full px-2 py-1 variant-soft-error">Avstängd</span>
-								{/if}
-							</td></tr
-						>
+						</tr>
 					{/each}
 				</tbody>
 			</table>
