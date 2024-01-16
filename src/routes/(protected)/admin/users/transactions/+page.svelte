@@ -111,11 +111,12 @@
 				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 			>
 				<tr>
-					<th class="px-6 py-3 table-cell-fit"><span class="sr-only">ID</span></th>
-					<th class="px-6 py-3 table-cell-fit">Användare</th>
-					<th class="px-6 py-3">Kort</th>
-					<th class="px-6 py-3">Datum</th>
-					<th class="px-6 py-3 table-cell-fit">Summa</th>
+					<th class="px-6 py-3 w-24"><span class="sr-only">ID</span></th>
+					<th class="px-6 py-3 w-24">Anv.</th>
+					<th class="px-6 py-3 w-44">Referens</th>
+					<th class="px-6 py-3 w-44">Datum</th>
+					<th class="px-6 py-3 whitespace-nowrap w-44 text-right">Belopp</th>
+					<th><span aria-hidden class="sr-only">Utfyllnad</span></th>
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -128,16 +129,19 @@
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
-							<td class="px-6 py-4 table-cell-fit">{transaction.id} </td>
-							<td class="px-6 py-4 table-cell-fit"
+							<td class="px-6 py-4 w-24">{transaction.id} </td>
+							<td class="px-6 py-4 w-24"
 								><a
 									href="/admin/users/{transaction.user_id}"
 									class="font-medium text-secondary-500 hover:underline">{transaction.user_id}</a
 								></td
 							>
-							<td class="px-6 py-4">{transaction.ref}</td>
-							<td class="px-6 py-4 whitespace-nowrap">{formatDateReadable(transaction.date)}</td>
-							<td class="px-6 py-4 table-cell-fit text-right">{transaction.amount} kr </td>
+							<td class="px-6 py-4 whitespace-nowrap w-44">{transaction.ref}</td>
+							<td class="px-6 py-4 whitespace-nowrap w-44"
+								>{formatDateReadable(transaction.date)}</td
+							>
+							<td class="px-6 py-4 whitespace-nowrap w-44 text-right">{transaction.amount} kr </td>
+							<td></td>
 						</tr>
 					{/each}
 				{/if}

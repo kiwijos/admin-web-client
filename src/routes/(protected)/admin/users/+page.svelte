@@ -79,12 +79,13 @@
 				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 			>
 				<tr>
-					<th class="px-6 py-3 table-cell-fit"><span class="sr-only">ID</span></th>
-					<th class="px-6 py-3">Mail</th>
-					<th class="px-6 py-3 table-cell-fit">Saldo</th>
-					<th class="px-6 py-3">
+					<th class="px-6 py-3 w-24"><span class="sr-only">Användar-ID</span></th>
+					<th class="px-6 py-3 w-96">Mail</th>
+					<th class="px-6 py-3 w-56">
 						<span class="sr-only">Profil, Resor, Betalningar</span>
 					</th>
+					<th class="px-6 py-3 w-56 text-right">Saldo</th>
+					<th><span aria-hidden class="sr-only">Utfyllnad</span></th>
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -98,24 +99,19 @@
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
-							<td class="px-6 py-4 table-cell-fit"
+							<td class="px-6 py-4 w-24"
 								><a
 									href="/admin/users/{user.id}"
 									class="font-medium text-secondary-500 hover:underline">{user.id}</a
 								></td
 							>
-							<td class="px-6 py-4"
+							<td class="px-6 py-4 w-96"
 								><a
 									href="/admin/users/{user.id}"
 									class="font-medium text-secondary-500 hover:underline">{user.email}</a
 								></td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right"
-								><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
-									>{user.balance} kr</span
-								>
-							</td>
-							<td class="px-6 py-4 text-right whitespace-nowrap">
+							<td class="px-6 py-4 text-center w-56 whitespace-nowrap">
 								<a
 									href="/admin/users/{user.id}"
 									class="font-medium text-secondary-500 hover:underline">Profil</a
@@ -128,8 +124,14 @@
 									href="/admin/users/{user.id}/transactions"
 									class="font-medium text-secondary-500 hover:underline">Betalningar</a
 								>
-							</td></tr
-						>
+							</td>
+							<td class="px-6 py-4 w-56 whitespace-nowrap text-right"
+								><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
+									>{user.balance} kr</span
+								>
+							</td>
+							<td></td>
+						</tr>
 					{/each}
 				{/if}
 			</tbody>

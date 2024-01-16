@@ -55,7 +55,7 @@
 					class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 				>
 					<tr>
-						<th class="px-6 py-3">Nr.</th>
+						<th class="px-6 py-3"><span class="sr-only">ID</span></th>
 						<th class="px-6 py-3">Stad</th>
 						<th class="px-6 py-3">Status</th>
 						<th class="px-6 py-3">Batteri</th>
@@ -67,19 +67,20 @@
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
-							<td class="px-6 py-4 table-cell-fit"
+							<td class="px-6 py-4 w-24"
 								><a
 									href="/admin/bikes/{bike.id}"
 									class="font-medium text-secondary-500 hover:underline whitespace-nowrap"
 									>{bike.id}</a
 								></td
 							>
-							<td class="px-6 py-4">{bike.city_id} </td>
+							<td class="px-6 py-4 w-48">{bike.city_id} </td>
 							<td class="px-6 py-4">{statusCodes[bike.status_id]} </td>
-							<td class="px-6 py-4 grid gap-2 grid-cols-2 items-center"
+							<td class="px-6 py-4 grid gap-2 grid-cols-[1fr,auto] items-center min-w-48"
 								><ChargeMeter fraction={bike.charge_perc} /><span
 									>{Math.round(bike.charge_perc * 100)}%</span
 								>
+							</td>
 							<td class="px-6 w-48 text-right">
 								{#if bike.active}
 									<span class="rounded-full px-2 py-1 variant-soft-success">Aktiv</span>

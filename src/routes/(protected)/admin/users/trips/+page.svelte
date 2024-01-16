@@ -113,16 +113,16 @@
 				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 			>
 				<tr>
-					<th class="px-6 py-3">Resenr.</th>
-					<th class="px-6 py-3">Anv.</th>
-					<th class="px-6 py-3">Cykelnr.</th>
-					<th class="px-6 py-3">Startdatum</th>
-					<th class="px-6 py-3">Slutdatum</th>
-					<th class="px-6 py-3 table-cell-fit">Resetid</th>
-					<th class="px-6 py-3">Startavgift</th>
-					<th class="px-6 py-3">Tidsavgfit</th>
-					<th class="px-6 py-3">Parkering</th>
-					<th class="px-6 py-3 table-cell-fit">Total kostnad</th>
+					<th class="px-6 py-3 w-24"><span class="sr-only">Rese-ID</span></th>
+					<th class="px-6 py-3 w-24">Anv.</th>
+					<th class="px-6 py-3 w-24">Cykel</th>
+					<th class="px-6 py-3 w-44">Startdatum</th>
+					<th class="px-6 py-3 w-44">Slutdatum</th>
+					<th class="px-6 py-3 w-44">Resetid</th>
+					<th class="px-6 py-3 table-cell-fit whitespace-nowrap">Startavgift</th>
+					<th class="px-6 py-3 table-cell-fit whitespace-nowrap">Tidsavgfit</th>
+					<th class="px-6 py-3 table-cell-fit whitespace-nowrap">Parkering</th>
+					<th class="px-6 py-3 table-cell-fit whitespace-nowrap">Total kostnad</th>
 				</tr>
 			</thead>
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -136,40 +136,40 @@
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 						>
-							<td class="px-6 py-4">{trip.id} </td>
-							<td class="px-6 py-4"
+							<td class="px-6 py-4 w-24">{trip.id} </td>
+							<td class="px-6 py-4 w-24"
 								><a
 									href="/admin/users/{trip.user_id}"
 									class="font-medium text-secondary-500 hover:underline">{trip.user_id}</a
 								></td
 							>
-							<td class="px-6 py-4"
+							<td class="px-6 py-4 w-24"
 								><a
 									href="/admin/bikes/{trip.bike_id}"
 									class="font-medium text-secondary-500 hover:underline whitespace-nowrap"
 									>{trip.bike_id}</a
 								></td
 							>
-							<td class="px-6 py-4 whitespace-nowrap">{formatDateReadable(trip.start_time)}</td>
-
-							<td class="px-6 py-4 whitespace-nowrap"
+							<td class="px-6 py-4 whitespace-nowrap w-44">{formatDateReadable(trip.start_time)}</td
+							>
+							<td class="px-6 py-4 whitespace-nowrap w-44"
 								>{hasEndTime ? formatDateReadable(trip.end_time) : '--'}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-center"
+							<td class="px-6 py-4 w-44"
 								>{!hasEndTime
 									? `~${calculateTimeDifference(trip.start_time, dateNow)}`
 									: calculateTimeDifference(trip.start_time, trip.end_time)}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right"
+							<td class="px-6 py-4 table-cell-fit whitespace-nowrap text-right"
 								>{trip.start_cost ? `${trip.start_cost} kr` : '--'}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right"
+							<td class="px-6 py-4 table-cell-fit whitespace-nowrap text-right"
 								>{trip.var_cost ? `${trip.var_cost.toFixed(2)} kr` : '--'}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right"
+							<td class="px-6 py-4 table-cell-fit whitespace-nowrap text-right"
 								>{trip.park_cost ? `${trip.park_cost} kr` : '--'}</td
 							>
-							<td class="px-6 py-4 table-cell-fit text-right"
+							<td class="px-6 py-4 table-cell-fit whitespace-nowrap text-right font-medium"
 								>{trip.total_cost ? `${trip.total_cost.toFixed(2)} kr` : '--'}
 							</td>
 						</tr>
