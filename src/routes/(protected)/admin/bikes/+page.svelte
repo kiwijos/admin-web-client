@@ -59,6 +59,7 @@
 						<th class="px-6 py-3">Stad</th>
 						<th class="px-6 py-3">Status</th>
 						<th class="px-6 py-3">Batteri</th>
+						<th class="px-6 py-3"><span class="sr-only">Aktiv</span></th>
 					</tr>
 				</thead>
 				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -79,6 +80,12 @@
 								><ChargeMeter fraction={bike.charge_perc} /><span
 									>{Math.round(bike.charge_perc * 100)}%</span
 								>
+							<td class="px-6 w-48 text-right">
+								{#if bike.active}
+									<span class="rounded-full px-2 py-1 variant-soft-success">Aktiv</span>
+								{:else}
+									<span class="rounded-full px-2 py-1 variant-soft-error">Avstängd</span>
+								{/if}
 							</td></tr
 						>
 					{/each}
