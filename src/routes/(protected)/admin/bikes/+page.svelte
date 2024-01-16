@@ -57,9 +57,11 @@
 					<tr>
 						<th class="px-6 py-3"><span class="sr-only">Cykel-ID</span></th>
 						<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Aktiv</span></th>
-						<th class="px-6 py-3">Status</th>
-						<th class="px-6 py-3">Stad</th>
-						<th class="px-6 py-3">Batteri</th>
+						<th class="px-6 py-3 w-72">Status</th>
+						<th class="px-6 py-3 min-w-48 max-w-72">Batteri</th>
+						<th class="px-6 py-3 w-48">Stad</th>
+						<th class="px-6 py-3 w-96">Position</th>
+						<th class="px-6 py-3"><span class="sr-only">Redigera</span></th>
 					</tr>
 				</thead>
 				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
@@ -81,14 +83,24 @@
 										: 'bg-red-100 text-red-800'}">{bike.active ? '✓' : '✕'}</span
 								>
 							</td>
-							<td class="px-6 py-4">{statusCodes[bike.status_id]}</td>
-							<td class="px-6 py-4 w-48">{bike.city_id} </td>
-							<td class="px-6 py-4 grid gap-2 grid-cols-[1fr,auto] items-center min-w-48"
+							<td class="px-6 py-4 w-72">{statusCodes[bike.status_id]}</td>
+							<td class="px-6 py-4 grid gap-2 grid-cols-[1fr,auto] items-center min-w-48 max-w-72"
 								><ChargeMeter fraction={bike.charge_perc} /><span
 									>{Math.round(bike.charge_perc * 100)}%</span
 								>
 							</td>
-						</tr>
+							<td class="px-6 py-4 w-48">{bike.city_id} </td>
+							<td class="px-6 py-4 w-96 whitespace-nowrap"
+								>Lat. {bike.coords[1].toFixed(4)}, Lon. {bike.coords[0].toFixed(4)}</td
+							>
+							<td class="px-6 py-4 w-24">
+								<a
+									href="/admin/bikes/{bike.id}"
+									class="font-medium text-secondary-500 hover:underline whitespace-nowrap"
+									>Redigera</a
+								>
+							</td></tr
+						>
 					{/each}
 				</tbody>
 			</table>
