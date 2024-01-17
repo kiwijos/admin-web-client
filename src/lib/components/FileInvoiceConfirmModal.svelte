@@ -40,7 +40,7 @@
 		<article>{$modalStore[0].body ?? '(body missing)'}</article>
 		<p class="text-error-500 text-sm">&nbsp;{errorMessage}</p>
 		<footer class={parent.regionFooter}>
-			<button class="btn {parent.buttonNeutral}" on:click={parent.onClose}
+			<button class="btn {parent.buttonNeutral}" on:click={() => modalStore.close()}
 				>{parent.buttonTextCancel}</button
 			>
 			<form action="/admin/users?/fileInvoice" method="POST" use:enhance={handleSubmit}>
