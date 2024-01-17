@@ -92,7 +92,7 @@
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
 				{#if sourceBodySliced.length === 0}
 					<tr>
-						<td colspan="10" class="px-6 py-4 text-center">Inga användare hittades.</td>
+						<td colspan="7" class="px-6 py-4 text-center">Inga användare hittades.</td>
 					</tr>
 				{:else}
 					{#each sourceBodySliced as user}
