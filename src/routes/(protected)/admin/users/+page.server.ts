@@ -1,4 +1,5 @@
 import type { PageServerLoad } from './$types';
+import type { Action, Actions } from './$types';
 import { PUBLIC_REST_API_URL } from '$env/static/public';
 import { fail } from '@sveltejs/kit';
 
