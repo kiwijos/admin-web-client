@@ -155,7 +155,7 @@
 							<td class="px-6 py-4 whitespace-nowrap w-44"
 								>{hasEndTime ? formatDateReadable(trip.end_time) : '--'}</td
 							>
-							<td class="px-6 py-4 w-44"
+							<td class="px-6 py-4 w-44 whitespace-nowrap"
 								>{!hasEndTime
 									? `~${calculateTimeDifference(trip.start_time, dateNow)}`
 									: calculateTimeDifference(trip.start_time, trip.end_time)}</td
