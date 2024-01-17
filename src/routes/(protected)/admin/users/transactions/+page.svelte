@@ -122,7 +122,7 @@
 			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
 				{#if sourceBodySliced.length === 0}
 					<tr>
-						<td colspan="5" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
+						<td colspan="6" class="px-6 py-4 text-center">Inga betalningar hittades.</td>
 					</tr>
 				{:else}
 					{#each sourceBodySliced as transaction}
