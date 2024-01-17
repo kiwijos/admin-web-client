@@ -1,57 +1,81 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
+	import { applyAction, enhance } from '$app/forms';
 	import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import { Avatar } from '@skeletonlabs/skeleton';
 	import { calculateTimeDifference, formatDateReadable } from '$lib/services/dateFormatter';
 
 	export let data: PageData;
+	export let form: ActionData;
+
+	// @ts-expect-error - untyped variables are fine
+	$: user = form?.success ? form.user ?? data.user : data.user;
+
+	// @ts-expect-error - untyped variables are fine
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const handleUserUpdateStatus = ({ formElement, formData, action, cancel, submitter }) => {
+		if (!formData.get('userId') || !action.search) {
+			cancel();
+			return;
+		}
+
+		// @ts-expect-error - We wholeheartedly accept this untyped variable too
+		return async ({ result }) => {
+			if (!result?.data?.success) return;
+
+			await applyAction(result); // Apply the action, which will update the form state
+		};
+	};
+
+	$: negative = user.balance < 0;
 </script>
 
 <div class="p-4 md:p-8 max-w-4xl space-y-4 md:space-y-8" data-sveltekit-preload-data="false">
-	{#await data.user}
-		<!-- Placeholder "loading" state -->
-		<div class="flex justify-between items-end">
-			<div class="flex gap-4 items-end">
-				<div class="w-16 placeholder-circle animate-pulse" />
-				<div class="space-y-2">
-					<div class="placeholder animate-pulse h-8 w-32"></div>
-					<div class="placeholder animate-pulse h-4 w-32"></div>
-				</div>
-			</div>
-			<div>
-				<div class="placeholder animate-pulse w-28 h-9"></div>
-			</div>
-		</div>
-		<!-- Placeholder "loading" state -->
-	{:then user}
-		{@const negative = user.balance < 0}
-		<div class="flex justify-between items-end gap-4">
-			<div class="flex gap-4 items-end">
+	<div class="flex justify-between items-end gap-4">
+		<div class="flex gap-4 items-end">
+			<div class="relative inline-block">
+				<span
+					class="absolute -bottom-2 -left-1 z-10 inline-flex p-2 w-8 h-8 items-center justify-center text-xs font-semibold rounded-full {user.active
+						? 'bg-green-100 dark:bg-surface-500 text-green-800 dark:text-green-300'
+						: 'bg-red-100 dark:bg-surface-500 text-red-800 dark:text-red-300'}"
+					>{user.active ? '✓' : '✕'}</span
+				>
 				<Avatar
 					width="w-16"
-					background="bg-gray-200 dark:bg-surface-500"
+					background="bg-gray-100 dark:bg-surface-700"
+					border="border-2 {user.active
+						? 'border-green-300 dark:border-green-600'
+						: 'border-red-300 dark:border-red-600'}"
 					initials={user.email[0] ?? '?'}
 				/>
-				<div class="max-w-36 sm:max-w-fit">
-					<h1 class="text-3xl font-bold">{user.email.split('@')[0]}</h1>
-					<p class="text-surface-400 truncate">{user.email}</p>
-				</div>
 			</div>
 
-			<div>
-				<span
-					class="badge !text-lg md:text-xl {negative
-						? ' variant-soft-error '
-						: 'variant-soft-success'}">{user.balance} kr</span
-				>
+			<div class="max-w-36 sm:max-w-fit">
+				<h1 class="text-3xl font-bold">{user.email.split('@')[0]}</h1>
+				<p class="text-surface-400 truncate">{user.email}</p>
 			</div>
+			<form action="/admin/users?/updateStatus" method="POST" use:enhance={handleUserUpdateStatus}>
+				<input type="hidden" name="userId" value={user.id} />
+				<input type="hidden" name="active" value={!user.active} />
+				<button
+					type="submit"
+					class="btn btn-sm dark:ring-1 dark:ring-surface-600 bg-white dark:bg-surface-800 {user.active
+						? 'text-red-700'
+						: 'text-green-700'}"
+				>
+					{user.active ? 'Inaktivera' : 'Aktivera'}
+				</button>
+			</form>
 		</div>
-	{:catch error}
-		<div class="w-full h-full flex items-center justify-center">
-			Fel vid hämtning av användare: {error.message}
+		<div>
+			<span
+				class="badge !text-lg md:text-xl {negative
+					? ' variant-soft-error '
+					: 'variant-soft-success'}">{user.balance} kr</span
+			>
 		</div>
-	{/await}
+	</div>
 
 	{#await data.trips}
 		<div class="rounded-container-token p-4 bg-white dark:bg-surface-800">
@@ -112,7 +136,7 @@
 									<tr
 										class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 									>
-										<td class="px-6 py-4 table-cell-fit">{trip.id}</td>
+										<td class="px-6 py-4 w-24">{trip.id}</td>
 										<td class="px-6 py-4"
 											><a
 												href="/admin/bikes/{trip.bike_id}"
@@ -124,10 +148,13 @@
 											{formatDateReadable(trip.start_time)}
 										</td>
 										<td class="px-6 py-4 text-right whitespace-nowrap">
-											{calculateTimeDifference(trip.start_time, trip.end_time)}
+											{calculateTimeDifference(
+												trip.start_time,
+												trip.end_time ?? String(new Date())
+											)}
 										</td>
 										<td class="px-6 py-4 text-right whitespace-nowrap">
-											{trip.total_cost} kr
+											{trip.total_cost ? `${trip.total_cost.toFixed(2)} kr` : '(ej avslutad)'}
 										</td>
 									</tr>
 								{/each}
@@ -198,8 +225,8 @@
 									<tr
 										class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
 									>
-										<td class="px-6 py-4 table-cell-fit">{transaction.id}</td>
-										<td class="px-6 py-4">
+										<td class="px-6 py-4 w-24">{transaction.id}</td>
+										<td class="px-6 py-4 whitespace-nowrap">
 											{transaction.ref}
 										</td>
 										<td class="px-6 py-4 text-right whitespace-nowrap">
