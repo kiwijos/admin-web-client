@@ -33,38 +33,40 @@
 		Hämtar cyklar...
 	</div>
 {:then bikes}
-	{#if bikes.length === 0}
-		<p class="text-xs text-surface-400">Inga cyklar hittades.</p>
-	{:else}
-		<div class="bg-surface-50 dark:bg-transparent p-8">
-			<Paginator
-				bind:settings={paginationSettings}
-				showFirstLastButtons={true}
-				showPreviousNextButtons={true}
-				amountText="per sida"
-				separatorText="av"
-				justify="justify-between"
-				select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
-				controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
-				class="sm:!flex-row gap-4 !space-x-0 !space-y-0 [&>label]:w-fit"
-			/>
-		</div>
-		<div class="relative overflow-x-auto">
-			<table class="w-full text-md text-left text-surface-400 dark:text-surface-300">
-				<thead
-					class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
-				>
+	<div class="bg-surface-50 dark:bg-transparent p-8">
+		<Paginator
+			bind:settings={paginationSettings}
+			showFirstLastButtons={true}
+			showPreviousNextButtons={true}
+			amountText="per sida"
+			separatorText="av"
+			justify="justify-between"
+			select="hover:cursor-pointer text-sm dark:bg-surface-600 rounded-3xl border-transparent"
+			controlVariant="text-sm bg-white dark:bg-surface-600 border-transparent"
+			class="sm:!flex-row gap-4 !space-x-0 !space-y-0 [&>label]:w-fit"
+		/>
+	</div>
+	<div class="relative overflow-x-auto">
+		<table class="w-full text-md text-left text-surface-400 dark:text-surface-300">
+			<thead
+				class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
+			>
+				<tr>
+					<th class="px-6 py-3 w-24"><span class="sr-only">Cykel-ID</span></th>
+					<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Aktiv</span></th>
+					<th class="px-6 py-3 w-72">Status</th>
+					<th class="px-6 py-3 min-w-48 max-w-72">Batteri</th>
+					<th class="px-6 py-3 w-48">Stad</th>
+					<th class="px-6 py-3 w-96">Position</th>
+					<th class="px-6 py-3"><span class="sr-only">Redigera</span></th>
+				</tr>
+			</thead>
+			<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
+				{#if sourceBodySliced.length === 0}
 					<tr>
-						<th class="px-6 py-3 w-24"><span class="sr-only">Cykel-ID</span></th>
-						<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Aktiv</span></th>
-						<th class="px-6 py-3 w-72">Status</th>
-						<th class="px-6 py-3 min-w-48 max-w-72">Batteri</th>
-						<th class="px-6 py-3 w-48">Stad</th>
-						<th class="px-6 py-3 w-96">Position</th>
-						<th class="px-6 py-3"><span class="sr-only">Redigera</span></th>
+						<td colspan="7" class="px-6 py-4 text-center">Inga cyklar hittades.</td>
 					</tr>
-				</thead>
-				<tbody class="overflow-y-scroll text-sm" data-sveltekit-preload-data="false">
+				{:else}
 					{#each sourceBodySliced as bike}
 						<tr
 							class="odd:bg-white odd:dark:bg-surface-900 even:bg-gray-50 even:dark:bg-surface-800"
@@ -103,10 +105,10 @@
 							</td></tr
 						>
 					{/each}
-				</tbody>
-			</table>
-		</div>
-	{/if}
+				{/if}
+			</tbody>
+		</table>
+	</div>
 {:catch error}
 	<p>Fel vid hämtning av cyklar: {error.message}</p>
 {/await}
