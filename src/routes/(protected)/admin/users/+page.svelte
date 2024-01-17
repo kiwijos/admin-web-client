@@ -6,9 +6,51 @@
 	import { Paginator } from '@skeletonlabs/skeleton';
 
 	import Fa from 'svelte-fa';
-	import { faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faSearch, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
+
+	import type { InvoiceData } from '$lib/types/InvoiceData';
 
 	export let data: PageData;
+
+	$: numUsersToInvoice = data?.users.filter((user: User) => user.balance < 0).length;
+
+	let modalStore = getModalStore();
+
+	const infoModal: ModalSettings = {
+		title: 'Fakturering genomförd',
+		body: '',
+		type: 'alert'
+	};
+
+	const showInfoModal = (invoice: InvoiceData) => {
+		const infoBody = invoice.invoice_users
+			? `${invoice.invoice_users} användare fakturerade för totalt ${invoice.invoiced_amount} kr.`
+			: 'Det fanns inga användare att fakturera.';
+		infoModal.body = infoBody;
+
+		// Set a timeout to show the modal after the previous modal has closed
+		setTimeout(() => {
+			modalStore.trigger(infoModal);
+		}, 500);
+	};
+
+	const confirmModal: ModalSettings = {
+		title: 'Bekräfta fakturering',
+		body: '',
+		type: 'component',
+		component: 'modalFileInvoiceConfirm',
+		response: showInfoModal
+	};
+
+	const showFileInvoiceModal = () => {
+		confirmModal.body = `Alla användare som har ett negativt saldo kommer att faktureras. Det är just nu ${
+			numUsersToInvoice ?? 0
+		} användare.`;
+		modalStore.trigger(confirmModal);
+	};
 
 	// Filter the data
 	let filter: string = '';
@@ -45,16 +87,34 @@
 </script>
 
 <div class="bg-surface-50 dark:bg-transparent flex flex-col lg:flex-row gap-4 p-8">
-	<div class="input-group grid-cols-[auto_1fr_auto] border-none">
-		<div class="input-group-shim bg-white dark:bg-surface-600">
-			<Fa size="sm" icon={faSearch} />
+	<div class="grow flex gap-4">
+		<div class="input-group grid-cols-[auto_1fr_auto] border-none">
+			<div class="input-group-shim bg-white dark:bg-surface-600">
+				<Fa size="sm" icon={faSearch} />
+			</div>
+			<input
+				type="search"
+				class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
+				placeholder="Sök efter användare"
+				on:input={filterUsers}
+			/>
 		</div>
-		<input
-			type="search"
-			class="text-sm !bg-white dark:!bg-surface-700 focus:!ring-blue-500 dark:placeholder-surface-400 dark:text-white dark:focus:ring-blue-500"
-			placeholder="Sök efter användare"
-			on:input={filterUsers}
-		/>
+		<div class="relative inline-block">
+			{#if numUsersToInvoice > 0}
+				<span
+					class="badge variant-filled-primary dark:variant-soft-primary absolute -top-2 -right-3 z-10"
+					>{numUsersToInvoice}</span
+				>
+			{/if}
+			<button
+				class="btn text-sm bg-white dark:bg-surface-600"
+				title="Öppna en dialogruta för att bekräfta fakturering"
+				disabled={numUsersToInvoice === 0}
+				on:click={showFileInvoiceModal}
+			>
+				<span><Fa icon={faFileInvoice} /></span><span>Fakturera</span>
+			</button>
+		</div>
 	</div>
 	<Paginator
 		bind:settings={paginationSettings}
