@@ -133,7 +133,7 @@
 									class="font-medium text-secondary-500 hover:underline">Betalningar</a
 								>
 							</td>
-							<td class="px-6 py-4 w-56 whitespace-nowrap text-right"
+							<td class="px-6 w-56 whitespace-nowrap text-right"
 								><span class="badge {negative ? ' variant-soft-error ' : 'variant-soft-success'}"
 									>{user.balance} kr</span
 								>
