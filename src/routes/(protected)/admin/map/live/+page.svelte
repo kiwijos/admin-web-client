@@ -30,7 +30,7 @@
 	const batteryLow: ExpressionSpecification = ['<=', ['get', 'charge_perc'], 0.15];
 	const batteryMedium: ExpressionSpecification = [
 		'all',
-		['>', ['get', 'charge_perc'], 0.2],
+		['>', ['get', 'charge_perc'], 0.15],
 		['<=', ['get', 'charge_perc'], 0.4]
 	];
 
