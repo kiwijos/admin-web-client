@@ -17,6 +17,7 @@ const login: Action = async ({ cookies, request, fetch }) => {
 	try {
 		const response = await fetch(`${PUBLIC_REST_API_URL}/login/admin`, {
 			method: 'POST',
+			cache: 'no-cache', // Prevents caching of *only* this request
 			headers: {
 				'Content-Type': 'application/json'
 			},
