@@ -55,7 +55,7 @@
 					class="text-xs text-surface-700 uppercase bg-gray-50 dark:text-surface-300 dark:bg-surface-600"
 				>
 					<tr>
-						<th class="px-6 py-3"><span class="sr-only">Cykel-ID</span></th>
+						<th class="px-6 py-3 w-24"><span class="sr-only">Cykel-ID</span></th>
 						<th class="px-6 py-3 table-cell-fit"><span class="sr-only">Aktiv</span></th>
 						<th class="px-6 py-3 w-72">Status</th>
 						<th class="px-6 py-3 min-w-48 max-w-72">Batteri</th>
