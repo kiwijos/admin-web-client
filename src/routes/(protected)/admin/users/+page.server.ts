@@ -51,7 +51,7 @@ const updateStatus: Action = async ({ request, fetch }) => {
 	const userId = data.get('userId');
 
 	if (typeof activeString !== 'string' || !activeString) {
-		return fail(400, { active, invalid: true });
+		return fail(400, { activeString, invalid: true });
 	}
 
 	if (typeof userId !== 'string' || !userId) {
