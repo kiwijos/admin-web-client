@@ -32,7 +32,7 @@
 	<div class="w-full h-full flex items-center justify-center placeholder animate-pulse">
 		Hämtar cyklar...
 	</div>
-{:then bikes}
+{:then}
 	<div class="bg-surface-50 dark:bg-transparent p-8">
 		<Paginator
 			bind:settings={paginationSettings}
