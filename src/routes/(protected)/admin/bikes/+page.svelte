@@ -79,8 +79,9 @@
 							<td class="table-cell-fit">
 								<span
 									class="inline-flex p-2 w-6 h-6 items-center justify-center text-xs font-semibold rounded-full {bike.active
-										? 'bg-green-100 text-green-800'
-										: 'bg-red-100 text-red-800'}">{bike.active ? '✓' : '✕'}</span
+										? 'bg-green-100 dark:bg-surface-500 text-green-800 dark:text-green-300'
+										: 'bg-red-100 dark:bg-surface-500 text-red-800 dark:text-red-300'}"
+									>{bike.active ? '✓' : '✕'}</span
 								>
 							</td>
 							<td class="px-6 py-4 w-72">{statusCodes[bike.status_id]}</td>
