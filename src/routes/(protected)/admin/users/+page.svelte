@@ -28,7 +28,7 @@
 	const showInfoModal = (invoice: InvoiceData) => {
 		const infoBody = invoice.invoice_users
 			? `${invoice.invoice_users} användare fakturerade för totalt ${invoice.invoiced_amount} kr.`
-			: 'Det fanns inga användare att fakturera.';
+				? `${invoice.invoiced_users} användare fakturerade för totalt ${invoice.invoiced_amount} kr.`
 		infoModal.body = infoBody;
 
 		// Set a timeout to show the modal after the previous modal has closed
