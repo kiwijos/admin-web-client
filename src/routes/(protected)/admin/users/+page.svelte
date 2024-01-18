@@ -109,7 +109,9 @@
 			{/if}
 			<button
 				class="btn text-sm bg-white dark:bg-surface-600"
-				title="Öppna en dialogruta för att bekräfta fakturering"
+				title={numUsersToInvoice === 0
+					? 'Knappen är avstängd. Det finns inga användare att fakturera'
+					: 'Öppna en dialogruta för att bekräfta fakturering'}
 				disabled={numUsersToInvoice === 0}
 				on:click={showFileInvoiceModal}
 			>
