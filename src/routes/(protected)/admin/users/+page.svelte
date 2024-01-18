@@ -21,7 +21,7 @@
 
 	const infoModal: ModalSettings = {
 		title: 'Fakturering genomförd',
-		body: '',
+		body: 'Alla användare med ett negativt saldo har fakturerats.', // Fallback – This will be overwritten
 		type: 'alert'
 	};
 
@@ -39,7 +39,7 @@
 
 	const confirmModal: ModalSettings = {
 		title: 'Bekräfta fakturering',
-		body: '',
+		body: 'Alla användare som har ett negativt saldo kommer att faktureras.', // Fallback – This will be overwritten
 		type: 'component',
 		component: 'modalFileInvoiceConfirm',
 		response: showInfoModal
