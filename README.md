@@ -12,6 +12,8 @@ Welcome to the administrative web client for our e-bike renting system – a sch
 
 - **Live Demo**: Visit [Lenticode](https://vteam-admin.lenticode.com/login) to see the application live.
 
+**Important Note**: To run the app live, you'll need an account. Feel free to [contact me](mailto:alexlindqvist@me.com) for further information.
+
 ### Root Repository
 
 For a comprehensive view of all our related projects and to access the entire collection of repositories, please visit our root repository:
